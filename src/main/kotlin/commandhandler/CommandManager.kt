@@ -7,10 +7,7 @@ import commands.database.Settings
 import commands.dev.CreateEmbed
 import commands.moderation.*
 import commands.quotes.*
-import commands.utility.Avatar
-import commands.utility.BAT
-import commands.utility.Colourme
-import commands.utility.Help
+import commands.utility.*
 import commands.vanced.BugReport
 import commands.vanced.Info
 import commands.vanced.SupportUs
@@ -134,6 +131,7 @@ class CommandManager {
             BAT(),
             Colourme(),
             Help(this),
+            Ping(),
             BugReport(),
             Info(),
             SupportUs(),
