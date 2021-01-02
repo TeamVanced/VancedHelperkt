@@ -1,5 +1,11 @@
+FROM gradle:jdk15
 LABEL maintainer="xfileFIN"
+WORKDIR /src
+COPY . /src
 
-RUN apt-get update && apt-get install openjdk-15-jre
+USER root
+RUN chown -R gradle /src
+RUN chmod +x /src/gradlew
+USER gradle
 
-CMD gradlew run
+CMD ./gradlew run
