@@ -5,7 +5,6 @@ import commandhandler.CommandManager
 import commands.BaseCommand
 import commands.CommandTypes.Utility
 import database.prefix
-import net.dv8tion.jda.api.entities.MessageEmbed
 
 class Help(private val commandManager: CommandManager) : BaseCommand(
     commandName = "help",
@@ -13,8 +12,6 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
     commandType = Utility,
     commandArguments = listOf("[command name]")
 ) {
-
-    private var helpembed: MessageEmbed
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -33,30 +30,26 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
                 }
             }
         } else {
-            channel.sendMessage(helpembed).queue {
+            val commands = mutableMapOf<String, List<String>>()
+            val prefix = guildId.prefix
+            commandManager.commandTypes.forEach { commandType ->
+                commands[commandType.name] =
+                    commandManager.commands.filter { it.commandType == commandType }.sortedBy { it.commandName }
+                        .map { "`$prefix${it.commandName}` - ${it.commandDescription}" }
+            }
+            val embed = embedBuilder.setTitle("Help Menu")
+                .setDescription("For info on a specific command, type `${guildId.prefix}help [command name]`!")
+            commands.forEach {
+                embed.addField(
+                    it.key,
+                    commands[it.key]?.joinToString("\n"),
+                    false
+                )
+            }
+            channel.sendMessage(embed.build()).queue {
                 messageId = it.id
             }
         }
-    }
-
-    init {
-        val commands = mutableMapOf<String, List<String>>()
-        val prefix = guildId.prefix
-        commandManager.commandTypes.forEach { commandType ->
-            commands[commandType.name] =
-                commandManager.commands.filter { it.commandType == commandType }.sortedBy { it.commandName }
-                    .map { "`$prefix${it.commandName}` - ${it.commandDescription}" }
-        }
-        val embed = embedBuilder.setTitle("Help Menu")
-            .setDescription("For info on a specific command, type `${guildId.prefix}help [command name]`!")
-        commands.forEach {
-            embed.addField(
-                it.key,
-                commands[it.key]?.joinToString("\n"),
-                false
-            )
-        }
-        helpembed = embed.build()
     }
 
 }

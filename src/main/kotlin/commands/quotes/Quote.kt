@@ -13,7 +13,7 @@ class Quote(
     commandName = "quote",
     commandDescription = "Quote manager",
     commandType = Quotes,
-    commandArguments = listOf("<get | add | remove | addrole | removerole | addstar | removestar>")
+    commandArguments = listOf("<get | add | remove | addstar | removestar>")
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -26,8 +26,6 @@ class Quote(
                     "get" -> execWithChecks(getCommand("getquote")!!, event, args)
                     "add" -> execWithChecks(getCommand("addquote")!!, event, args)
                     "remove" -> execWithChecks(getCommand("removequote")!!, event, args)
-                    "addrole" -> execWithChecks(getCommand(command)!!, event, args)
-                    "removerole" -> execWithChecks(getCommand(command)!!, event, args)
                     "addstar" -> execWithChecks(getCommand(command)!!, event, args)
                     "removestar" -> execWithChecks(getCommand(command)!!, event, args)
                     else -> ctx.channel.useCommandProperly(this@Quote)
