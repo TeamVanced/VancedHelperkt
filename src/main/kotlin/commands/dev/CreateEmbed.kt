@@ -4,7 +4,6 @@ import com.beust.klaxon.Klaxon
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Dev
-import ext.useArguments
 import ext.useCommandProperly
 import java.awt.Color
 
