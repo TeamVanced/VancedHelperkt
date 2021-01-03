@@ -6,6 +6,7 @@ import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Utility
 import config
+import utils.*
 import java.net.URL
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
@@ -45,12 +46,12 @@ class BAT : BaseCommand(
     private fun Double.stonkify(): String {
         val roundedPrice = roundToInt()
         return when {
-            roundedPrice >= 25 -> ":relax: $this%"
-            roundedPrice >= 5 -> ":merchant: $this%"
-            roundedPrice == 1 -> ":stonks: $this%"
-            roundedPrice <= -5 -> ":feels: $this%"
-            roundedPrice <= -25 -> ":sad: $this%"
-            else -> ":stinks: $this%"
+            roundedPrice >= 25 -> "$relax $this%"
+            roundedPrice >= 5 -> "$vmerchant $this%"
+            roundedPrice == 1 -> "$stonks $this%"
+            roundedPrice <= -5 -> "$feels $this%"
+            roundedPrice <= -25 -> "$sadness $this%"
+            else -> "$stinks $this%"
         }
     }
 
