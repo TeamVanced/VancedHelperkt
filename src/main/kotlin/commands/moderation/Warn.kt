@@ -45,16 +45,12 @@ class Warn : BaseCommand(
                 ctx.authorAsMember?.let { embedBuilder.sendWarnLog(member, it, reason, guildId) }
                 if (warnsCollection.findOne(filter)?.reasons?.size == 3) {
                     member.kick("Too many infractions").queue {
-                        channel.sendMessage("Kicked ${member.user.asTag}").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Kicked ${member.user.asTag}").queueAddReaction()
                         warnsCollection.deleteOne(filter)
                     }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("Provided user does not exist!").queueAddReaction()
             })
 
         } else {

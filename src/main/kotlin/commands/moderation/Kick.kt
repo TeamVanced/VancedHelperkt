@@ -29,20 +29,13 @@ class Kick : BaseCommand(
                     try {
                         member.kick(reason).queue {
                             ctx.authorAsMember?.let { it1 -> embedBuilder.sendKickLog(member, it1, reason, guildId) }
-                            channel.sendMessage("Successfully kicked ${member.user.asTag}").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("Successfully kicked ${member.user.asTag}").queueAddReaction()
                         }
                     } catch (e: HierarchyException) {
-                        channel.sendMessage("You cannot kick this member because their role is higher than yours!")
-                            .queue {
-                                messageId = it.id
-                            }
+                        channel.sendMessage("You cannot kick this member because their role is higher than yours!").queueAddReaction()
                     }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                    channel.sendMessage("Provided user does not exist!").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Provided user does not exist!").queueAddReaction()
                 })
             } else {
                 channel.useCommandProperly(this)

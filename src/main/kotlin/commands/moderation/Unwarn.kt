@@ -25,9 +25,7 @@ class Unwarn : BaseCommand(
             val user = args[0]
             val warnIndex = args[1]
             if (warnIndex.toIntOrNull() == null) {
-                channel.sendMessage("$warnIndex is not a valid warn").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("$warnIndex is not a valid warn").queueAddReaction()
                 return
             }
             val id = user.filter { it.isDigit() }
@@ -39,15 +37,11 @@ class Unwarn : BaseCommand(
                     ) != null
                 ) {
                     warnsCollection.findOneAndUpdate(filter, Updates.pull("reasons", null))
-                    channel.sendMessage("Successfully unwarned ${member.user.asMention}").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Successfully unwarned ${member.user.asMention}").queueAddReaction()
                     ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member, it, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("Provided user does not exist!").queueAddReaction()
             })
 
         } else {

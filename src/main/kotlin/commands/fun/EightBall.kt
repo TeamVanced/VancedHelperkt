@@ -36,9 +36,7 @@ class EightBall : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        channel.sendMessage(responses.random()).queue {
-            messageId = it.id
-        }
+        channel.sendMessage(responses.random()).queueAddReaction()
     }
 
 }

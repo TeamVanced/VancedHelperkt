@@ -25,7 +25,7 @@ class StarBoard : BaseCommand(
         super.execute(ctx)
         sbquotes = quotesCollection.find().filter { it.stars.size > 0 }.sortedByDescending { it.stars.size }.take(10)
         if (sbquotes.isEmpty()) {
-            ctx.event.channel.sendMessage("Quotes not found, try adding some")
+            ctx.event.channel.sendMessage("Quotes not found, try adding some").queueAddReaction()
             return
         }
         sendStarboard(ctx.channel)

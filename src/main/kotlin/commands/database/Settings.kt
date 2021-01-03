@@ -24,123 +24,83 @@ class Settings : BaseCommand(
                 when (args[0]) {
                     "prefix" -> {
                         prefix = value
-                        channel.sendMessage("Successfully set the prefix to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the prefix to `$value`!").queueAddReaction()
                     }
                     "boosterchat" -> {
                         boosterChat = value
-                        channel.sendMessage("Successfully set the booster chat to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the booster chat to `$value`!").queueAddReaction()
                     }
                     "muterole" -> {
                         muteRole = value
-                        channel.sendMessage("Successfully set the mute role to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the mute role to `$value`!").queueAddReaction()
                     }
                     "boosterrole" -> {
                         boosterRole = value
-                        channel.sendMessage("Successfully set the booster role to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the booster role to `$value`!").queueAddReaction()
                     }
                     "logchannel" -> {
                         logChannel = value
-                        channel.sendMessage("Successfully set the log channel to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the log channel to `$value`!").queueAddReaction()
                     }
                     "modlogchannel" -> {
                         modlogChannel = value
-                        channel.sendMessage("Successfully set the mod log channel to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the mod log channel to `$value`!").queueAddReaction()
                     }
                     "boosterchannel" -> {
                         boosterChannel = value
-                        channel.sendMessage("Successfully set the booster channel to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the booster channel to `$value`!").queueAddReaction()
                     }
                     "errorchannel" -> {
                         errorChannel = value
-                        channel.sendMessage("Successfully set the error channel to `$value`!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully set the error channel to `$value`!").queueAddReaction()
                     }
                     "addowner" -> {
                         if (owners.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
                             return@with
                         }
                         addOwner(value)
-                        channel.sendMessage("Successfully added `$value` to owners!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully added `$value` to owners!").queueAddReaction()
                     }
                     "removeowner" -> {
                         if (!owners.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
                             return@with
                         }
                         removeOwner(value)
-                        channel.sendMessage("Successfully removed `$value` from owners!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully removed `$value` from owners!").queueAddReaction()
                     }
                     "addmodrole" -> {
                         if (modRoles.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
                             return@with
                         }
                         addModRole(value)
-                        channel.sendMessage("Successfully added `$value` to moderators!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully added `$value` to moderators!").queueAddReaction()
                     }
                     "removemodrole" -> {
                         if (!modRoles.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
                             return@with
                         }
                         removeModRole(value)
-                        channel.sendMessage("Successfully removed `$value` from moderators!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully removed `$value` from moderators!").queueAddReaction()
                     }
                     "addquoterole" -> {
                         if (quoteRoles.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
                             return@with
                         }
                         addQuoteRole(value)
-                        channel.sendMessage("Successfully added `$value` to allowed quote roles!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully added `$value` to allowed quote roles!").queueAddReaction()
                     }
                     "removequoterole" -> {
                         if (!quoteRoles.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queue {
-                                messageId = it.id
-                            }
+                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
                             return@with
                         }
                         removeQuoteRole(value)
-                        channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queue {
-                            messageId = it.id
-                        }
+                        channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
                     }
                     else -> {
                         channel.useCommandProperly(this@Settings)

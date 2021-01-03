@@ -21,9 +21,7 @@ class RemoveQuote : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.channel.sendMessage("You are not allowed to use this command").queue {
-                messageId = it.id
-            }
+            ctx.channel.sendMessage("You are not allowed to use this command").queueAddReaction()
             return
         }
         val args = ctx.args.apply { remove("removequote") }
@@ -46,9 +44,7 @@ class RemoveQuote : BaseCommand(
         if (this == null) {
             ctx.channel.sendIncorrectQuote(this@RemoveQuote)
         } else {
-            ctx.channel.sendMessage("Quote $quoteId deleted successfully!").queue {
-                messageId = it.id
-            }
+            ctx.channel.sendMessage("Quote $quoteId deleted successfully!").queueAddReaction()
         }
     }
 

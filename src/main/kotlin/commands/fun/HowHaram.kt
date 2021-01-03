@@ -33,8 +33,6 @@ class HowHaram : BaseCommand(
                 setTitle("Haram Calculator")
                 setDescription("$arg is $percentage% Haram\n$bar")
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        ).queueAddReaction()
     }
 }

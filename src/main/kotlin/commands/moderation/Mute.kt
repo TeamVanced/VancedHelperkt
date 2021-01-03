@@ -29,9 +29,7 @@ class Mute : BaseCommand(
                 ctx.guild.createRole().setName("HelperMute").queue({
                     addRole(args, user, it, ctx)
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                    channel.sendMessage("Guild reached maximum amount of roles!").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
                 })
             }
         } else {
@@ -45,15 +43,11 @@ class Mute : BaseCommand(
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 ctx.guild.addRoleToMember(member, role).queue {
-                    channel.sendMessage("Successfully muted ${member.asMention}").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Successfully muted ${member.asMention}").queueAddReaction()
                     ctx.authorAsMember?.let { it1 -> embedBuilder.sendMuteLog(member, it1, reason, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("Provided user does not exist!").queueAddReaction()
             })
         } else {
             channel.useCommandProperly(this)

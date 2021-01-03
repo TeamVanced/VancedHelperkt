@@ -36,18 +36,12 @@ class Warns : BaseCommand(
                                 )
                             }
                         }.build()
-                    ).queue {
-                        messageId = it.id
-                    }
+                    ).queueAddReaction()
                 } else {
-                    channel.sendMessage("User $user has no warns").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("User $user has no warns").queueAddReaction()
                 }
             } else {
-                channel.sendMessage("User $user has no warns").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("User $user has no warns").queueAddReaction()
             }
         } else {
             channel.useArguments(1, this)
