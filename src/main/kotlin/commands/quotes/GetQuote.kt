@@ -43,9 +43,7 @@ class GetQuote(
                             if (quotes.size < 10) {
                                 quotes.sendQuotes()
                             } else {
-                                channel.sendMessage("Too many quotes matching this search!").queue {
-                                    messageId = it.id
-                                }
+                                channel.sendMessage("Too many quotes matching this search!").queueAddReaction()
                             }
                         } else {
                             quotes[0].getQuote()

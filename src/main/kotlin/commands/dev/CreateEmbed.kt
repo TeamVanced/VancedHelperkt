@@ -43,9 +43,7 @@ class CreateEmbed : BaseCommand(
                         }
                     }
                 }.build()
-            ).queue {
-                messageId = it.id
-            }
+            ).queueAddReaction()
         } else {
             channel.useArguments(1, this)
         }

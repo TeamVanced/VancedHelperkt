@@ -27,9 +27,7 @@ class Avatar : BaseCommand(
 
     private fun sendAvatar(userId: String, ctx: CommandContext) {
         if (userId.isEmpty()) {
-            channel.sendMessage("Provided user does not exist!").queue {
-                messageId = it.id
-            }
+            channel.sendMessage("Provided user does not exist!").queueAddReaction()
             return
         }
         ctx.guild.retrieveMemberById(userId).queue({
@@ -40,13 +38,9 @@ class Avatar : BaseCommand(
                     setImage(url)
                     setDescription("[Avatar URL]($url)")
                 }.build()
-            ).queue {
-                messageId = it.id
-            }
+            ).queueAddReaction()
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-            channel.sendMessage("Provided user does not exist!").queue {
-                messageId = it.id
-            }
+            channel.sendMessage("Provided user does not exist!").queueAddReaction()
         })
 
     }

@@ -18,13 +18,9 @@ class RandomQuote : BaseCommand(
         try {
             channel.sendMessage(
                 embedBuilder.getQuote(quotesCollection.find().toList().random())
-            ).queue {
-                messageId = it.id
-            }
+            ).queueAddReaction()
         } catch (e: NoSuchElementException) {
-            channel.sendMessage("There are no quotes in this server! Try adding some").queue {
-                messageId = it.id
-            }
+            channel.sendMessage("There are no quotes in this server! Try adding some").queueAddReaction()
         }
 
     }

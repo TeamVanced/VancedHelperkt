@@ -33,9 +33,7 @@ class PPSize : BaseCommand(
                 setTitle("PP Size Calculator")
                 setDescription("$thing has a PP size of $ppsize inches\n$bar")
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        ).queueAddReaction()
     }
 
 }

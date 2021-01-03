@@ -5,13 +5,16 @@ import commandhandler.ICommand
 import commandhandler.IMessageReactionListener
 import database.prefix
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
+import net.dv8tion.jda.api.exceptions.ErrorHandler
+import net.dv8tion.jda.api.requests.ErrorResponse
+import net.dv8tion.jda.api.requests.RestAction
 import java.awt.Color
 import javax.annotation.OverridingMethodsMustInvokeSuper
-import kotlin.properties.Delegates
 
 open class BaseCommand(
     override val commandType: CommandTypes,
@@ -30,19 +33,7 @@ open class BaseCommand(
 
     open val embedBuilder get() = EmbedBuilder().setColor(Color((Math.random() * 0x1000000).toInt()))
 
-    var messageId by Delegates.observable("") { _, oldValue, newValue ->
-        if (addTrashCan) {
-            try {
-                channel.addReactionById(newValue, trashEmote).queue()
-            } catch (e: Exception) {
-            }
-            try {
-                channel.removeReactionById(oldValue, trashEmote).queue()
-            } catch (e: Exception) {
-            }
-        }
-    }
-
+    var messageId = ""
     var commandAuthorId = ""
     var guildId = ""
     private var userMessageId: String = ""
@@ -71,6 +62,14 @@ open class BaseCommand(
     }
 
     override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
+
+    fun RestAction<Message>.queueAddReaction() {
+        queue {
+            if (messageId != "") it.channel.removeReactionById(messageId, trashEmote).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+            messageId = it.id
+            it.addReaction(trashEmote).queue()
+        }
+    }
 
     fun getHelpEmbed(): MessageEmbed = EmbedBuilder().apply {
         setTitle(commandName)

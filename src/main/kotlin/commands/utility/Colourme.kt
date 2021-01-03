@@ -21,9 +21,7 @@ class Colourme : BaseCommand(
         val member = ctx.authorAsMember
         val guildId = ctx.guild.id
         if (!(member!!.isBooster(guildId) || member.isMod(guildId))) {
-            channel.sendMessage("You are not allowed to use this command!").queue {
-                messageId = it.id
-            }
+            channel.sendMessage("You are not allowed to use this command!").queueAddReaction()
             return
         }
         val args = ctx.args
@@ -37,9 +35,7 @@ class Colourme : BaseCommand(
             val roleName = args.apply { removeAt(0) }.joinToString(" ")
             ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue { role ->
                 ctx.guild.addRoleToMember(member, role).queue {
-                    channel.sendMessage("Successfully added the role!").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Successfully added the role!").queueAddReaction()
                 }
             }
         } else {

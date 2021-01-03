@@ -28,14 +28,10 @@ class Unban : BaseCommand(
                             embedBuilder.sendUnbanLog(it2, it1, guildId)
                         }
                     }
-                    channel.sendMessage("Successfully unbanned ${ban.user.asTag}").queue {
-                        messageId = it.id
-                    }
+                    channel.sendMessage("Successfully unbanned ${ban.user.asTag}").queueAddReaction()
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_BAN) {
-                channel.sendMessage("Either user does not exist or they're not banned!").queue {
-                    messageId = it.id
-                }
+                channel.sendMessage("Either user does not exist or they're not banned!").queueAddReaction()
             })
 
         } else {

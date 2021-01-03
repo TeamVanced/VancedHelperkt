@@ -30,8 +30,6 @@ class IQ : BaseCommand(
                 setTitle("IQ Calculator")
                 setDescription("$arg has an iq of $iq")
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        ).queueAddReaction()
     }
 }

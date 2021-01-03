@@ -33,8 +33,6 @@ class HowLesbian : BaseCommand(
                 setTitle("Lesbian Meter")
                 setDescription("$arg is $percentage% lesbian\n$bar")
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        ).queueAddReaction()
     }
 }

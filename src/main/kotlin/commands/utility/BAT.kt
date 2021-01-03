@@ -39,9 +39,7 @@ class BAT : BaseCommand(
                 )
                 setFooter("Powered by coinlib.io")
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        ).queueAddReaction()
     }
 
     private fun Double.stonkify(): String {
