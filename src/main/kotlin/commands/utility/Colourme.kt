@@ -6,7 +6,6 @@ import commands.CommandTypes.Utility
 import ext.isBooster
 import ext.isMod
 import ext.useArguments
-import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import java.awt.Color
@@ -38,17 +37,25 @@ class Colourme : BaseCommand(
             val roleName = args.apply { removeAt(0) }.joinToString(" ")
             val ccrole = ctx.authorAsMember?.roles?.filter { it.name.endsWith("CC") }
             if (ccrole != null) {
-                if (ccrole.isNotEmpty()) {
-                    ctx.guild.removeRoleFromMember(ctx.authorAsMember!!, ccrole[0]).queue()
+                fun addRole() {
+                    ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
+                        ctx.guild.addRoleToMember(member, role).queue {
+                            channel.sendMessage("Successfully added the role!").queueAddReaction()
+                        }
+                    }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
+                        channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
+                    })
                 }
 
-                ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
-                    ctx.guild.addRoleToMember(member, role).queue {
-                        channel.sendMessage("Successfully added the role!").queueAddReaction()
+                if (ccrole.isNotEmpty()) {
+                    ctx.guild.removeRoleFromMember(ctx.authorAsMember!!, ccrole[0]).queue {
+                        addRole()
+                        return@queue
                     }
-                }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                    channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
-                })
+                }
+
+                addRole()
+
             }
 
 
