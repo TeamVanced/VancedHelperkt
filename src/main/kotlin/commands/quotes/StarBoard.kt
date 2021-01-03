@@ -50,7 +50,7 @@ class StarBoard : BaseCommand(
         setTitle("Starboard")
         for (i in sbquotes.indices) {
             addField(
-                "${emotes[i + 1]} Quote by ${sbquotes[i].authorName} (${sbquotes[i].stars.size} :star:)",
+                "${emotes[i + 1]} Quote #${sbquotes[i].quoteId} by ${sbquotes[i].authorName} (${sbquotes[i].stars.size} :star:)",
                 sbquotes[i].messageContent,
                 false
             )
