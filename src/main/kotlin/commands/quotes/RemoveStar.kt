@@ -10,7 +10,8 @@ import database.quotesCollection
 import ext.sendIncorrectQuote
 import ext.useCommandProperly
 import org.bson.conversions.Bson
-import org.litote.kmongo.*
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
 
 class RemoveStar : BaseCommand(
     commandName = "removestar",
@@ -29,10 +30,10 @@ class RemoveStar : BaseCommand(
             when {
                 message.matches(contentIDRegex) -> quotesCollection.removeStar(ctx, Quote::messageID eq message)
                 message.toLongOrNull() != null -> quotesCollection.removeStar(ctx, Quote::quoteId eq message.toLong())
-                else -> ctx.channel.sendIncorrectQuote(this)
+                else -> sendIncorrectQuote()
             }
         } else {
-            ctx.channel.useCommandProperly(this)
+            useCommandProperly()
         }
     }
 
@@ -47,7 +48,7 @@ class RemoveStar : BaseCommand(
                 ctx.channel.sendMessage("Successfully removed star from quote #${quote.quoteId}").queueAddReaction()
             }
         } else {
-            ctx.channel.sendIncorrectQuote(this@RemoveStar)
+            sendIncorrectQuote()
         }
     }
 

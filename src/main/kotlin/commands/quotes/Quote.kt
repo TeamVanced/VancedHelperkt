@@ -28,11 +28,11 @@ class Quote(
                     "remove" -> execWithChecks(getCommand("removequote")!!, event, args)
                     "addstar" -> execWithChecks(getCommand(command)!!, event, args)
                     "removestar" -> execWithChecks(getCommand(command)!!, event, args)
-                    else -> ctx.channel.useCommandProperly(this@Quote)
+                    else -> useCommandProperly()
                 }
             }
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
 
     }

@@ -29,7 +29,7 @@ class Unmute : BaseCommand(
                 channel.sendMessage("Mute role does not exist, how the fuck can user be muted???").queueAddReaction()
             }
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 
@@ -49,7 +49,7 @@ class Unmute : BaseCommand(
                 channel.sendMessage("Provided user does not exist!").queueAddReaction()
             })
         } else {
-            channel.useCommandProperly(this)
+            useCommandProperly()
         }
     }
 

@@ -45,7 +45,7 @@ class Unwarn : BaseCommand(
             })
 
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 

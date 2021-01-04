@@ -8,10 +8,7 @@ import commands.dev.CreateEmbed
 import commands.moderation.*
 import commands.quotes.*
 import commands.utility.*
-import commands.vanced.BugReport
-import commands.vanced.Info
-import commands.vanced.SupportUs
-import commands.vanced.Troubleshoot
+import commands.vanced.*
 import database.modRoles
 import database.owners
 import database.prefix
@@ -106,16 +103,14 @@ class CommandManager {
             CreateEmbed(),
             EightBall(),
             Emote(),
+            EmoteBoard(),
             F(),
             HowGay(),
             HowHaram(),
             HowLesbian(),
             IQ(),
             PPSize(),
-            Ban(),
-            Kick(),
             Mute(),
-            Unban(),
             Unmute(),
             Unwarn(),
             Warn(),
@@ -134,6 +129,7 @@ class CommandManager {
             Help(this),
             Ping(),
             BugReport(),
+            Features(),
             Info(),
             SupportUs(),
             Troubleshoot()

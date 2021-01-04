@@ -1,13 +1,10 @@
 package commands.utility
 
-import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Utility
 import config
 import utils.*
-import java.net.URL
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -19,9 +16,7 @@ class BAT : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val json = Parser.default().parse(
-            StringBuilder(URL("https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT").readText().trimIndent())
-        ) as JsonObject?
+        val json = "https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT".getJson()
         ctx.channel.sendMessage(
             embedBuilder.apply {
                 setTitle("${json?.string("name")} (${json?.string("symbol")})")
@@ -48,7 +43,7 @@ class BAT : BaseCommand(
         return when {
             roundedPrice >= 25 -> "$relax $this%"
             roundedPrice >= 5 -> "$vmerchant $this%"
-            roundedPrice == 1 -> "$stonks $this%"
+            roundedPrice >= 0 -> "$stonks $this%"
             roundedPrice <= -5 -> "$feels $this%"
             roundedPrice <= -25 -> "$sadness $this%"
             else -> "$stinks $this%"

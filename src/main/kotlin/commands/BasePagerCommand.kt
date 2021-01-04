@@ -1,11 +1,13 @@
 package commands
 
+import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import utils.EmbedPagerAdapter
+import utils.getJson
 
 abstract class BasePagerCommand(
     override val commandName: String,
@@ -22,8 +24,7 @@ abstract class BasePagerCommand(
     addTrashCan = false
 ) {
 
-    abstract val embedPages: List<MessageEmbed>
-    abstract val totalEmbedPages: Int
+    abstract val jsonName: String
     private val emotes = listOf("⏪", "⬅️", trashEmote, "➡️", "⏩")
     private lateinit var embedPagerAdapter: EmbedPagerAdapter
     private val pagesWithTableOfContent = getPagesWithTableOfContent()
@@ -46,15 +47,39 @@ abstract class BasePagerCommand(
 
     }
 
-    fun EmbedBuilder.build(position: Int): MessageEmbed {
-        setFooter("page $position/$totalEmbedPages")
-        return build()
-    }
-
+    //this shit is kinda retarded but it works
+    //will probably optimise this later
     private fun getPagesWithTableOfContent(): List<MessageEmbed> {
         val tableDesc = mutableListOf("0 | You are here ;)")
-        embedPages.forEach { it ->
-            tableDesc.add("${it.footer?.text?.first { it.isDigit() }} | ${it.title}")
+        val jsonArray = "https://vancedapp.com/api/v1/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
+        val embedPages = mutableListOf<EmbedBuilder>()
+        val builtEmbedPages = mutableListOf<MessageEmbed>()
+        for (i in jsonArray?.indices!!) {
+            val element = jsonArray[i]
+            embedPages.add(
+                embedBuilder.apply {
+                    setTitle(element.string("title"))
+                    setDescription(element.string("description"))
+                    val fields = element.array<JsonObject>("fields")
+                    if (fields != null) {
+                        for (j in fields.indices) {
+                            with (fields[j]) {
+                                addField(
+                                    string("title"),
+                                    string("content"),
+                                    false
+                                )
+                            }
+                        }
+                    }
+                }
+            )
+            tableDesc.add("${i + 1} | ${element.string("title")}")
+        }
+        for (i in embedPages.indices) {
+            val embed = embedPages[i]
+            embed.setFooter("Page ${i + 1}/${embedPages.size}")
+            builtEmbedPages.add(embed.build())
         }
         val tablePage = embedBuilder.apply {
             setTitle("Index")
@@ -65,8 +90,9 @@ abstract class BasePagerCommand(
                     )
                 }\n```"
             )
-        }.build(0)
-        return listOf(tablePage) + embedPages
+            setFooter("page 0/${embedPages.size}")
+        }.build()
+        return listOf(tablePage) + builtEmbedPages
     }
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {

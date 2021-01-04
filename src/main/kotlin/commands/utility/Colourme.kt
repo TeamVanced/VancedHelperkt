@@ -39,8 +39,10 @@ class Colourme : BaseCommand(
             if (ccrole != null) {
                 fun addRole() {
                     ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
-                        ctx.guild.addRoleToMember(member, role).queue {
-                            channel.sendMessage("Successfully added the role!").queueAddReaction()
+                        ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
+                            ctx.guild.addRoleToMember(member, role).queue {
+                                channel.sendMessage("Successfully added the role!").queueAddReaction()
+                            }
                         }
                     }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
                         channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
@@ -53,14 +55,11 @@ class Colourme : BaseCommand(
                         return@queue
                     }
                 }
-
                 addRole()
-
             }
 
-
         } else {
-            channel.useArguments(2, this)
+            useArguments(2)
         }
     }
 

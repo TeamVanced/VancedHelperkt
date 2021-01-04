@@ -8,3 +8,5 @@ val config = Config(
 )
 
 var jda: JDA? = null
+
+const val defaultPrefix = "-"

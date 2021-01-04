@@ -49,7 +49,7 @@ class GetQuote(
                             quotes[0].getQuote()
                         }
                     } else {
-                        channel.sendIncorrectQuote(this)
+                        sendIncorrectQuote()
                     }
                 }
             }
@@ -62,7 +62,7 @@ class GetQuote(
         if (this != null) {
             embedBuilder.sendQuote(this, channel, this@GetQuote)
         } else {
-            channel.sendIncorrectQuote(this@GetQuote)
+            sendIncorrectQuote()
         }
     }
 

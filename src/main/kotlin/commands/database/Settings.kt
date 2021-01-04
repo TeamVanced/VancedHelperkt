@@ -103,12 +103,12 @@ class Settings : BaseCommand(
                         channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
                     }
                     else -> {
-                        channel.useCommandProperly(this@Settings)
+                        useCommandProperly()
                     }
                 }
             }
         } else {
-            channel.useArguments(2, this)
+            useArguments(2)
         }
     }
 

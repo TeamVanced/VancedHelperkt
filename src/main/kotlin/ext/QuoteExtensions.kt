@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 
 fun EmbedBuilder.sendQuote(quote: Quote, channel: MessageChannel, baseCommand: BaseCommand) {
     with (baseCommand) {
@@ -27,11 +26,8 @@ fun EmbedBuilder.getQuote(quote: Quote): MessageEmbed {
     }.build()
 }
 
-fun TextChannel.sendIncorrectQuote(baseCommand: BaseCommand) {
-    with(baseCommand) {
-        sendMessage("That's not a valid quote bro").queueAddReaction()
-    }
-
+fun BaseCommand.sendIncorrectQuote() {
+    channel.sendMessage("That's not a valid quote bro").queueAddReaction()
 }
 
 fun Member.hasQuotePerms(guildId: String): Boolean {
