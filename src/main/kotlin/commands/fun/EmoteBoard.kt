@@ -2,7 +2,7 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandTypes.Fun
 import database.collections.Emote
 import database.emotesCollection
 import ext.useCommandProperly
@@ -11,16 +11,22 @@ import org.litote.kmongo.eq
 class EmoteBoard : BaseCommand(
     commandName = "emoteboard",
     commandDescription = "Get most frequently used emotes",
-    commandType = Quotes,
+    commandType = Fun,
     commandAliases = listOf("eb"),
-    addTrashCan = false
+    commandArguments = listOf("[least]")
 ) {
+
+    private val Emote.description: String get() = "$emote (Used $usedCount times)\n"
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         val args = ctx.args
         if (args.isEmpty()) {
-            val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.take(10)
+            var emoteCounter = 0
+            val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.takeWhile {
+                emoteCounter += it.description.length
+                emoteCounter < 2048
+            }
             if (ebemotes.isEmpty()) {
                 ctx.event.channel.sendMessage("Frequently used emotes not found").queueAddReaction()
                 return
@@ -37,21 +43,29 @@ class EmoteBoard : BaseCommand(
             ).queueAddReaction()
         } else {
             if (args[0] == "least") {
-                val ebemotes = emotesCollection.find(Emote::guildId eq guildId).sortedBy { it.usedCount }
+                val collection = emotesCollection.find(Emote::guildId eq guildId).sortedBy { it.usedCount }
+                var emoteCouner = 0
+                var notUsedCounter = 0
+                val ebemotes = collection.filter { it.usedCount > 0 }.takeWhile {
+                    emoteCouner += it.description.length
+                    emoteCouner < 2048
+                }
+                val totalNotUsed = collection.filter { it.usedCount == 0 }
+                val notUsed = totalNotUsed.takeWhile {
+                    notUsedCounter += it.emote.length + 1 // + 1 is for " "
+                    notUsedCounter < 1021
+                }
                 channel.sendMessage(
                     embedBuilder.apply {
                         setTitle("Emoteboard")
-                        val description = mutableListOf<String>()
-                        val notUsedEmotes = mutableListOf<String>()
-                        for (i in ebemotes.indices) {
-                            val emote = ebemotes[i]
-                            if (emote.usedCount == 0) {
-                                notUsedEmotes.add(emote.emote)
-                            } else {
-                                description.add("${ebemotes[i].emote} (Used ${ebemotes[i].usedCount} times)")
-                            }
+                        ebemotes.forEach {
+                            appendDescription(it.description)
                         }
-                        setDescription(notUsedEmotes.joinToString() + " (Used 0 times)\n" + description.joinToString("\n"))
+                        addField(
+                            "Not used emotes",
+                            notUsed.joinToString(separator = " ") { it.emote }.let { if (notUsed.size < totalNotUsed.size) "$it..." else it },
+                            false
+                        )
                     }.build()
                 ).queueAddReaction()
             } else {
