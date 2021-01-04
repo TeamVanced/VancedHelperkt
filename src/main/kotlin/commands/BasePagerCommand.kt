@@ -51,7 +51,7 @@ abstract class BasePagerCommand(
     //will probably optimise this later
     private fun getPagesWithTableOfContent(): List<MessageEmbed> {
         val tableDesc = mutableListOf("0 | You are here ;)")
-        val jsonArray = "file:///C:/Users/Xinto/IdeaProjects/VancedBackend/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
+        val jsonArray = "https://vancedapp.com/api/v1/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
         val embedPages = mutableListOf<EmbedBuilder>()
         val builtEmbedPages = mutableListOf<MessageEmbed>()
         for (i in jsonArray?.indices!!) {
