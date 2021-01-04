@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTime
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.litote.kmongo.findOne
+import utils.stinks
+import utils.stonks
 import java.awt.Color
 
 class ActionListener : ListenerAdapter() {
@@ -142,16 +144,13 @@ class ActionListener : ListenerAdapter() {
         }
         with(event.jda) {
             if (event.member.roles.map { it.id }.contains(boosterRole)) {
-                getTextChannelById(boosterChannel)?.sendMessage("${event.member.user.asTag} just boosted :stonks:")
-                    ?.queue()
+                getTextChannelById(boosterChannel)?.sendMessage("${event.member.user.asTag} just boosted $stonks")?.queue()
                 if (boosterChat.isNotEmpty())
-                    getTextChannelById(boosterChat)?.sendMessage("Hello ${event.member.asMention}! Thank you for boosting, please consider creating a custom role. see ${guildId.prefix}help colourme for more info.")
-                        ?.queue()
+                    getTextChannelById(boosterChat)?.sendMessage("Hello ${event.member.asMention}! Thank you for boosting, please consider creating a custom role. See `${guildId.prefix}help colourme` for more info.")?.queue()
                 else
                     return@with
             } else {
-                getTextChannelById(boosterChannel)?.sendMessage("${event.member.user.asTag} just unboosted :stinks:")
-                    ?.queue()
+                getTextChannelById(boosterChannel)?.sendMessage("${event.member.user.asTag} just unboosted $stinks")?.queue()
             }
         }
 
