@@ -1,6 +1,7 @@
 package ext
 
 import commands.BaseCommand
+import database.collections.Emote
 import database.collections.Quote
 import database.quoteRoles
 import net.dv8tion.jda.api.EmbedBuilder

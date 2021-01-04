@@ -103,6 +103,7 @@ class CommandManager {
             CreateEmbed(),
             EightBall(),
             Emote(),
+            EmoteBoard(),
             F(),
             HowGay(),
             HowHaram(),

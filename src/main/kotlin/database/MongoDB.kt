@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Updates
 import config
+import database.collections.Emote
 import database.collections.Quote
 import database.collections.Settings
 import database.collections.Warn
@@ -17,6 +18,7 @@ val helperDB: MongoDatabase = client.getDatabase("VancedHelper")
 val quotesCollection = helperDB.getCollection<Quote>("quotes")
 val settingsCollection = helperDB.getCollection<Settings>()
 val warnsCollection = helperDB.getCollection<Warn>("warns")
+val emotesCollection = helperDB.getCollection<Emote>("emotes")
 
 val String.settings: Settings?
     get() {
