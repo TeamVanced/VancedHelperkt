@@ -26,7 +26,7 @@ class Mute : BaseCommand(
             if (role != null) {
                 addRole(args, user, role, ctx)
             } else {
-                ctx.guild.createRole().setName("HelperMute").queue({
+                ctx.guild.createRole().setName("VancedHelper-Mute").queue({
                     addRole(args, user, it, ctx)
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
                     channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
@@ -40,8 +40,12 @@ class Mute : BaseCommand(
     private fun addRole(args: MutableList<String>, user: String, role: Role, ctx: CommandContext) {
         val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
         val id = user.filter { it.isDigit() }
+
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
+                if (!ctx.authorAsMember?.canInteract(member)!!) {
+                    channel.sendMessage("You can't mute this member!").queueAddReaction()
+                }
                 ctx.guild.addRoleToMember(member, role).queue {
                     channel.sendMessage("Successfully muted ${member.asMention}").queueAddReaction()
                     ctx.authorAsMember?.let { it1 -> embedBuilder.sendMuteLog(member, it1, reason, guildId) }
