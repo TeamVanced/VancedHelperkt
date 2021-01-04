@@ -19,9 +19,7 @@ class BAT : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val json = Parser.default().parse(
-            StringBuilder(URL("https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT").readText().trimIndent())
-        ) as JsonObject?
+        val json = "https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT".getJson()
         ctx.channel.sendMessage(
             embedBuilder.apply {
                 setTitle("${json?.string("name")} (${json?.string("symbol")})")
