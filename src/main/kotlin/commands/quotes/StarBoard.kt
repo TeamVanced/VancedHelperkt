@@ -9,6 +9,7 @@ import ext.getQuote
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import org.litote.kmongo.eq
 
 class StarBoard : BaseCommand(
     commandName = "starboard",
@@ -23,7 +24,7 @@ class StarBoard : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        sbquotes = quotesCollection.find().filter { it.stars.size > 0 }.sortedByDescending { it.stars.size }.take(10)
+        sbquotes = quotesCollection.find(Quote::guildID eq guildId).filter { it.stars.size > 0 }.sortedByDescending { it.stars.size }.take(10)
         if (sbquotes.isEmpty()) {
             ctx.event.channel.sendMessage("Quotes not found, try adding some").queueAddReaction()
             return

@@ -1,5 +1,6 @@
 package eventhandler
 
+import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
@@ -8,11 +9,13 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
 import net.dv8tion.jda.api.events.ReadyEvent
+import net.dv8tion.jda.api.events.emote.EmoteAddedEvent
+import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent
+import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent
 import net.dv8tion.jda.api.events.guild.GuildBanEvent
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
 import java.awt.Color
 
@@ -22,44 +25,99 @@ class ActionListener : ListenerAdapter() {
     private val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
 
     override fun onReady(event: ReadyEvent) {
-        event.jda.guilds.forEach {
-            val logChannel = it.id.logChannel
+        event.jda.guilds.forEach { guild ->
+            val logChannel = guild.id.logChannel
+            val guildId = guild.id
             if (logChannel.isNotEmpty()) {
                 event.jda.getTextChannelById(logChannel)?.sendMessage(
                     EmbedBuilder().apply {
                         setTitle("I just started!")
                         setDescription(
-                            "**Prefix**: `${it.id.prefix}`\n" +
+                            "**Prefix**: `${guildId.prefix}`\n" +
                             "**Guilds**: `${event.jda.guilds.size}`\n" +
-                            "**Channels**: `${it.channels.size}\n`" +
-                            "**Members**: `${it.memberCount}`"
+                            "**Channels**: `${guild.channels.size}\n`" +
+                            "**Members**: `${guild.memberCount}`"
                         )
                     }.build()
                 )?.queue()
             }
+            val filter = BasicDBObject().append("guildId", guildId)
+            guild.emotes.forEach {
+                val emote = "<:${it.name}:${it.id}>"
+                if (emotesCollection.findOne(filter.append("emote", emote)) == null) {
+                    emotesCollection.insertOne(
+                        Emote(
+                            guildId = guildId,
+                            emote = emote,
+                            usedCount = 0
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onEmoteUpdateName(event: EmoteUpdateNameEvent) {
+        val oldEmote = "<:${event.oldName}:${event.emote.id}>"
+        val newEmote = "<:${event.newName}:${event.emote.id}>"
+        val guildId = event.guild.id
+        val filter = BasicDBObject().append("guildId", guildId).append("emote", oldEmote)
+        if (emotesCollection.findOne(filter) == null) {
+            emotesCollection.insertOne(
+                Emote(
+                    guildId = guildId,
+                    emote = newEmote,
+                    usedCount = 0
+                )
+            )
+        } else {
+            emotesCollection.updateOne(filter, Updates.set("emote", newEmote))
         }
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         super.onGuildMessageReceived(event)
         val message = event.message.contentRaw
+        val guildId = event.guild.id
         if (message.contains(emoteRegex)) {
             val emote = emoteRegex.findAll(message)
+            val filter = BasicDBObject().append("guildId", guildId)
             emote.forEach {
-                val filter = Emote::emote eq it.value
-                val emoteCollection = emotesCollection.findOne(filter)
+                val emoteFilter = filter.append("emote", it.value)
+                val emoteCollection = emotesCollection.findOne(emoteFilter)
                 if (emoteCollection == null) {
                     emotesCollection.insertOne(
                         Emote(
+                            guildId = guildId,
                             emote = it.value,
                             usedCount = 1
                         )
                     )
                 } else {
-                    emotesCollection.updateOne(filter, Updates.set("usedCount", emoteCollection.usedCount + 1))
+                    emotesCollection.updateOne(emoteFilter, Updates.set("usedCount", emoteCollection.usedCount + 1))
                 }
             }
         }
+    }
+
+    override fun onEmoteAdded(event: EmoteAddedEvent) {
+        val emote = "<:${event.emote.name}:${event.emote.id}>"
+        val guildId = event.guild.id
+        if (emotesCollection.findOne(BasicDBObject().append("guildId", guildId).append("emote", emote)) == null) {
+            emotesCollection.insertOne(
+                Emote(
+                    guildId = guildId,
+                    emote = emote,
+                    usedCount = 0
+                )
+            )
+        }
+    }
+
+    override fun onEmoteRemoved(event: EmoteRemovedEvent) {
+        val emote = "<:${event.emote.name}:${event.emote.id}>"
+        val guildId = event.guild.id
+        emotesCollection.deleteOne(BasicDBObject().append("guildId", guildId).append("emote", emote))
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
