@@ -1,7 +1,9 @@
 package database.collections
 
+import defaultPrefix
+
 data class Settings(
-    val prefix: String = "-",
+    val prefix: String = defaultPrefix,
     val guildId: String,
     val logChannel: String = "",
     val modlogChannel: String = "",
@@ -12,5 +14,6 @@ data class Settings(
     val boosterChat: String = "",
     val owners: List<String> = listOf("202115709231300617", "256143257472335872", "423915768191647755"),
     val modRoles: List<String> = emptyList(),
-    val allowedQuoteRoles: List<String> = emptyList()
+    val allowedQuoteRoles: List<String> = emptyList(),
+    val allowedBoosterRoles: List<String> = emptyList()
 )

@@ -22,11 +22,7 @@ class EmoteBoard : BaseCommand(
         super.execute(ctx)
         val args = ctx.args
         if (args.isEmpty()) {
-            var emoteCounter = 0
-            val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.takeWhile {
-                emoteCounter += it.description.length
-                emoteCounter < 2048
-            }
+            val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.take(10)
             if (ebemotes.isEmpty()) {
                 ctx.event.channel.sendMessage("Frequently used emotes not found").queueAddReaction()
                 return
@@ -44,12 +40,8 @@ class EmoteBoard : BaseCommand(
         } else {
             if (args[0] == "least") {
                 val collection = emotesCollection.find(Emote::guildId eq guildId).sortedBy { it.usedCount }
-                var emoteCouner = 0
                 var notUsedCounter = 0
-                val ebemotes = collection.filter { it.usedCount > 0 }.takeWhile {
-                    emoteCouner += it.description.length
-                    emoteCouner < 2048
-                }
+                val ebemotes = collection.filter { it.usedCount > 0 }.take(10)
                 val totalNotUsed = collection.filter { it.usedCount == 0 }
                 val notUsed = totalNotUsed.takeWhile {
                     notUsedCounter += it.emote.length + 1 // + 1 is for " "
