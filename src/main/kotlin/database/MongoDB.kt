@@ -8,6 +8,7 @@ import database.collections.Emote
 import database.collections.Quote
 import database.collections.Settings
 import database.collections.Warn
+import defaultPrefix
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
@@ -30,7 +31,7 @@ val String.settings: Settings?
     }
 
 var String.prefix: String
-    get() = settings?.prefix ?: "-"
+    get() = settings?.prefix ?: defaultPrefix
     set(value) {
         if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.set("prefix", value)) == null) {
             settingsCollection.insertOne(

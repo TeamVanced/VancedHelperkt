@@ -78,7 +78,6 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        super.onGuildMessageReceived(event)
         val message = event.message.contentRaw
         val guildId = event.guild.id
         if (message.contains(emoteRegex)) {
@@ -134,7 +133,6 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildMemberUpdateBoostTime(event: GuildMemberUpdateBoostTimeEvent) {
-        super.onGuildMemberUpdateBoostTime(event)
         val guildId = event.guild.id
         val boosterRole = guildId.boosterRole
         val boosterChannel = guildId.boosterChannel

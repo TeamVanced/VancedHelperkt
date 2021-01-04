@@ -13,7 +13,7 @@ class Main {
             .addEventListeners(ActionListener(), CommandListener(), ErrorListener())
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .enableIntents(GatewayIntent.GUILD_MEMBERS)
-            .setActivity(Activity.listening("help"))
+            .setActivity(Activity.listening("${defaultPrefix}help"))
             .build()
     }
 
