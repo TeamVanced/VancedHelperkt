@@ -10,7 +10,8 @@ import database.quotesCollection
 import ext.sendIncorrectQuote
 import ext.useCommandProperly
 import org.bson.conversions.Bson
-import org.litote.kmongo.*
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
 
 class RemoveStar : BaseCommand(
     commandName = "removestar",

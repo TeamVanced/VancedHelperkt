@@ -2,7 +2,6 @@ package commands
 
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
-import commands.dev.EmbedField
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent

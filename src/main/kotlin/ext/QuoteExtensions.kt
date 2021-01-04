@@ -1,14 +1,12 @@
 package ext
 
 import commands.BaseCommand
-import database.collections.Emote
 import database.collections.Quote
 import database.quoteRoles
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 
 fun EmbedBuilder.sendQuote(quote: Quote, channel: MessageChannel, baseCommand: BaseCommand) {
     with (baseCommand) {
