@@ -54,8 +54,7 @@ open class BaseCommand(
         event.user?.let {
             event.reaction.removeReaction(it).queue {
                 if (event.reactionEmote.asReactionCode == trashEmote) {
-                    channel.deleteMessageById(messageId).queue()
-                    channel.deleteMessageById(userMessageId).queue()
+                    channel.deleteMessagesByIds(listOf(messageId, userMessageId)).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE){})
                 }
             }
         }

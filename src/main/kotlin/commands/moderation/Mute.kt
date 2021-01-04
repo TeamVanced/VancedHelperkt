@@ -33,7 +33,7 @@ class Mute : BaseCommand(
                 })
             }
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 
@@ -54,7 +54,7 @@ class Mute : BaseCommand(
                 channel.sendMessage("Provided user does not exist!").queueAddReaction()
             })
         } else {
-            channel.useCommandProperly(this)
+            useCommandProperly()
         }
     }
 

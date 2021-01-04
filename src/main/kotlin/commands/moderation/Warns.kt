@@ -44,7 +44,7 @@ class Warns : BaseCommand(
                 channel.sendMessage("User $user has no warns").queueAddReaction()
             }
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 

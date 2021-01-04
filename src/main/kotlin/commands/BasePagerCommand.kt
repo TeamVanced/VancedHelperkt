@@ -2,6 +2,7 @@ package commands
 
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
+import commands.dev.EmbedField
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
@@ -51,7 +52,7 @@ abstract class BasePagerCommand(
     //will probably optimise this later
     private fun getPagesWithTableOfContent(): List<MessageEmbed> {
         val tableDesc = mutableListOf("0 | You are here ;)")
-        val jsonArray = "https://github.com/YTVanced/VancedBackend/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
+        val jsonArray = "file:///C:/Users/Xinto/IdeaProjects/VancedBackend/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
         val embedPages = mutableListOf<EmbedBuilder>()
         val builtEmbedPages = mutableListOf<MessageEmbed>()
         for (i in jsonArray?.indices!!) {

@@ -63,11 +63,11 @@ class AddQuote : BaseCommand(
                     )
                 }
                 else -> {
-                    ctx.channel.useCommandProperly(this)
+                    useCommandProperly()
                 }
             }
         } else {
-            ctx.channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 

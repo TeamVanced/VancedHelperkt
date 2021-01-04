@@ -34,7 +34,7 @@ class Emote : BaseCommand(
             }
             channel.sendMessage(emotelinks.distinct().joinToString("\n")).queueAddReaction()
         } else {
-            channel.useArguments(1, this)
+            useArguments(1)
         }
     }
 

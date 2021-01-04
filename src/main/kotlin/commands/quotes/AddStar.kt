@@ -29,10 +29,10 @@ class AddStar : BaseCommand(
             when {
                 message.matches(contentIDRegex) -> quotesCollection.addStar(ctx, Quote::messageID eq message)
                 message.toLongOrNull() != null -> quotesCollection.addStar(ctx, Quote::quoteId eq message.toLong())
-                else -> ctx.channel.sendIncorrectQuote(this)
+                else -> sendIncorrectQuote()
             }
         } else {
-            ctx.channel.useCommandProperly(this)
+            useCommandProperly()
         }
     }
 
@@ -47,7 +47,7 @@ class AddStar : BaseCommand(
                 ctx.channel.sendMessage("Successfully starred quote #${quote.quoteId}").queueAddReaction()
             }
         } else {
-            ctx.channel.sendIncorrectQuote(this@AddStar)
+            sendIncorrectQuote()
         }
     }
 

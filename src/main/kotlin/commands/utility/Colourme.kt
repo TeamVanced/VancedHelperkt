@@ -60,7 +60,7 @@ class Colourme : BaseCommand(
 
 
         } else {
-            channel.useArguments(2, this)
+            useArguments(2)
         }
     }
 

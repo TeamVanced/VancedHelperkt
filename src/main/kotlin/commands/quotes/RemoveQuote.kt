@@ -8,6 +8,7 @@ import database.collections.Quote
 import database.quotesCollection
 import ext.hasQuotePerms
 import ext.sendIncorrectQuote
+import ext.useArguments
 import ext.useCommandProperly
 
 class RemoveQuote : BaseCommand(
@@ -25,24 +26,28 @@ class RemoveQuote : BaseCommand(
             return
         }
         val args = ctx.args.apply { remove("removequote") }
-        val args0 = args[0]
-        val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)
-        when {
-            args0.matches(contentIDRegex) -> quotesCollection.findOneAndDelete(guildFilter.append("messageID", args0))
-                .checkDelete(ctx)
-            args0.toLongOrNull() != null -> quotesCollection.findOneAndDelete(
-                guildFilter.append(
-                    "quoteId",
-                    args0.toLong()
-                )
-            ).checkDelete(ctx)
-            else -> ctx.channel.useCommandProperly(this)
+        if (args.isNotEmpty()) {
+            val args0 = args[0]
+            val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)
+            when {
+                args0.matches(contentIDRegex) -> quotesCollection.findOneAndDelete(guildFilter.append("messageID", args0))
+                    .checkDelete(ctx)
+                args0.toLongOrNull() != null -> quotesCollection.findOneAndDelete(
+                    guildFilter.append(
+                        "quoteId",
+                        args0.toLong()
+                    )
+                ).checkDelete(ctx)
+                else -> useCommandProperly()
+            }
+        } else {
+            useArguments(1)
         }
     }
 
     private fun Quote?.checkDelete(ctx: CommandContext) {
         if (this == null) {
-            ctx.channel.sendIncorrectQuote(this@RemoveQuote)
+            sendIncorrectQuote()
         } else {
             ctx.channel.sendMessage("Quote $quoteId deleted successfully!").queueAddReaction()
         }

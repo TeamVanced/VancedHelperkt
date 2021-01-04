@@ -51,7 +51,7 @@ class CreateEmbed : BaseCommand(
                 }.build()
             ).queueAddReaction()
         } else {
-            channel.useCommandProperly(this)
+            useCommandProperly()
         }
     }
 

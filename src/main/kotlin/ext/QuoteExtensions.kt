@@ -27,11 +27,8 @@ fun EmbedBuilder.getQuote(quote: Quote): MessageEmbed {
     }.build()
 }
 
-fun TextChannel.sendIncorrectQuote(baseCommand: BaseCommand) {
-    with(baseCommand) {
-        sendMessage("That's not a valid quote bro").queueAddReaction()
-    }
-
+fun BaseCommand.sendIncorrectQuote() {
+    channel.sendMessage("That's not a valid quote bro").queueAddReaction()
 }
 
 fun Member.hasQuotePerms(guildId: String): Boolean {
