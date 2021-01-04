@@ -43,7 +43,7 @@ class BAT : BaseCommand(
         return when {
             roundedPrice >= 25 -> "$relax $this%"
             roundedPrice >= 5 -> "$vmerchant $this%"
-            roundedPrice == 1 -> "$stonks $this%"
+            roundedPrice >= 0 -> "$stonks $this%"
             roundedPrice <= -5 -> "$feels $this%"
             roundedPrice <= -25 -> "$sadness $this%"
             else -> "$stinks $this%"
