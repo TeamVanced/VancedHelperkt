@@ -122,14 +122,13 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue {
-            val banLog = it[0]
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue { banLogs ->
+            val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
-                event.guild.retrieveMember(event.user).queue { member ->
-                    banLog.user?.let { modResolvable ->
-                        event.guild.retrieveMember(modResolvable).queue { mod ->
-                            embedBuilder.sendBanLog(member, mod, banLog.reason, event.guild.id)
-                        }
+                val mod = banLog.user
+                if (mod != null) {
+                    event.guild.retrieveMember(mod).queue {
+                        embedBuilder.sendBanLog(event.user, it, banLog.reason, event.guild.id)
                     }
                 }
             }
