@@ -7,3 +7,6 @@ fun User.getModLogInfo(): String {
     "Tag: $asTag\n" +
     "ID: $id"
 }
+
+val String.asMention: String
+     get() = "<@$this>"

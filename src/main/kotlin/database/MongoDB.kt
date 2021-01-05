@@ -126,7 +126,7 @@ var String.boosterChat: String
         if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.set("boosterChat", value)) == null) {
             settingsCollection.insertOne(
                 Settings(
-                    boosterRole = value,
+                    boosterChat = value,
                     guildId = this
                 )
             )
@@ -151,6 +151,9 @@ val String.quoteRoles: List<String>
 
 val String.modRoles: List<String>
     get() = settings?.modRoles ?: emptyList()
+
+val String.colourmeRoles: List<String>
+    get() = settings?.allowedColourmeRoles ?: emptyList()
 
 val String.owners: List<String>
     get() = settings?.owners ?: listOf("202115709231300617", "256143257472335872", "423915768191647755")
@@ -187,6 +190,21 @@ fun String.addQuoteRole(newRoleId: String) {
 
 fun String.removeQuoteRole(roleId: String) {
     settingsCollection.updateOne(Settings::guildId eq this, Updates.pull("allowedQuoteRoles", roleId))
+}
+
+fun String.addColourmeRole(newRoleId: String) {
+    if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.push("allowedBoosterRoles", newRoleId)) == null) {
+        settingsCollection.insertOne(
+            Settings(
+                allowedColourmeRoles = listOf(newRoleId),
+                guildId = this
+            )
+        )
+    }
+}
+
+fun String.removeColourmeRole(roleId: String) {
+    settingsCollection.updateOne(Settings::guildId eq this, Updates.pull("allowedBoosterRoles", roleId))
 }
 
 fun String.addOwner(ownerId: String) {
