@@ -21,7 +21,7 @@ class Unwarn : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         val args = ctx.args
-        if (args.isNotEmpty()) {
+        if (args.isNotEmpty() && args.size == 2) {
             val user = args[0]
             val warnIndex = args[1]
             if (warnIndex.toIntOrNull() == null) {
@@ -45,7 +45,7 @@ class Unwarn : BaseCommand(
             })
 
         } else {
-            useArguments(1)
+            useArguments(2)
         }
     }
 

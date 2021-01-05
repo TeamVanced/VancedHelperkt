@@ -20,7 +20,7 @@ fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String
                 setTitle(title)
                 setDescription(stacktrace?.take(2045) + "...")
             }.build()
-        ).setContent(guild.id.owners.joinToString(" ") { jda?.getUserById(it)?.asMention.toString() }).build()
+        ).setContent(guild.id.owners.joinToString(" ") { it.asMention }).build()
     )?.queue()
 }
 
@@ -82,8 +82,8 @@ fun EmbedBuilder.sendMuteLog(user: Member, mod: Member, reason: String?, guildId
     sendModLog("User Muted", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendBanLog(userId: String, mod: Member, reason: String?, guildId: String) {
-    sendModLog("User Banned", userId, mod, reason, guildId)
+fun EmbedBuilder.sendBanLog(user: Member, mod: Member, reason: String?, guildId: String) {
+    sendModLog("User Banned", user, mod, reason, guildId)
 }
 
 fun EmbedBuilder.sendUnwarnLog(user: Member, mod: Member, guildId: String) {

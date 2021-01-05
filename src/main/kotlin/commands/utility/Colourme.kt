@@ -3,8 +3,7 @@ package commands.utility
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Utility
-import ext.isBooster
-import ext.isMod
+import database.colourmeRoles
 import ext.useArguments
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
@@ -22,7 +21,7 @@ class Colourme : BaseCommand(
         super.execute(ctx)
         val member = ctx.authorAsMember
         val guildId = ctx.guild.id
-        if (!(member!!.isBooster(guildId) || member.isMod(guildId))) {
+        if (member!!.roles.none { guildId.colourmeRoles.contains(it.id) }) {
             channel.sendMessage("You are not allowed to use this command!").queueAddReaction()
             return
         }

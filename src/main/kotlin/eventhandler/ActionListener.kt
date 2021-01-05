@@ -125,8 +125,12 @@ class ActionListener : ListenerAdapter() {
         event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue {
             val banLog = it[0]
             if (banLog.targetType == TargetType.MEMBER) {
-                event.guild.retrieveMember(event.user).queue { mod ->
-                    embedBuilder.sendBanLog(banLog.targetId, mod, banLog.reason, event.guild.id)
+                event.guild.retrieveMember(event.user).queue { member ->
+                    banLog.user?.let { modResolvable ->
+                        event.guild.retrieveMember(modResolvable).queue { mod ->
+                            embedBuilder.sendBanLog(member, mod, banLog.reason, event.guild.id)
+                        }
+                    }
                 }
             }
         }

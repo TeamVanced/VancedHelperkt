@@ -6,12 +6,13 @@ import commands.CommandTypes.Database
 import database.*
 import ext.useArguments
 import ext.useCommandProperly
+import org.litote.kmongo.eq
 
 class Settings : BaseCommand(
     commandName = "settings",
     commandDescription = "Configurable settings for helper",
     commandType = Database,
-    commandArguments = listOf("<prefix | boosterchannel | modlogchannel | infochannel | errorchannel>"),
+    commandArguments = listOf("<prefix | boosterchat | boosterrole | muterole | modlogchannel | infochannel | errorchannel | addowner | removeowner | addquoterole | removequoterole | addcolourmerole | removecolourmerole | clear>"),
     devOnly = true
 ) {
 
@@ -30,13 +31,13 @@ class Settings : BaseCommand(
                         boosterChat = value
                         channel.sendMessage("Successfully set the booster chat to `$value`!").queueAddReaction()
                     }
-                    "muterole" -> {
-                        muteRole = value
-                        channel.sendMessage("Successfully set the mute role to `$value`!").queueAddReaction()
-                    }
                     "boosterrole" -> {
                         boosterRole = value
                         channel.sendMessage("Successfully set the booster role to `$value`!").queueAddReaction()
+                    }
+                    "muterole" -> {
+                        muteRole = value
+                        channel.sendMessage("Successfully set the mute role to `$value`!").queueAddReaction()
                     }
                     "logchannel" -> {
                         logChannel = value
@@ -101,6 +102,26 @@ class Settings : BaseCommand(
                         }
                         removeQuoteRole(value)
                         channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
+                    }
+                    "addcolourmerole" -> {
+                        if (colourmeRoles.contains(value)) {
+                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
+                            return@with
+                        }
+                        addColourmeRole(value)
+                        channel.sendMessage("Successfully added `$value` to allowed colourme roles!").queueAddReaction()
+                    }
+                    "removecolourmerole" -> {
+                        if (!colourmeRoles.contains(value)) {
+                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
+                            return@with
+                        }
+                        removeColourmeRole(value)
+                        channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
+                    }
+                    "clear" -> {
+                        settingsCollection.findOneAndDelete(Settings::guildId eq this)
+                        channel.sendMessage("Successfully cleared settings").queueAddReaction()
                     }
                     else -> {
                         useCommandProperly()
