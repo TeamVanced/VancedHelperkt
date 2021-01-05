@@ -45,6 +45,7 @@ class Mute : BaseCommand(
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
                     channel.sendMessage("You can't mute this member!").queueAddReaction()
+                    return@queue
                 }
                 ctx.guild.addRoleToMember(member, role).queue {
                     channel.sendMessage("Successfully muted ${member.asMention}").queueAddReaction()

@@ -29,6 +29,10 @@ class Warn : BaseCommand(
             val id = user.filter { it.isDigit() }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
             ctx.guild.retrieveMemberById(id).queue({ member ->
+                if (!ctx.authorAsMember?.canInteract(member)!!) {
+                    channel.sendMessage("You can't warn this member!").queueAddReaction()
+                    return@queue
+                }
                 if (warnsCollection.findOneAndUpdate(filter, Updates.push("reasons", reason)) == null) {
                     warnsCollection.insertOne(
                         Warn(
