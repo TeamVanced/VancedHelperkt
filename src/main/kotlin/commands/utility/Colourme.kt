@@ -14,28 +14,27 @@ class Colourme : BaseCommand(
     commandDescription = "Create a custom role for yourself",
     commandType = Utility,
     commandArguments = listOf("<color> <role name>"),
-    commandAliases = listOf("colorme")
+    commandAliases = listOf("colorme", "colorme")
 ) {
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val member = ctx.authorAsMember
         val guildId = ctx.guild.id
-        if (member!!.roles.none { guildId.colourmeRoles.contains(it.id) }) {
-            channel.sendMessage("You are not allowed to use this command!").queueAddReaction()
-            return
-        }
         val args = ctx.args
         if (args.isNotEmpty() && args.size >= 2) {
             val color = try {
-                Color.decode(args[0])
+                Color.decode("#${args[0].removePrefix("#")}")
             } catch (e: Exception) {
-                Color.BLACK
+                Color.CYAN
             }
 
-            val roleName = args.apply { removeAt(0) }.joinToString(" ")
-            val ccrole = ctx.authorAsMember?.roles?.filter { it.name.endsWith("CC") }
-            if (ccrole != null) {
+            ctx.guild.retrieveMemberById(ctx.author.id).queue member@ { member ->
+                if (member.roles.none { guildId.colourmeRoles.contains(it.id) }) {
+                    channel.sendMessage("You are not allowed to use this command!").queueAddReaction()
+                    return@member
+                }
+                val roleName = args.apply { removeAt(0) }.joinToString(" ")
+                val ccrole = member.roles.filter { it.name.endsWith("CC") }
                 fun addRole() {
                     ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
                         ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
@@ -49,14 +48,14 @@ class Colourme : BaseCommand(
                 }
 
                 if (ccrole.isNotEmpty()) {
-                    ctx.guild.removeRoleFromMember(ctx.authorAsMember!!, ccrole[0]).queue {
+                    ccrole[0].delete().queue {
                         addRole()
-                        return@queue
                     }
+                } else {
+                    addRole()
                 }
-                addRole()
-            }
 
+            }
         } else {
             useArguments(2)
         }

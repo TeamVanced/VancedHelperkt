@@ -35,6 +35,10 @@ class Unmute : BaseCommand(
 
     private fun removeRole(user: String, role: Role, ctx: CommandContext) {
         val id = user.filter { it.isDigit() }
+        if (id.isEmpty()) {
+            useCommandProperly()
+            return
+        }
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (member.roles.contains(role)) {

@@ -193,7 +193,7 @@ fun String.removeQuoteRole(roleId: String) {
 }
 
 fun String.addColourmeRole(newRoleId: String) {
-    if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.push("allowedBoosterRoles", newRoleId)) == null) {
+    if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.push("allowedColourmeRoles", newRoleId)) == null) {
         settingsCollection.insertOne(
             Settings(
                 allowedColourmeRoles = listOf(newRoleId),
@@ -204,7 +204,7 @@ fun String.addColourmeRole(newRoleId: String) {
 }
 
 fun String.removeColourmeRole(roleId: String) {
-    settingsCollection.updateOne(Settings::guildId eq this, Updates.pull("allowedBoosterRoles", roleId))
+    settingsCollection.updateOne(Settings::guildId eq this, Updates.pull("allowedColourmeRoles", roleId))
 }
 
 fun String.addOwner(ownerId: String) {

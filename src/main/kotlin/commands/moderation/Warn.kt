@@ -9,6 +9,7 @@ import database.collections.Warn
 import database.warnsCollection
 import ext.sendWarnLog
 import ext.useArguments
+import ext.useCommandProperly
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
@@ -28,7 +29,15 @@ class Warn : BaseCommand(
             val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
             val id = user.filter { it.isDigit() }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
+            if (id.isEmpty()) {
+                useCommandProperly()
+                return
+            }
             ctx.guild.retrieveMemberById(id).queue({ member ->
+                if (!ctx.authorAsMember?.canInteract(member)!!) {
+                    channel.sendMessage("You can't warn this member!").queueAddReaction()
+                    return@queue
+                }
                 if (warnsCollection.findOneAndUpdate(filter, Updates.push("reasons", reason)) == null) {
                     warnsCollection.insertOne(
                         Warn(

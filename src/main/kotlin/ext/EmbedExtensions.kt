@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.User
 
 fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String?) {
     val errorChannel = guild.id.errorChannel
@@ -49,13 +50,13 @@ fun EmbedBuilder.sendModLog(title: String, user: Member, mod: Member, reason: St
     )?.queue()
 }
 
-fun EmbedBuilder.sendModLog(title: String, userId: String, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendModLog(title: String, user: User, mod: Member, reason: String?, guildId: String) {
     jda?.getTextChannelById(guildId.modlogChannel)?.sendMessage(
         apply {
             setTitle(title)
             addField(
                 "User",
-                userId,
+                user.getModLogInfo(),
                 false
             )
             addField(
@@ -82,7 +83,7 @@ fun EmbedBuilder.sendMuteLog(user: Member, mod: Member, reason: String?, guildId
     sendModLog("User Muted", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendBanLog(user: Member, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendBanLog(user: User, mod: Member, reason: String?, guildId: String) {
     sendModLog("User Banned", user, mod, reason, guildId)
 }
 
