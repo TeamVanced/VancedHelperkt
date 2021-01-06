@@ -1,3 +1,2 @@
-
-rootProject.name = "VancedHelperRewrite"
+rootProject.name = "VancedHelperKt"
 
