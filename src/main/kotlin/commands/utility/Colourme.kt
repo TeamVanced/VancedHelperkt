@@ -23,9 +23,9 @@ class Colourme : BaseCommand(
         val args = ctx.args
         if (args.isNotEmpty() && args.size >= 2) {
             val color = try {
-                Color.decode(args[0])
+                Color.decode("#${args[0].removePrefix("#")}")
             } catch (e: Exception) {
-                Color.BLACK
+                Color.CYAN
             }
 
             ctx.guild.retrieveMemberById(ctx.author.id).queue member@ { member ->
@@ -48,7 +48,7 @@ class Colourme : BaseCommand(
                 }
 
                 if (ccrole.isNotEmpty()) {
-                    ctx.guild.removeRoleFromMember(member, ccrole[0]).queue {
+                    ccrole[0].delete().queue {
                         addRole()
                     }
                 } else {
