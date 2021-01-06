@@ -40,7 +40,10 @@ class Mute : BaseCommand(
     private fun addRole(args: MutableList<String>, user: String, role: Role, ctx: CommandContext) {
         val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
         val id = user.filter { it.isDigit() }
-
+        if (id.isEmpty()) {
+            useCommandProperly()
+            return
+        }
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {

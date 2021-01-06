@@ -8,6 +8,7 @@ import commands.CommandTypes.Moderation
 import database.warnsCollection
 import ext.sendUnwarnLog
 import ext.useArguments
+import ext.useCommandProperly
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
@@ -25,6 +26,10 @@ class Unwarn : BaseCommand(
         if (args.isNotEmpty()) {
             val user = args[0]
             val id = user.filter { it.isDigit() }
+            if (id.isEmpty()) {
+                useCommandProperly()
+                return
+            }
             fun removeWarn(removeAction: (member: Member) -> Unit) {
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)

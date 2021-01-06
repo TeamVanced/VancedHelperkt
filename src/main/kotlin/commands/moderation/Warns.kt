@@ -6,6 +6,7 @@ import commands.BaseCommand
 import commands.CommandTypes.Moderation
 import database.warnsCollection
 import ext.useArguments
+import ext.useCommandProperly
 import org.litote.kmongo.findOne
 
 class Warns : BaseCommand(
@@ -20,6 +21,10 @@ class Warns : BaseCommand(
         if (args.isNotEmpty()) {
             val user = args[0]
             val id = user.filter { it.isDigit() }
+            if (id.isEmpty()) {
+                useCommandProperly()
+                return
+            }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
             val warn = warnsCollection.findOne(filter)
             if (warn != null) {
