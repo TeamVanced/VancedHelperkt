@@ -5,7 +5,8 @@ public class IQLogic {
         NormalDistribution iqDist = new NormalDistribution(100, 15);
         int randIQ = (int) (Math.random() * 200);
         double luck = Math.random();
-        if (iqDist.cumulativeProbability(randIQ) > luck) {
+        boolean smallo = iqDist.cumulativeProbability(randIQ) < 0.5;
+        if ((smallo && iqDist.cumulativeProbability(randIQ) > luck) || (!smallo && iqDist.cumulativeProbability(randIQ) < luck)) {
             return randIQ;
         }
         return calcIQ();
