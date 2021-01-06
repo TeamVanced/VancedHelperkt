@@ -1,11 +1,13 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
+import commandhandler.CommandManager
 import commands.BaseCommand
 import commands.CommandTypes.Fun
-import net.dv8tion.jda.api.entities.MessageChannel
 
-class HowGay : BaseCommand(
+class HowGay(
+    private val commandManager: CommandManager
+) : BaseCommand(
     commandName = "howgay",
     commandDescription = "Calculate gayness",
     commandType = Fun,
@@ -15,24 +17,13 @@ class HowGay : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         val args = ctx.args
+        val howcmd = commandManager.getCommand("how")
         if (args.isNotEmpty()) {
-            calculateGayness(args.joinToString(" "), ctx.channel)
+            howcmd?.execute(CommandContext(ctx.event, mutableListOf("gay | ${args.joinToString(" ")}")))
         } else {
             val user = ctx.author.asMention
-            calculateGayness(user, ctx.channel)
+            howcmd?.execute(CommandContext(ctx.event, mutableListOf("gay | $user")))
         }
 
-    }
-
-    private fun calculateGayness(arg: String, channel: MessageChannel) {
-        val percentage = (0..100).random()
-        val barAmount = percentage / 10
-        val bar = "▰".repeat(barAmount) + "▱".repeat(10 - barAmount)
-        channel.sendMessage(
-            embedBuilder.apply {
-                setTitle("Gay Meter")
-                setDescription("$arg is $percentage% gay\n$bar")
-            }.build()
-        ).queueAddReaction()
     }
 }
