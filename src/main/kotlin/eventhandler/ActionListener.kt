@@ -45,21 +45,26 @@ class ActionListener : ListenerAdapter() {
             }
             val filter = BasicDBObject().append("guildId", guildId)
             guild.emotes.forEach {
-                val emote = "<:${it.name}:${it.id}>"
-                if (emotesCollection.findOne(filter.append("emote", emote)) == null) {
-                    emotesCollection.insertOne(
-                        Emote(
-                            guildId = guildId,
-                            emote = emote,
-                            usedCount = 0
+                if (!it.isAnimated) {
+                    val emote = "<:${it.name}:${it.id}>"
+                    if (emotesCollection.findOne(filter.append("emote", emote)) == null) {
+                        emotesCollection.insertOne(
+                            Emote(
+                                guildId = guildId,
+                                emote = emote,
+                                usedCount = 0
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
     }
 
     override fun onEmoteUpdateName(event: EmoteUpdateNameEvent) {
+        if (event.emote.isAnimated)
+            return
+
         val oldEmote = "<:${event.oldName}:${event.emote.id}>"
         val newEmote = "<:${event.newName}:${event.emote.id}>"
         val guildId = event.guild.id
@@ -102,6 +107,9 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onEmoteAdded(event: EmoteAddedEvent) {
+        if (event.emote.isAnimated)
+            return
+
         val emote = "<:${event.emote.name}:${event.emote.id}>"
         val guildId = event.guild.id
         if (emotesCollection.findOne(BasicDBObject().append("guildId", guildId).append("emote", emote)) == null) {
