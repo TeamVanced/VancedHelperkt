@@ -49,7 +49,7 @@ class Colourme : BaseCommand(
                     }
 
                     if (ccrole.isNotEmpty()) {
-                        ctx.guild.removeRoleFromMember(ctx.authorAsMember!!, ccrole[0]).queue {
+                        ctx.guild.removeRoleFromMember(member, ccrole[0]).queue {
                             addRole()
                             return@queue
                         }
