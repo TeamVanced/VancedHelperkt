@@ -34,28 +34,27 @@ class Colourme : BaseCommand(
                     return@member
                 }
                 val roleName = args.apply { removeAt(0) }.joinToString(" ")
-                val ccrole = ctx.authorAsMember?.roles?.filter { it.name.endsWith("CC") }
-                if (ccrole != null) {
-                    fun addRole() {
-                        ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
-                            ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
-                                ctx.guild.addRoleToMember(member, role).queue {
-                                    channel.sendMessage("Successfully added the role!").queueAddReaction()
-                                }
+                val ccrole = member.roles.filter { it.name.endsWith("CC") }
+                fun addRole() {
+                    ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
+                        ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
+                            ctx.guild.addRoleToMember(member, role).queue {
+                                channel.sendMessage("Successfully added the role!").queueAddReaction()
                             }
-                        }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                            channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
-                        })
-                    }
-
-                    if (ccrole.isNotEmpty()) {
-                        ctx.guild.removeRoleFromMember(member, ccrole[0]).queue {
-                            addRole()
-                            return@queue
                         }
+                    }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
+                        channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
+                    })
+                }
+
+                if (ccrole.isNotEmpty()) {
+                    ctx.guild.removeRoleFromMember(member, ccrole[0]).queue {
+                        addRole()
                     }
+                } else {
                     addRole()
                 }
+
             }
         } else {
             useArguments(2)
