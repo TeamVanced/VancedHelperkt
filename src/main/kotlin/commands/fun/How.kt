@@ -20,7 +20,6 @@ class How : BaseCommand(
             val predicate = joinedArray.substringBefore("|")
             val thing = joinedArray.substringAfter("|", "")
             if (thing.isNotEmpty()) {
-                println(thing)
                 calculate(predicate, thing)
             } else {
                 calculate(predicate, ctx.author.asMention)
