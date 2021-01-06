@@ -24,7 +24,7 @@ class IQ : BaseCommand(
     }
 
     private fun calculateIQ(arg: String, channel: MessageChannel) {
-        val iq = (0..281).random()
+        val iq = IQLogic()
         channel.sendMessage(
             embedBuilder.apply {
                 setTitle("IQ Calculator")
