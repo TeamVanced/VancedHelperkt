@@ -1,9 +1,9 @@
 package commands.`fun`
 
-import config
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Fun
+import config
 import ext.hasQuotePerms
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
