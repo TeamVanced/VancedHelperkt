@@ -16,6 +16,8 @@ class Gender : BaseCommand(
     commandArguments = listOf("[The thing]")
 ) {
 
+    private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
+
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
@@ -27,7 +29,7 @@ class Gender : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    detectGender(it.user.name.substringBefore(" "))
+                    detectGender(it.user.name)
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
                     channel.sendMessage("Provided member does not exist!").queueAddReaction()
                 }.handle(ErrorResponse.UNKNOWN_USER) {
@@ -43,7 +45,7 @@ class Gender : BaseCommand(
     }
 
     private fun detectGender(thing: String) {
-        val json = "https://gender-api.com/get?key=${config.genderToken}&name=$thing".getJson()
+        val json = if (thing.contains(" ")) "$baseUrl&email=${thing.replace(" ", "")}".getJson() else "$baseUrl&name=$thing".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
         channel.sendMessage(
