@@ -5,6 +5,7 @@ import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
 import ext.sendBanLog
+import ext.sendUnbanLog
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.events.emote.EmoteAddedEvent
 import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent
 import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent
 import net.dv8tion.jda.api.events.guild.GuildBanEvent
+import net.dv8tion.jda.api.events.guild.GuildUnbanEvent
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -137,6 +139,20 @@ class ActionListener : ListenerAdapter() {
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
                         embedBuilder.sendBanLog(event.user, it, banLog.reason, event.guild.id)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onGuildUnban(event: GuildUnbanEvent) {
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(1).queue { banLogs ->
+            val banLog = banLogs[0]
+            if (banLog.targetType == TargetType.MEMBER) {
+                val mod = banLog.user
+                if (mod != null) {
+                    event.guild.retrieveMember(mod).queue {
+                        embedBuilder.sendUnbanLog(event.user, it, banLog.reason, event.guild.id)
                     }
                 }
             }

@@ -4,6 +4,7 @@ import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Fun
 import net.dv8tion.jda.api.entities.MessageChannel
+import org.apache.commons.math3.distribution.NormalDistribution
 
 class IQ : BaseCommand(
     commandName = "iq",
@@ -24,12 +25,24 @@ class IQ : BaseCommand(
     }
 
     private fun calculateIQ(arg: String, channel: MessageChannel) {
-        val iq = (0..281).random()
         channel.sendMessage(
             embedBuilder.apply {
                 setTitle("IQ Calculator")
-                setDescription("$arg has an iq of $iq")
+                setDescription("$arg has an iq of ${calcIQ()}")
             }.build()
         ).queueAddReaction()
     }
+
+    private fun calcIQ(): Int {
+        val iqDist = NormalDistribution(100.0, 15.0)
+        val randIQ = (50..150).random()
+        val luck = Math.random()
+        val smallo = iqDist.cumulativeProbability(randIQ.toDouble()) < 0.5
+        return if (smallo && iqDist.cumulativeProbability(randIQ.toDouble()) > luck || !smallo && iqDist.cumulativeProbability(randIQ.toDouble()) < luck) {
+            randIQ
+        } else {
+            calcIQ()
+        }
+    }
+
 }

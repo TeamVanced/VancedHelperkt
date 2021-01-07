@@ -6,7 +6,6 @@ import commands.CommandTypes.Utility
 import config
 import utils.*
 import java.text.DecimalFormat
-import kotlin.math.roundToInt
 
 class BAT : BaseCommand(
     commandName = "bat",
@@ -27,10 +26,10 @@ class BAT : BaseCommand(
                 )
                 addField(
                     "Price Change",
-                    "`1h` - ${json?.string("delta_1h")?.toDouble()?.stonkify()}\n" +
-                    "`24h` - ${json?.string("delta_24h")?.toDouble()?.stonkify()}\n" +
-                    "`7d` - ${json?.string("delta_7d")?.toDouble()?.stonkify()}\n" +
-                    "`30d` - ${json?.string("delta_30d")?.toDouble()?.stonkify()}",
+                    "`1h` - ${json?.string("delta_1h")?.stonkify()}\n" +
+                    "`24h` - ${json?.string("delta_24h")?.stonkify()}\n" +
+                    "`7d` - ${json?.string("delta_7d")?.stonkify()}\n" +
+                    "`30d` - ${json?.string("delta_30d")?.stonkify()}",
                     false
                 )
                 setFooter("Powered by coinlib.io")
@@ -38,14 +37,14 @@ class BAT : BaseCommand(
         ).queueAddReaction()
     }
 
-    private fun Double.stonkify(): String {
-        val roundedPrice = roundToInt()
+    private fun String.stonkify(): String {
+        val price = Integer.parseInt(this.toDouble().toInt().toString(), 10)
         return when {
-            roundedPrice >= 25 -> "$relax $this%"
-            roundedPrice >= 5 -> "$vmerchant $this%"
-            roundedPrice >= 0 -> "$stonks $this%"
-            roundedPrice <= -5 -> "$feels $this%"
-            roundedPrice <= -25 -> "$sadness $this%"
+            price >= 25 -> "$relax $this%"
+            price >= 5 -> "$vmerchant $this%"
+            price >= 0 -> "$stonks $this%"
+            price <= -5 -> "$feels $this%"
+            price <= -25 -> "$sadness $this%"
             else -> "$stinks $this%"
         }
     }

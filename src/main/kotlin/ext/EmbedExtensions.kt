@@ -87,6 +87,10 @@ fun EmbedBuilder.sendBanLog(user: User, mod: Member, reason: String?, guildId: S
     sendModLog("User Banned", user, mod, reason, guildId)
 }
 
+fun EmbedBuilder.sendUnbanLog(user: User, mod: Member, reason: String?, guildId: String) {
+    sendModLog("User Unbanned", user, mod, reason, guildId)
+}
+
 fun EmbedBuilder.sendUnwarnLog(user: Member, mod: Member, guildId: String) {
     sendModLog("User Unwarned", user, mod, null, guildId)
 }

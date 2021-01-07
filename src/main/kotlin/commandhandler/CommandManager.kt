@@ -105,6 +105,7 @@ class CommandManager {
             Emote(),
             EmoteBoard(),
             F(),
+            Gender(),
             How(),
             IQ(),
             PPSize(),
