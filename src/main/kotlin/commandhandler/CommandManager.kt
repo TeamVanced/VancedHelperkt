@@ -101,6 +101,7 @@ class CommandManager {
         arrayOf(
             Settings(),
             CreateEmbed(),
+            Country(),
             EightBall(),
             Emote(),
             EmoteBoard(),
