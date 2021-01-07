@@ -16,6 +16,8 @@ class Gender : BaseCommand(
     commandArguments = listOf("[The thing]")
 ) {
 
+    private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
+
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
@@ -43,7 +45,7 @@ class Gender : BaseCommand(
     }
 
     private fun detectGender(thing: String) {
-        val json = "https://gender-api.com/get?key=${config.genderToken}&name=$thing".getJson()
+        val json = "$baseUrl&email=${thing.replace(" ", ".")}@gmail.com".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
         channel.sendMessage(
