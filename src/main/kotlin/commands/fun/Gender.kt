@@ -45,7 +45,7 @@ class Gender : BaseCommand(
     }
 
     private fun detectGender(thing: String) {
-        val json = if (thing.contains(" ")) "$baseUrl&email=${thing.replace(" ", "")}@gmail.com".getJson() else "$baseUrl&name=$thing".getJson()
+        val json = if (thing.contains(" ")) "$baseUrl&email=${thing.replace(" ", ".")}@gmail.com".getJson() else "$baseUrl&name=$thing".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
         channel.sendMessage(
