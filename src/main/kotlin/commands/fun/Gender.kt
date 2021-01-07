@@ -27,7 +27,7 @@ class Gender : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    detectGender(it.user.name)
+                    detectGender(it.user.name.substringBefore(" "))
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
                     channel.sendMessage("Provided member does not exist!").queueAddReaction()
                 }.handle(ErrorResponse.UNKNOWN_USER) {
