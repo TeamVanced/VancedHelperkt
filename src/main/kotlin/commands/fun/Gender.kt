@@ -27,27 +27,29 @@ class Gender : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    calculateGender(it.user.name)
+                    detectGender(it.user.name)
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
                     channel.sendMessage("Provided member does not exist!").queueAddReaction()
                 }.handle(ErrorResponse.UNKNOWN_USER) {
                     channel.sendMessage("Provided user does not exist!").queueAddReaction()
                 })
             } else {
-                calculateGender(args.joinToString(" "))
+                detectGender(args.joinToString(" "))
             }
         } else {
-            calculateGender(event.author.name)
+            detectGender(event.author.name)
         }
 
     }
 
-    private fun calculateGender(thing: String) {
-        val gender = "https://gender-api.com/get?key=${config.genderToken}&name=$thing".getJson()?.string("gender")
+    private fun detectGender(thing: String) {
+        val json = "https://gender-api.com/get?key=${config.genderToken}&name=$thing".getJson()
+        val gender = json?.string("gender")
+        val accuracy = json?.int("accuracy")
         channel.sendMessage(
             embedBuilder.apply {
                 setTitle("Gender Detector")
-                setDescription("$thing is $gender")
+                setDescription("$thing is $gender\nAccuracy: $accuracy%")
                 setFooter("Powered by gender-api.com")
             }.build()
         ).queueAddReaction()
