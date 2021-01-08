@@ -20,7 +20,9 @@ import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTime
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
+import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
@@ -116,10 +118,10 @@ class ActionListener : ListenerAdapter() {
         if (message.contains(emoteRegex)) {
             val emote = emoteRegex.findAll(message)
             if (emote.count() > 6) {
-                event.message.delete().queue {
+                event.message.delete().queue({
                     event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
                     event.channel.sendMessage("${event.member?.asMention} has been warned for spamming emotes").queue()
-                }
+                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                 return
             }
             val filter = BasicDBObject().append("guildId", guildId)
