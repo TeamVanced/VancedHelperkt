@@ -7,6 +7,7 @@ import database.muteRole
 import ext.sendMuteLog
 import ext.useArguments
 import ext.useCommandProperly
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
@@ -22,12 +23,23 @@ class Mute : BaseCommand(
         val args = ctx.args
         if (args.isNotEmpty()) {
             val user = args[0]
-            val role = ctx.guild.getRoleById(guildId.muteRole)
-            if (role != null) {
-                addRole(args, user, role, ctx)
-            } else {
-                ctx.guild.createRole().setName("VancedHelper-Mute").queue({
-                    addRole(args, user, it, ctx)
+            val muteRole = guildId.muteRole
+            if (muteRole.isNotEmpty()) {
+                val role = ctx.guild.getRoleById(muteRole)
+                if (role != null) {
+                    addRole(args, user, role, ctx)
+                    return
+                }
+            }
+
+            channel.sendMessage("Mute role does not exist, creating...").queue {
+                ctx.guild.createRole().setName("VancedHelper-Mute").queue({ role ->
+                    val shardManager = ctx.event.jda.shardManager
+                    ctx.guild.channels.forEach {
+                        shardManager?.getTextChannelById(it.id)?.createPermissionOverride(role)?.deny(Permission.MESSAGE_WRITE)?.queue()
+                    }
+                    addRole(args, user, role, ctx)
+                    guildId.muteRole = role.id
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
                     channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
                 })
