@@ -13,7 +13,7 @@ class EmoteBoard : BaseCommand(
     commandDescription = "Get most frequently used emotes",
     commandType = Fun,
     commandAliases = listOf("eb"),
-    commandArguments = listOf("[least]")
+    commandArguments = listOf("[least | clean]")
 ) {
 
     private val Emote.description: String get() = "$emote (Used $usedCount times)\n"
@@ -38,30 +38,37 @@ class EmoteBoard : BaseCommand(
                 }.build()
             ).queueAddReaction()
         } else {
-            if (args[0] == "least") {
-                val collection = emotesCollection.find(Emote::guildId eq guildId).sortedBy { it.usedCount }
-                var notUsedCounter = 0
-                val ebemotes = collection.filter { it.usedCount > 0 }.take(10)
-                val totalNotUsed = collection.filter { it.usedCount == 0 }
-                val notUsed = totalNotUsed.takeWhile {
-                    notUsedCounter += it.emote.length + 1 // + 1 is for " "
-                    notUsedCounter < 1021
+            when (args[0]) {
+                "least" -> {
+                    val collection = emotesCollection.find(Emote::guildId eq guildId).sortedBy { it.usedCount }
+                    var notUsedCounter = 0
+                    val ebemotes = collection.filter { it.usedCount > 0 }.take(10)
+                    val totalNotUsed = collection.filter { it.usedCount == 0 }
+                    val notUsed = totalNotUsed.takeWhile {
+                        notUsedCounter += it.emote.length + 1 // + 1 is for " "
+                        notUsedCounter < 1021
+                    }
+                    channel.sendMessage(
+                        embedBuilder.apply {
+                            setTitle("Emoteboard")
+                            ebemotes.forEach {
+                                appendDescription(it.description)
+                            }
+                            addField(
+                                "Not used emotes",
+                                notUsed.joinToString(separator = " ") { it.emote }.let { if (notUsed.size < totalNotUsed.size) "$it..." else it },
+                                false
+                            )
+                        }.build()
+                    ).queueAddReaction()
                 }
-                channel.sendMessage(
-                    embedBuilder.apply {
-                        setTitle("Emoteboard")
-                        ebemotes.forEach {
-                            appendDescription(it.description)
-                        }
-                        addField(
-                            "Not used emotes",
-                            notUsed.joinToString(separator = " ") { it.emote }.let { if (notUsed.size < totalNotUsed.size) "$it..." else it },
-                            false
-                        )
-                    }.build()
-                ).queueAddReaction()
-            } else {
-                useCommandProperly()
+                "clean" -> {
+                    emotesCollection.deleteMany(Emote::usedCount eq 0)
+                    channel.sendMessage("Successfully removed unused emotes from database").queueAddReaction()
+                }
+                else -> {
+                    useCommandProperly()
+                }
             }
         }
     }
