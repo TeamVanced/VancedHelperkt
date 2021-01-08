@@ -6,6 +6,7 @@ import database.*
 import database.collections.Emote
 import ext.sendBanLog
 import ext.sendUnbanLog
+import ext.warn
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -89,6 +90,13 @@ class ActionListener : ListenerAdapter() {
         val guildId = event.guild.id
         if (message.contains(emoteRegex)) {
             val emote = emoteRegex.findAll(message)
+            if (emote.count() > 6) {
+                event.message.delete().queue {
+                    event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
+                    event.channel.sendMessage("${event.member?.asMention} has been warned for spamming emotes").queue()
+                }
+                return
+            }
             val filter = BasicDBObject().append("guildId", guildId)
             emote.forEach {
                 val emoteFilter = filter.append("emote", it.value)
@@ -138,7 +146,7 @@ class ActionListener : ListenerAdapter() {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendBanLog(event.user, it, banLog.reason, event.guild.id)
+                        embedBuilder.sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
@@ -152,7 +160,7 @@ class ActionListener : ListenerAdapter() {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendUnbanLog(event.user, it, banLog.reason, event.guild.id)
+                        embedBuilder.sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
