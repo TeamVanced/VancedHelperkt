@@ -27,6 +27,7 @@ open class BaseCommand(
 ) : ICommand, IMessageReactionListener {
 
     val contentIDRegex = "\\b\\d{18}\\b".toRegex()
+    val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
 
     val trashEmote = "\uD83D\uDDD1"
     lateinit var channel: TextChannel

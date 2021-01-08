@@ -1,5 +1,6 @@
 package commands.`fun`
 
+import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandTypes.Fun
@@ -9,14 +10,14 @@ import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
 
-class Gender : BaseCommand(
-    commandName = "gender",
-    commandDescription = "Guess the gender",
+class Country : BaseCommand(
+    commandName = "country",
+    commandDescription = "Guess the country",
     commandType = Fun,
     commandArguments = listOf("[The thing]")
 ) {
 
-    private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
+    private val baseUrl = "https://gender-api.com/get-country-of-origin?key=${config.genderToken}"
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -29,29 +30,39 @@ class Gender : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    detectGender(it.user.name)
+                    detectCountries(it.user.name.substringBefore(" "))
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
                     channel.sendMessage("Provided member does not exist!").queueAddReaction()
                 }.handle(ErrorResponse.UNKNOWN_USER) {
                     channel.sendMessage("Provided user does not exist!").queueAddReaction()
                 })
             } else {
-                detectGender(args.joinToString(" "))
+                detectCountries(args.joinToString(" "))
             }
         } else {
-            detectGender(event.author.name)
+            detectCountries(event.author.name)
         }
 
     }
 
-    private fun detectGender(thing: String) {
-        val json = "$baseUrl&email=${thing.replace(" ", ".")}@gmail.com".getJson()
-        val gender = json?.string("gender")
-        val accuracy = json?.int("accuracy")
+    private fun detectCountries(thing: String) {
+        val json = "$baseUrl&name=$thing".getJson()
+        val countries = json?.array<JsonObject>("country_of_origin")
         channel.sendMessage(
             embedBuilder.apply {
-                setTitle("Gender Detector")
-                setDescription("$thing is $gender\nAccuracy: $accuracy%")
+                setTitle("Country Detector")
+                if (countries != null && countries.isNotEmpty()) {
+                    setDescription("Possible country(es) for $thing")
+                    countries.take(5).forEach {
+                        addField(
+                            it.string("country_name"),
+                            "Probability: ${it.double("probability")}",
+                            false
+                        )
+                    }
+                } else {
+                    setDescription("Countries not found for $thing")
+                }
                 setFooter("Powered by gender-api.com")
             }.build()
         ).queueAddReaction()

@@ -5,6 +5,7 @@ import commands.CommandTypes
 import commands.`fun`.*
 import commands.database.Settings
 import commands.dev.CreateEmbed
+import commands.dev.EmoteRole
 import commands.moderation.*
 import commands.quotes.*
 import commands.utility.*
@@ -101,6 +102,8 @@ class CommandManager {
         arrayOf(
             Settings(),
             CreateEmbed(),
+            EmoteRole(),
+            Country(),
             EightBall(),
             Emote(),
             EmoteBoard(),
@@ -110,6 +113,7 @@ class CommandManager {
             IQ(),
             PPSize(),
             Mute(),
+            Purge(),
             Unmute(),
             Unwarn(),
             Warn(),

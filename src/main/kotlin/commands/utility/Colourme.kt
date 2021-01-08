@@ -34,6 +34,12 @@ class Colourme : BaseCommand(
                     return@member
                 }
                 val roleName = args.apply { removeAt(0) }.joinToString(" ")
+
+                if (roleName.length > 100) {
+                    channel.sendMessage("Role name can't be more than 100 characters!").queueAddReaction()
+                    return@member
+                }
+
                 val ccrole = member.roles.filter { it.name.endsWith("CC") }
                 fun addRole() {
                     ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->

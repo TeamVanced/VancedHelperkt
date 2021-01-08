@@ -6,6 +6,7 @@ import database.*
 import database.collections.Emote
 import ext.sendBanLog
 import ext.sendUnbanLog
+import ext.warn
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -17,7 +18,11 @@ import net.dv8tion.jda.api.events.guild.GuildBanEvent
 import net.dv8tion.jda.api.events.guild.GuildUnbanEvent
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
+import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
@@ -84,11 +89,41 @@ class ActionListener : ListenerAdapter() {
         }
     }
 
+    override fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
+        val emoteRole = event.guild.id.getEmoteRoles(event.messageId, "<:${event.reactionEmote.asReactionCode}>")
+        if (emoteRole != null) {
+            val role = event.guild.getRoleById(emoteRole.roleId)
+            if (role != null) {
+                event.guild.addRoleToMember(event.member, role).queue()
+            }
+
+        }
+    }
+
+    override fun onGuildMessageReactionRemove(event: GuildMessageReactionRemoveEvent) {
+        val emoteRole = event.guild.id.getEmoteRoles(event.messageId, "<:${event.reactionEmote.asReactionCode}>")
+        if (emoteRole != null) {
+            val role = event.guild.getRoleById(emoteRole.roleId)
+            val member = event.member
+            if (role != null && member != null) {
+                event.guild.removeRoleFromMember(member, role).queue()
+            }
+
+        }
+    }
+
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val message = event.message.contentRaw
         val guildId = event.guild.id
         if (message.contains(emoteRegex)) {
             val emote = emoteRegex.findAll(message)
+            if (emote.count() > 6) {
+                event.message.delete().queue({
+                    event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
+                    event.channel.sendMessage("${event.member?.asMention} has been warned for spamming emotes").queue()
+                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                return
+            }
             val filter = BasicDBObject().append("guildId", guildId)
             emote.forEach {
                 val emoteFilter = filter.append("emote", it.value)
@@ -138,7 +173,7 @@ class ActionListener : ListenerAdapter() {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendBanLog(event.user, it, banLog.reason, event.guild.id)
+                        embedBuilder.sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
@@ -152,7 +187,7 @@ class ActionListener : ListenerAdapter() {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendUnbanLog(event.user, it, banLog.reason, event.guild.id)
+                        embedBuilder.sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }

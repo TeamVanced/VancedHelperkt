@@ -34,7 +34,7 @@ class Unwarn : BaseCommand(
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)
                     channel.sendMessage("Successfully unwarned ${member.user.asMention}").queueAddReaction()
-                    ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member, it, guildId) }
+                    ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                     channel.sendMessage("Provided user does not exist!").queueAddReaction()
                 })

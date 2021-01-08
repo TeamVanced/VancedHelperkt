@@ -7,7 +7,6 @@ import jda
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.User
 
 fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String?) {
@@ -25,32 +24,7 @@ fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String
     )?.queue()
 }
 
-fun EmbedBuilder.sendModLog(title: String, user: Member, mod: Member, reason: String?, guildId: String) {
-    jda?.getTextChannelById(guildId.modlogChannel)?.sendMessage(
-        apply {
-            setTitle(title)
-            addField(
-                "User",
-                user.user.getModLogInfo(),
-                false
-            )
-            addField(
-                "Moderator",
-                mod.user.getModLogInfo(),
-                false
-            )
-            if (reason != null) {
-                addField(
-                    "Reason",
-                    reason,
-                    false
-                )
-            }
-        }.build()
-    )?.queue()
-}
-
-fun EmbedBuilder.sendModLog(title: String, user: User, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendModLog(title: String, user: User, mod: User, reason: String?, guildId: String) {
     jda?.getTextChannelById(guildId.modlogChannel)?.sendMessage(
         apply {
             setTitle(title)
@@ -61,7 +35,7 @@ fun EmbedBuilder.sendModLog(title: String, user: User, mod: Member, reason: Stri
             )
             addField(
                 "Moderator",
-                mod.user.getModLogInfo(),
+                mod.getModLogInfo(),
                 false
             )
             if (reason != null) {
@@ -75,26 +49,26 @@ fun EmbedBuilder.sendModLog(title: String, user: User, mod: Member, reason: Stri
     )?.queue()
 }
 
-fun EmbedBuilder.sendWarnLog(user: Member, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendWarnLog(user: User, mod: User, reason: String?, guildId: String) {
     sendModLog("User Warned", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendMuteLog(user: Member, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendMuteLog(user: User, mod: User, reason: String?, guildId: String) {
     sendModLog("User Muted", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendBanLog(user: User, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendBanLog(user: User, mod: User, reason: String?, guildId: String) {
     sendModLog("User Banned", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendUnbanLog(user: User, mod: Member, reason: String?, guildId: String) {
+fun EmbedBuilder.sendUnbanLog(user: User, mod: User, reason: String?, guildId: String) {
     sendModLog("User Unbanned", user, mod, reason, guildId)
 }
 
-fun EmbedBuilder.sendUnwarnLog(user: Member, mod: Member, guildId: String) {
+fun EmbedBuilder.sendUnwarnLog(user: User, mod: User, guildId: String) {
     sendModLog("User Unwarned", user, mod, null, guildId)
 }
 
-fun EmbedBuilder.sendUnmuteLog(user: Member, mod: Member, guildId: String) {
+fun EmbedBuilder.sendUnmuteLog(user: User, mod: User, guildId: String) {
     sendModLog("User Unmuted", user, mod, null, guildId)
 }
