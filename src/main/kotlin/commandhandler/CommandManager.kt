@@ -113,6 +113,7 @@ class CommandManager {
             IQ(),
             PPSize(),
             Mute(),
+            Purge(),
             Unmute(),
             Unwarn(),
             Warn(),
