@@ -7,9 +7,7 @@ import jda
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.User
-import javax.jws.soap.SOAPBinding
 
 fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String?) {
     val errorChannel = guild.id.errorChannel
