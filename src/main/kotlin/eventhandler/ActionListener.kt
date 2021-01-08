@@ -18,6 +18,8 @@ import net.dv8tion.jda.api.events.guild.GuildBanEvent
 import net.dv8tion.jda.api.events.guild.GuildUnbanEvent
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.litote.kmongo.findOne
 import utils.stinks
@@ -82,6 +84,29 @@ class ActionListener : ListenerAdapter() {
             )
         } else {
             emotesCollection.updateOne(filter, Updates.set("emote", newEmote))
+        }
+    }
+
+    override fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
+        val emoteRole = event.guild.id.getEmoteRoles(event.messageId, "<:${event.reactionEmote.asReactionCode}>")
+        if (emoteRole != null) {
+            val role = event.guild.getRoleById(emoteRole.roleId)
+            if (role != null) {
+                event.guild.addRoleToMember(event.member, role).queue()
+            }
+
+        }
+    }
+
+    override fun onGuildMessageReactionRemove(event: GuildMessageReactionRemoveEvent) {
+        val emoteRole = event.guild.id.getEmoteRoles(event.messageId, "<:${event.reactionEmote.asReactionCode}>")
+        if (emoteRole != null) {
+            val role = event.guild.getRoleById(emoteRole.roleId)
+            val member = event.member
+            if (role != null && member != null) {
+                event.guild.removeRoleFromMember(member, role).queue()
+            }
+
         }
     }
 

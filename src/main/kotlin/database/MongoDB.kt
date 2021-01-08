@@ -1,13 +1,11 @@
 package database
 
+import com.mongodb.BasicDBObject
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Updates
 import config
-import database.collections.Emote
-import database.collections.Quote
-import database.collections.Settings
-import database.collections.Warn
+import database.collections.*
 import defaultPrefix
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.eq
@@ -20,6 +18,22 @@ val quotesCollection = helperDB.getCollection<Quote>("quotes")
 val settingsCollection = helperDB.getCollection<Settings>()
 val warnsCollection = helperDB.getCollection<Warn>("warns")
 val emotesCollection = helperDB.getCollection<Emote>("emotes")
+val emoteRolesCollection = helperDB.getCollection<EmoteRole>("emoteRoles")
+
+fun String.getEmoteRoles(messageId: String, emote: String): EmoteRole? {
+    return try {
+        emoteRolesCollection.findOne(BasicDBObject("guildId", this).append("messageId", messageId).append("emote", emote))
+    } catch (e: Exception) {
+        null
+    }
+}
+fun String.updateEmoteRoles(messageId: String, emote: String, roleId: String): EmoteRole? {
+    return try {
+        emoteRolesCollection.findOneAndUpdate(BasicDBObject("guildId", this).append("messageId", messageId).append("emote", emote),  Updates.set("roleId", roleId))
+    } catch (e: Exception) {
+        null
+    }
+}
 
 val String.settings: Settings?
     get() {
