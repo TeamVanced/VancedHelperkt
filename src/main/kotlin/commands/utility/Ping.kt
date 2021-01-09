@@ -2,7 +2,7 @@ package commands.utility
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Utility
+import commands.CommandType.Utility
 import net.dv8tion.jda.api.utils.TimeUtil
 
 class Ping : BaseCommand(

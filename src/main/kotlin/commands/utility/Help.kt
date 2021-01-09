@@ -3,14 +3,15 @@ package commands.utility
 import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
-import commands.CommandTypes.Utility
+import commands.CommandType.Utility
 import database.prefix
+import ext.optional
 
 class Help(private val commandManager: CommandManager) : BaseCommand(
     commandName = "help",
     commandDescription = "Get all available commands from bot",
     commandType = Utility,
-    commandArguments = listOf("[command name]")
+    commandArguments = mapOf("command name".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {

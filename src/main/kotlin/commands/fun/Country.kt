@@ -3,9 +3,10 @@ package commands.`fun`
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
+import ext.optional
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -14,7 +15,7 @@ class Country : BaseCommand(
     commandName = "country",
     commandDescription = "Guess the country",
     commandType = Fun,
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
 
     private val baseUrl = "https://gender-api.com/get-country-of-origin?key=${config.genderToken}"

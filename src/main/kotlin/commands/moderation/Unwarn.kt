@@ -4,11 +4,9 @@ import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
 import database.warnsCollection
-import ext.sendUnwarnLog
-import ext.useArguments
-import ext.useCommandProperly
+import ext.*
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
@@ -17,7 +15,7 @@ class Unwarn : BaseCommand(
     commandName = "unwarn",
     commandDescription = "Unwarn a user",
     commandType = Moderation,
-    commandArguments = listOf("<User ID | User Mention> [warn number | all]")
+    commandArguments = mapOf("User ID | User Mention".required(), "warn number | all".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {

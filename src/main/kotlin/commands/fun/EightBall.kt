@@ -2,14 +2,15 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.required
 import ext.useArguments
 
 class EightBall : BaseCommand(
     commandName = "8ball",
     commandDescription = "Let the magic 8ball decide your fate",
     commandType = Fun,
-    commandArguments = listOf("<question>")
+    commandArguments = mapOf("Question".required())
 ) {
 
     private val responses = arrayOf(

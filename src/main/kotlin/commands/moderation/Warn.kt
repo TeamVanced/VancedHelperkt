@@ -2,10 +2,8 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
-import ext.useArguments
-import ext.useCommandProperly
-import ext.warn
+import commands.CommandType.Moderation
+import ext.*
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 
@@ -13,7 +11,7 @@ class Warn : BaseCommand(
     commandName = "warn",
     commandDescription = "Warn a user",
     commandType = Moderation,
-    commandArguments = listOf("<User ID | User Mention>")
+    commandArguments = mapOf("User ID | User Mention".required(), "Reason".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {

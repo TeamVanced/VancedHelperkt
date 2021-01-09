@@ -2,7 +2,8 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
+import ext.required
 import ext.useArguments
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
@@ -11,7 +12,8 @@ class Purge : BaseCommand(
     commandName = "purge",
     commandDescription = "Purge a number of messages between 2 and 100 in the channel",
     commandType = Moderation,
-    commandAliases = listOf("prune")
+    commandAliases = listOf("prune"),
+    commandArguments = mapOf("amount".required())
 ) {
 
     override fun execute(ctx: CommandContext) {

@@ -2,9 +2,10 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
 import database.collections.Emote
 import database.emotesCollection
+import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
 
@@ -13,7 +14,7 @@ class EmoteBoard : BaseCommand(
     commandDescription = "Get most frequently used emotes",
     commandType = Fun,
     commandAliases = listOf("eb"),
-    commandArguments = listOf("[least | clean]")
+    commandArguments = mapOf("least | clean".optional())
 ) {
 
     private val Emote.description: String get() = "$emote (Used $usedCount times)\n"

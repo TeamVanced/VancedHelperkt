@@ -2,8 +2,9 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
 import database.muteRole
+import ext.required
 import ext.sendMuteLog
 import ext.useArguments
 import ext.useCommandProperly
@@ -15,7 +16,8 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 class Mute : BaseCommand(
     commandName = "mute",
     commandDescription = "Mute a member",
-    commandType = Moderation
+    commandType = Moderation,
+    commandArguments = mapOf("member".required())
 ) {
 
     override fun execute(ctx: CommandContext) {

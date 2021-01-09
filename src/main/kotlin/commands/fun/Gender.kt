@@ -2,9 +2,10 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
+import ext.optional
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -13,7 +14,7 @@ class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Guess the gender",
     commandType = Fun,
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
 
     private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"

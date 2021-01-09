@@ -3,19 +3,16 @@ package commands.quotes
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
-import ext.hasQuotePerms
-import ext.sendIncorrectQuote
-import ext.useArguments
-import ext.useCommandProperly
+import ext.*
 
 class RemoveQuote : BaseCommand(
     commandName = "removequote",
     commandDescription = "Remove a quote",
     commandType = Quotes,
-    commandArguments = listOf("<Quote ID | Message ID>"),
+    commandArguments = mapOf("Quote ID | Message ID".optional()),
     commandAliases = listOf("rmquote", "rmq")
 ) {
 

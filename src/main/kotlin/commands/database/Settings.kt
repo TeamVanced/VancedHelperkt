@@ -2,8 +2,9 @@ package commands.database
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Database
+import commands.CommandType.Database
 import database.*
+import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.eq
@@ -12,7 +13,7 @@ class Settings : BaseCommand(
     commandName = "settings",
     commandDescription = "Configurable settings for helper",
     commandType = Database,
-    commandArguments = listOf("<prefix | boosterchat | boosterrole | muterole | modlogchannel | infochannel | errorchannel | addowner | removeowner | addquoterole | removequoterole | addcolourmerole | removecolourmerole | clear>"),
+    commandArguments = mapOf("prefix | boosterchat | boosterrole | muterole | modlogchannel | infochannel | errorchannel | addowner | removeowner | addquoterole | removequoterole | addcolourmerole | removecolourmerole | clear".required()),
     devOnly = true
 ) {
 

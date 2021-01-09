@@ -4,7 +4,7 @@ import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.sendIncorrectQuote

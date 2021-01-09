@@ -1,7 +1,7 @@
 package commandhandler
 
 import commands.BaseCommand
-import commands.CommandTypes
+import commands.CommandType
 import commands.`fun`.*
 import commands.database.Settings
 import commands.dev.CreateEmbed
@@ -23,7 +23,7 @@ import java.awt.Color
 class CommandManager {
 
     val commands = mutableListOf<ICommand>()
-    val commandTypes = mutableListOf<CommandTypes>()
+    val commandTypes = mutableListOf<CommandType>()
 
     fun addCommand(command: ICommand) {
         if (commands.contains(command)) {
@@ -32,7 +32,7 @@ class CommandManager {
         }
         commands.add(command)
         val commandType = command.commandType
-        if (!commandTypes.contains(commandType) && commandType != CommandTypes.Database && commandType != CommandTypes.Dev) {
+        if (!commandTypes.contains(commandType) && commandType != CommandType.Database && commandType != CommandType.Dev) {
             commandTypes.add(commandType)
         }
 
@@ -61,7 +61,7 @@ class CommandManager {
         val owners = guildId.owners
 
         event.guild.retrieveMemberById(event.author.id).queue { member ->
-            if ((command.devOnly && !owners.contains(member.id)) || (command.commandType == CommandTypes.Moderation && !member.roles.any {
+            if ((command.devOnly && !owners.contains(member.id)) || (command.commandType == CommandType.Moderation && !member.roles.any {
                     modRoles.contains(
                         it.id
                     )

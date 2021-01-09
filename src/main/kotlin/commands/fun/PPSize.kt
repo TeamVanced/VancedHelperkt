@@ -2,7 +2,8 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.optional
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.apache.commons.math3.distribution.NormalDistribution
 
@@ -11,7 +12,7 @@ class PPSize : BaseCommand(
     commandDescription = "Calculate PP size",
     commandType = Fun,
     commandAliases = listOf("pp", "coce"),
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {

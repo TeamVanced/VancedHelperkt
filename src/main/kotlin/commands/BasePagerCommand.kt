@@ -12,15 +12,14 @@ import utils.getJson
 abstract class BasePagerCommand(
     override val commandName: String,
     override val commandDescription: String,
-    override val commandType: CommandTypes,
-    override val commandAliases: List<String> = listOf(commandName),
-    override val commandArguments: List<String> = emptyList()
+    override val commandType: CommandType,
+    override val commandAliases: List<String> = listOf(commandName)
 ) : BaseCommand(
     commandName = commandName,
     commandDescription = commandDescription,
     commandType = commandType,
     commandAliases = commandAliases,
-    commandArguments = commandArguments,
+    commandArguments = mapOf("Page number" to ArgumentType.Optional),
     addTrashCan = false
 ) {
 

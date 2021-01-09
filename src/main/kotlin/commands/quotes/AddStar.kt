@@ -4,9 +4,10 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
+import ext.required
 import ext.sendIncorrectQuote
 import ext.useCommandProperly
 import org.bson.conversions.Bson
@@ -17,7 +18,7 @@ class AddStar : BaseCommand(
     commandName = "addstar",
     commandDescription = "Star a quote",
     commandType = Quotes,
-    commandArguments = listOf("<Quote ID | Message ID>"),
+    commandArguments = mapOf("Quote ID | Message I>".required()),
     commandAliases = listOf("as", "sq")
 ) {
 

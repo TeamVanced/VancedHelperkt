@@ -2,7 +2,7 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.quotesCollection
 import ext.getQuote
 

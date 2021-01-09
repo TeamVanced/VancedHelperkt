@@ -4,6 +4,8 @@ import commandhandler.CommandContext
 import commandhandler.ICommand
 import commandhandler.IMessageReactionListener
 import database.prefix
+import ext.optional
+import ext.transformToArg
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -17,10 +19,10 @@ import java.awt.Color
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 open class BaseCommand(
-    override val commandType: CommandTypes,
+    override val commandType: CommandType,
     override val commandName: String,
     override val commandDescription: String,
-    override val commandArguments: List<String> = emptyList(),
+    override val commandArguments: Map<String, ArgumentType> = mapOf(),
     override val commandAliases: List<String> = listOf(commandName),
     override val devOnly: Boolean = false,
     private val addTrashCan: Boolean = true,
@@ -73,9 +75,9 @@ open class BaseCommand(
 
     fun getHelpEmbed(): MessageEmbed = EmbedBuilder().apply {
         setTitle(commandName)
-        setDescription("Owner Only: $devOnly\nRequires arguments: ${commandArguments.isNotEmpty()}")
+        setDescription("Owner Only: $devOnly\nMinimum required arguments: ${commandArguments.filter { it.value != ArgumentType.Optional }.size}")
         addField("Description", commandDescription, false)
-        addField("Usage", "```css\n${guildId.prefix}$commandName ${commandArguments.joinToString()}```", false)
+        addField("Usage", "```css\n${guildId.prefix}$commandName ${commandArguments.map { it.transformToArg() }.joinToString(" ")}```", false)
         addField("Aliases", commandAliases.joinToString(" "), false)
     }.build()
 

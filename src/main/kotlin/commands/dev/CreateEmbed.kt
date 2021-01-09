@@ -3,7 +3,8 @@ package commands.dev
 import com.beust.klaxon.Klaxon
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Dev
+import commands.CommandType.Dev
+import ext.required
 import ext.useCommandProperly
 import java.awt.Color
 
@@ -11,7 +12,7 @@ class CreateEmbed : BaseCommand(
     commandName = "createembed",
     commandDescription = "Create an embed from a provided json",
     commandType = Dev,
-    commandArguments = listOf("<json>"),
+    commandArguments = mapOf("json".required()),
     commandAliases = listOf("embed"),
     devOnly = true
 ) {

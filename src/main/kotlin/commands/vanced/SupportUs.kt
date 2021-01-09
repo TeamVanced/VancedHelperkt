@@ -2,7 +2,7 @@ package commands.vanced
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Vanced
+import commands.CommandType.Vanced
 import database.prefix
 
 class SupportUs : BaseCommand(

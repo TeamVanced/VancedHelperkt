@@ -2,14 +2,16 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.optional
+import ext.required
 import ext.useArguments
 
 class How : BaseCommand(
     commandName = "how",
     commandDescription = "See how [predicate] is [the thing]",
     commandType = Fun,
-    commandArguments = listOf("<predicate> [| <the thing>]")
+    commandArguments = mapOf("predicate".required(), "| the thing".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
