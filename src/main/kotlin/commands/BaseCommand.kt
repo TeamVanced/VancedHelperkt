@@ -4,7 +4,6 @@ import commandhandler.CommandContext
 import commandhandler.ICommand
 import commandhandler.IMessageReactionListener
 import database.prefix
-import ext.optional
 import ext.transformToArg
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
