@@ -9,6 +9,7 @@ import database.warnsCollection
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.exceptions.HierarchyException
 import org.litote.kmongo.findOne
 
 fun Member.isMod(guildId: String): Boolean {
@@ -35,9 +36,11 @@ fun Member.warn(guildId: String, reason: String, channel: MessageChannel, embedB
     }
     embedBuilder.sendWarnLog(user, jda.selfUser, reason, guildId)
     if (warnsCollection.findOne(filter)?.reasons?.size == 3) {
-        kick("Too many infractions").queue {
-            channel.sendMessage("Kicked ${user.asTag}").queue()
-            warnsCollection.deleteOne(filter)
-        }
+        try {
+            kick("Too many infractions").queue {
+                channel.sendMessage("Kicked ${user.asTag}").queue()
+                warnsCollection.deleteOne(filter)
+            }
+        } catch (e: HierarchyException) {}
     }
 }

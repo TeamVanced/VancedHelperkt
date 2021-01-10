@@ -11,6 +11,7 @@ import ext.warn
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
+import net.dv8tion.jda.api.entities.MessageType
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.emote.EmoteAddedEvent
 import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent
@@ -109,49 +110,68 @@ class ActionListener : ListenerAdapter() {
             if (role != null && member != null) {
                 event.guild.removeRoleFromMember(member, role).queue()
             }
-
         }
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val message = event.message.contentRaw
+        val message = event.message
+        val messageContent = message.contentRaw
         val guildId = event.guild.id
-        event.channel.history.retrievePast(3).queue { messages ->
-            if (messages.all { it.contentRaw == message }) {
-                event.channel.deleteMessages(messages + event.message).queue({
-                    event.member?.warn(guildId, "Message spam", event.channel, embedBuilder)
-                    event.channel.sendMessage("${event.member!!.asMention} has been warned for spamming messages").queue()
-                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+        val channel = event.channel
+        val member = event.member
+        val words = messageContent.split("\\s+".toRegex()).map { word ->
+            word.replace("^[,.]|[,.]$".toRegex(), "")
+        }
+        channel.history.retrievePast(10).queue { messages ->
+            val memberMessages = messages.filter { it.type != MessageType.GUILD_MEMBER_JOIN && !it.isWebhookMessage && it.author == event.author && it.contentRaw.equals(messageContent, ignoreCase = true) }.take(4)
+            if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
                 return@queue
             }
-            if (message.contains(emoteRegex)) {
-                val emote = emoteRegex.findAll(message)
-                if (emote.count() > 6) {
-                    if (event.member != null) {
-                        if (!event.member!!.isMod(guildId)) {
-                            event.message.delete().queue({
-                                event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
-                                event.channel.sendMessage("${event.member!!.asMention} has been warned for spamming emotes").queue()
-                            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-                            return@queue
-                        }
+
+            channel.deleteMessages(memberMessages).queue({
+                event.member?.warn(guildId, "Message spam", channel, embedBuilder)
+                channel.sendMessage("${event.member?.asMention} has been warned for spamming messages").queue()
+            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+
+            return@queue
+        }
+
+        if (words.groupingBy { it }.eachCount().filter { it.value > 3 }.isNotEmpty()) {
+            if (member != null && !member.isMod(guildId)) {
+                message.delete().queue {
+                    member.warn(guildId, "Message spam", channel, embedBuilder)
+                    channel.sendMessage("${member.asMention} has been warned for spamming messages").queue()
+                }
+            }
+        }
+
+        if (messageContent.contains(emoteRegex)) {
+            val emote = emoteRegex.findAll(messageContent)
+            if (emote.count() > 6) {
+                if (member != null) {
+                    if (!member.isMod(guildId)) {
+                        message.delete().queue({
+                            member.warn(guildId, "Emote spam", channel, embedBuilder)
+                            channel.sendMessage("${member.asMention} has been warned for spamming emotes").queue()
+                        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                        return
                     }
                 }
-                val filter = BasicDBObject().append("guildId", guildId)
-                emote.forEach {
-                    val emoteFilter = filter.append("emote", it.value)
-                    val emoteCollection = emotesCollection.findOne(emoteFilter)
-                    if (emoteCollection == null) {
-                        emotesCollection.insertOne(
-                            Emote(
-                                guildId = guildId,
-                                emote = it.value,
-                                usedCount = 1
-                            )
+            }
+            val filter = BasicDBObject().append("guildId", guildId)
+            emote.forEach {
+                val emoteFilter = filter.append("emote", it.value)
+                val emoteCollection = emotesCollection.findOne(emoteFilter)
+                if (emoteCollection == null) {
+                    emotesCollection.insertOne(
+                        Emote(
+                            guildId = guildId,
+                            emote = it.value,
+                            usedCount = 1
                         )
-                    } else {
-                        emotesCollection.updateOne(emoteFilter, Updates.set("usedCount", emoteCollection.usedCount + 1))
-                    }
+                    )
+                } else {
+                    emotesCollection.updateOne(emoteFilter, Updates.set("usedCount", emoteCollection.usedCount + 1))
                 }
             }
         }
