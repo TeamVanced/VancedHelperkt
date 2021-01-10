@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
+import ext.isMod
 import ext.sendBanLog
 import ext.sendUnbanLog
 import ext.warn
@@ -115,29 +116,42 @@ class ActionListener : ListenerAdapter() {
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val message = event.message.contentRaw
         val guildId = event.guild.id
-        if (message.contains(emoteRegex)) {
-            val emote = emoteRegex.findAll(message)
-            if (emote.count() > 6) {
-                event.message.delete().queue({
-                    event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
-                    event.channel.sendMessage("${event.member?.asMention} has been warned for spamming emotes").queue()
+        event.channel.history.retrievePast(3).queue { messages ->
+            if (messages.all { it.contentRaw == message }) {
+                event.channel.deleteMessages(messages + event.message).queue({
+                    event.member?.warn(guildId, "Message spam", event.channel, embedBuilder)
+                    event.channel.sendMessage("${event.member!!.asMention} has been warned for spamming messages").queue()
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-                return
+                return@queue
             }
-            val filter = BasicDBObject().append("guildId", guildId)
-            emote.forEach {
-                val emoteFilter = filter.append("emote", it.value)
-                val emoteCollection = emotesCollection.findOne(emoteFilter)
-                if (emoteCollection == null) {
-                    emotesCollection.insertOne(
-                        Emote(
-                            guildId = guildId,
-                            emote = it.value,
-                            usedCount = 1
+            if (message.contains(emoteRegex)) {
+                val emote = emoteRegex.findAll(message)
+                if (emote.count() > 6) {
+                    if (event.member != null) {
+                        if (!event.member!!.isMod(guildId)) {
+                            event.message.delete().queue({
+                                event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
+                                event.channel.sendMessage("${event.member!!.asMention} has been warned for spamming emotes").queue()
+                            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                            return@queue
+                        }
+                    }
+                }
+                val filter = BasicDBObject().append("guildId", guildId)
+                emote.forEach {
+                    val emoteFilter = filter.append("emote", it.value)
+                    val emoteCollection = emotesCollection.findOne(emoteFilter)
+                    if (emoteCollection == null) {
+                        emotesCollection.insertOne(
+                            Emote(
+                                guildId = guildId,
+                                emote = it.value,
+                                usedCount = 1
+                            )
                         )
-                    )
-                } else {
-                    emotesCollection.updateOne(emoteFilter, Updates.set("usedCount", emoteCollection.usedCount + 1))
+                    } else {
+                        emotesCollection.updateOne(emoteFilter, Updates.set("usedCount", emoteCollection.usedCount + 1))
+                    }
                 }
             }
         }
