@@ -31,10 +31,10 @@ class Unwarn : BaseCommand(
             fun removeWarn(removeAction: (member: Member) -> Unit) {
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)
-                    channel.sendMessage("Successfully unwarned ${member.user.asMention}").queueAddReaction()
+                    sendMessage("Successfully unwarned ${member.user.asMention}")
                     ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                    channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                    sendMessage("Provided user does not exist!")
                 })
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -50,7 +50,7 @@ class Unwarn : BaseCommand(
                     } else {
                         val warnIndex = args[1]
                         if (warnIndex.toIntOrNull() == null) {
-                            channel.sendMessage("$warnIndex is not a valid warn").queueAddReaction()
+                            sendMessage("$warnIndex is not a valid warn")
                             return
                         }
                         removeWarn {

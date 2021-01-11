@@ -43,10 +43,10 @@ class AddStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (quote.stars.contains(authorId)) {
-                ctx.channel.sendMessage("Bruh you already starred this").queueAddReaction()
+                sendMessage("Bruh you already starred this")
             } else {
                 quotesCollection.updateOne(filter, Updates.push("stars", authorId))
-                ctx.channel.sendMessage("Successfully starred quote #${quote.quoteId}").queueAddReaction()
+                sendMessage("Successfully starred quote #${quote.quoteId}")
             }
         } else {
             sendIncorrectQuote()

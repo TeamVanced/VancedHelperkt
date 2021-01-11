@@ -28,20 +28,20 @@ class Avatar : BaseCommand(
 
     private fun sendAvatar(userId: String, ctx: CommandContext) {
         if (userId.isEmpty()) {
-            channel.sendMessage("Provided user does not exist!").queueAddReaction()
+            sendMessage("Provided user does not exist!")
             return
         }
         ctx.guild.retrieveMemberById(userId).queue({
-            channel.sendMessage(
+            sendMessage(
                 embedBuilder.apply {
                     val url = it.user.avatarUrl + "?size=256"
                     setTitle("${it.user.name}'s avatar")
                     setImage(url)
                     setDescription("[Avatar URL]($url)")
                 }.build()
-            ).queueAddReaction()
+            )
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-            channel.sendMessage("Provided user does not exist!").queueAddReaction()
+            sendMessage("Provided user does not exist!")
         })
 
     }

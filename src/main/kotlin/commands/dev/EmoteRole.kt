@@ -44,10 +44,10 @@ class EmoteRole : BaseCommand(
                             }
                         }
                     }
-                    channel.sendMessage("Successfully configured emote role!").queue()
+                    sendMessage("Successfully configured emote role!")
                 } else {
                     guildId.updateEmoteRoles(messageId, emote, roleId)
-                    channel.sendMessage("Successfully reconfigured emote role!").queueAddReaction()
+                    sendMessage("Successfully reconfigured emote role!")
                 }
             } else {
                 useCommandProperly()

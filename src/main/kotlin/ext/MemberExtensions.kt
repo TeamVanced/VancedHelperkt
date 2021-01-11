@@ -8,7 +8,7 @@ import database.modRoles
 import database.warnsCollection
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.exceptions.HierarchyException
 import org.litote.kmongo.findOne
 
@@ -22,7 +22,7 @@ fun Member.isBooster(guildId: String): Boolean {
     return roles.any { boosterRole == it.id }
 }
 
-fun Member.warn(guildId: String, reason: String, channel: MessageChannel, embedBuilder: EmbedBuilder) {
+fun Member.warn(guildId: String, reason: String, channel: TextChannel, embedBuilder: EmbedBuilder) {
     val filter = BasicDBObject("userId", user.id).append("guildId", guildId)
     if (warnsCollection.findOneAndUpdate(filter, Updates.push("reasons", reason)) == null) {
         warnsCollection.insertOne(
@@ -38,7 +38,7 @@ fun Member.warn(guildId: String, reason: String, channel: MessageChannel, embedB
     if (warnsCollection.findOne(filter)?.reasons?.size == 3) {
         try {
             kick("Too many infractions").queue {
-                channel.sendMessage("Kicked ${user.asTag}").queue()
+                channel.sendMsg("Kicked ${user.asTag}")
                 warnsCollection.deleteOne(filter)
             }
         } catch (e: HierarchyException) {}

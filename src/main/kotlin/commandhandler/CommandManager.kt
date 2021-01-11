@@ -13,6 +13,7 @@ import commands.vanced.*
 import database.modRoles
 import database.owners
 import database.prefix
+import ext.sendMsg
 import ext.sendStacktrace
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
@@ -66,14 +67,14 @@ class CommandManager {
                         it.id
                     )
                 })) {
-                event.channel.sendMessage("You are not allowed to use this command!").queue()
+                event.channel.sendMsg("You are not allowed to use this command!")
                 return@queue
             }
 
             try {
                 command.execute(commandContext)
             } catch (e: Exception) {
-                event.channel.sendMessage("Sorry, something went wrong").queue()
+                event.channel.sendMsg("Sorry, something went wrong")
                 EmbedBuilder().setColor(Color.red).sendStacktrace(event.guild, e.cause?.message, e.stackTraceToString())
             }
         }

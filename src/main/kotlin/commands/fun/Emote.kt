@@ -33,7 +33,7 @@ class Emote : BaseCommand(
                     emotelinks.add("Not an emote")
                 }
             }
-            channel.sendMessage(emotelinks.distinct().joinToString("\n")).queueAddReaction()
+            sendMessage(emotelinks.distinct().joinToString("\n"))
         } else {
             useArguments(1)
         }

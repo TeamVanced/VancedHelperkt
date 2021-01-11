@@ -36,9 +36,9 @@ abstract class BasePagerCommand(
             try {
                 embedPagerAdapter.newInstance(args[0].toInt())
             } catch (e: NumberFormatException) {
-                ctx.channel.sendMessage("Provided argument is not a number!").queueAddReaction()
+                sendMessage("Provided argument is not a number!")
             } catch (e: IndexOutOfBoundsException) {
-                ctx.channel.sendMessage("Provided page does not exist!").queueAddReaction()
+                sendMessage("Provided page does not exist!")
             }
         } else {
             embedPagerAdapter.newInstance()

@@ -4,10 +4,7 @@ import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandType.Moderation
 import database.muteRole
-import ext.required
-import ext.sendMuteLog
-import ext.useArguments
-import ext.useCommandProperly
+import ext.*
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.exceptions.ErrorHandler
@@ -34,7 +31,7 @@ class Mute : BaseCommand(
                 }
             }
 
-            channel.sendMessage("Mute role does not exist, creating...").queue {
+            channel.sendMsg("Mute role does not exist, creating...") {
                 ctx.guild.createRole().setName("VancedHelper-Mute").queue({ role ->
                     val shardManager = ctx.event.jda.shardManager
                     ctx.guild.channels.forEach {
@@ -43,7 +40,7 @@ class Mute : BaseCommand(
                     addRole(args, user, role, ctx)
                     guildId.muteRole = role.id
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                    channel.sendMessage("Guild reached maximum amount of roles!").queueAddReaction()
+                    sendMessage("Guild reached maximum amount of roles!")
                 })
             }
         } else {
@@ -61,15 +58,15 @@ class Mute : BaseCommand(
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    channel.sendMessage("You can't mute this member!").queueAddReaction()
+                    sendMessage("You can't mute this member!")
                     return@queue
                 }
                 ctx.guild.addRoleToMember(member, role).queue {
-                    channel.sendMessage("Successfully muted ${member.asMention}").queueAddReaction()
+                    sendMessage("Successfully muted ${member.asMention}")
                     ctx.authorAsMember?.let { it1 -> embedBuilder.sendMuteLog(member.user, it1.user, reason, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                sendMessage("Provided user does not exist!")
             })
         } else {
             useCommandProperly()

@@ -27,15 +27,13 @@ class Warn : BaseCommand(
             }
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    channel.sendMessage("You can't warn this member!").queueAddReaction()
+                    sendMessage("You can't warn this member!")
                     return@queue
                 }
                 member.warn(guildId, reason, channel, embedBuilder)
-                channel.sendMessage("Successfully warned ${member.user.asMention}").queue {
-                    messageId = it.id
-                }
+                sendMessage("Successfully warned ${member.user.asMention}")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                sendMessage("Provided user does not exist!")
             })
 
         } else {

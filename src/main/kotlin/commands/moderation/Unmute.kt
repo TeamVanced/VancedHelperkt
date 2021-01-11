@@ -28,7 +28,7 @@ class Unmute : BaseCommand(
             if (role != null) {
                 removeRole(user, role, ctx)
             } else {
-                channel.sendMessage("Mute role does not exist, how the fuck can user be muted???").queueAddReaction()
+                sendMessage("Mute role does not exist, how the fuck can user be muted???")
             }
         } else {
             useArguments(1)
@@ -46,13 +46,13 @@ class Unmute : BaseCommand(
                 if (member.roles.contains(role)) {
                     ctx.guild.removeRoleFromMember(member, role).queue {
                         ctx.authorAsMember?.let { it1 -> embedBuilder.sendUnmuteLog(member.user, it1.user, guildId) }
-                        channel.sendMessage("Successfully unmuted ${member.asMention}").queueAddReaction()
+                        sendMessage("Successfully unmuted ${member.asMention}")
                     }
                 } else {
-                    channel.sendMessage("Provided user is not muted!").queueAddReaction()
+                    sendMessage("Provided user is not muted!")
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                sendMessage("Provided user does not exist!")
             })
         } else {
             useCommandProperly()

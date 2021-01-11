@@ -4,10 +4,7 @@ import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
-import ext.isMod
-import ext.sendBanLog
-import ext.sendUnbanLog
-import ext.warn
+import ext.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -130,7 +127,7 @@ class ActionListener : ListenerAdapter() {
 
             channel.deleteMessages(memberMessages).queue({
                 event.member?.warn(guildId, "Message spam", channel, embedBuilder)
-                channel.sendMessage("${event.member?.asMention} has been warned for spamming messages").queue()
+                channel.sendMsg("${event.member?.asMention} has been warned for spamming messages")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
 
             return@queue
@@ -140,7 +137,7 @@ class ActionListener : ListenerAdapter() {
             if (member != null && !member.isMod(guildId)) {
                 message.delete().queue {
                     member.warn(guildId, "Message spam", channel, embedBuilder)
-                    channel.sendMessage("${member.asMention} has been warned for spamming messages").queue()
+                    channel.sendMsg("${member.asMention} has been warned for spamming messages")
                 }
             }
         }
@@ -152,7 +149,7 @@ class ActionListener : ListenerAdapter() {
                     if (!member.isMod(guildId)) {
                         message.delete().queue({
                             member.warn(guildId, "Emote spam", channel, embedBuilder)
-                            channel.sendMessage("${member.asMention} has been warned for spamming emotes").queue()
+                            channel.sendMsg("${member.asMention} has been warned for spamming emotes")
                         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                         return
                     }

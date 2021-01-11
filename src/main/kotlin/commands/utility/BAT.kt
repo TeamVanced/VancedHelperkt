@@ -16,7 +16,7 @@ class BAT : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         val json = "https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT".getJson()
-        ctx.channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("${json?.string("name")} (${json?.string("symbol")})")
                 addField(
@@ -34,7 +34,7 @@ class BAT : BaseCommand(
                 )
                 setFooter("Powered by coinlib.io")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
     private fun String.stonkify(): String {

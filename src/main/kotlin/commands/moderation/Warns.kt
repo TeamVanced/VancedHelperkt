@@ -32,7 +32,7 @@ class Warns : BaseCommand(
             if (warn != null) {
                 val reasons = warn.reasons
                 if (reasons.isNotEmpty()) {
-                    channel.sendMessage(
+                    sendMessage(
                         embedBuilder.apply {
                             setTitle("Warns for ${warn.userName}")
                             for (i in reasons.indices) {
@@ -43,12 +43,12 @@ class Warns : BaseCommand(
                                 )
                             }
                         }.build()
-                    ).queueAddReaction()
+                    )
                 } else {
-                    channel.sendMessage("User $user has no warns").queueAddReaction()
+                    sendMessage("User $user has no warns")
                 }
             } else {
-                channel.sendMessage("User $user has no warns").queueAddReaction()
+                sendMessage("User $user has no warns")
             }
         } else {
             useArguments(1)

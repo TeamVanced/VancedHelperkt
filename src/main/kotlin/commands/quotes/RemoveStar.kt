@@ -43,10 +43,10 @@ class RemoveStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (!quote.stars.contains(authorId)) {
-                ctx.channel.sendMessage("You don't have this quote starred!").queueAddReaction()
+                sendMessage("You don't have this quote starred!")
             } else {
                 quotesCollection.updateOne(filter, Updates.pull("stars", authorId))
-                ctx.channel.sendMessage("Successfully removed star from quote #${quote.quoteId}").queueAddReaction()
+                sendMessage("Successfully removed star from quote #${quote.quoteId}")
             }
         } else {
             sendIncorrectQuote()

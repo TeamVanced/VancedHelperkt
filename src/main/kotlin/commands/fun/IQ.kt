@@ -26,12 +26,12 @@ class IQ : BaseCommand(
     }
 
     private fun calculateIQ(arg: String, channel: MessageChannel) {
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("IQ Calculator")
                 setDescription("$arg has an iq of ${calcIQ()}")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
     private fun calcIQ(): Int {

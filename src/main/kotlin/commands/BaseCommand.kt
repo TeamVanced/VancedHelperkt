@@ -4,6 +4,7 @@ import commandhandler.CommandContext
 import commandhandler.ICommand
 import commandhandler.IMessageReactionListener
 import database.prefix
+import ext.sendMsg
 import ext.transformToArg
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
@@ -13,7 +14,6 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
-import net.dv8tion.jda.api.requests.RestAction
 import java.awt.Color
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
@@ -64,12 +64,22 @@ open class BaseCommand(
 
     override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
 
-    fun RestAction<Message>.queueAddReaction() {
-        queue {
-            if (messageId != "") it.channel.removeReactionById(messageId, trashEmote).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-            messageId = it.id
-            it.addReaction(trashEmote).queue()
+    fun sendMessage(message: String) {
+        channel.sendMsg(message) {
+            it.addReaction()
         }
+    }
+
+    fun sendMessage(embed: MessageEmbed) {
+        channel.sendMsg(embed) {
+            it.addReaction()
+        }
+    }
+
+    fun Message.addReaction() {
+        if (messageId != "") channel.removeReactionById(messageId, trashEmote).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+        messageId = id
+        addReaction(trashEmote).queue()
     }
 
     fun getHelpEmbed(): MessageEmbed = EmbedBuilder().apply {

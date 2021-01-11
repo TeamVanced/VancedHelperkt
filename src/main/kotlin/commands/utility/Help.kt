@@ -22,9 +22,9 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
         if (args.isNotEmpty()) {
             val command = commandManager.getCommand(args[0])
             if (command != null) {
-                channel.sendMessage((command as BaseCommand).getHelpEmbed()).queueAddReaction()
+                sendMessage((command as BaseCommand).getHelpEmbed())
             } else {
-                channel.sendMessage("Command not found!").queueAddReaction()
+                sendMessage("Command not found!")
             }
         } else {
             val commands = mutableMapOf<String, List<String>>()
@@ -43,7 +43,7 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
                     false
                 )
             }
-            channel.sendMessage(embed.build()).queueAddReaction()
+            sendMessage(embed.build())
         }
     }
 

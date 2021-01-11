@@ -35,12 +35,12 @@ class How : BaseCommand(
         val percentage = (0..100).random()
         val barAmount = percentage / 10
         val bar = "▰".repeat(barAmount) + "▱".repeat(10 - barAmount)
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("${predicate.capitalize().removeSuffix(" ")} Meter")
                 setDescription("$thing is $percentage% $predicate\n$bar")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
 }

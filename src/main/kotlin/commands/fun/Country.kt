@@ -7,6 +7,7 @@ import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
+import ext.sendMsg
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -23,7 +24,7 @@ class Country : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.channel.sendMessage("You are not allowed to use this command").queueAddReaction()
+            sendMessage("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -33,9 +34,9 @@ class Country : BaseCommand(
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
                     detectCountries(it.user.name.substringBefore(" "))
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
-                    channel.sendMessage("Provided member does not exist!").queueAddReaction()
+                    sendMessage("Provided member does not exist!")
                 }.handle(ErrorResponse.UNKNOWN_USER) {
-                    channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                    sendMessage("Provided user does not exist!")
                 })
             } else {
                 detectCountries(args.joinToString(" "))
@@ -49,7 +50,7 @@ class Country : BaseCommand(
     private fun detectCountries(thing: String) {
         val json = "$baseUrl&name=$thing".getJson()
         val countries = json?.array<JsonObject>("country_of_origin")
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("Country Detector")
                 if (countries != null && countries.isNotEmpty()) {
@@ -66,7 +67,7 @@ class Country : BaseCommand(
                 }
                 setFooter("Powered by gender-api.com")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
 }

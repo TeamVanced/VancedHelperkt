@@ -30,12 +30,12 @@ class PPSize : BaseCommand(
     private fun calculatePPSize(thing: String, event: GuildMessageReceivedEvent) {
         val ppsize = calcPP()
         val bar = "8" + "=".repeat(ppsize) + "D"
-        event.channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("PP Size Calculator")
                 setDescription("$thing has a PP size of $ppsize inches\n$bar")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
     private fun calcPP(): Int {
