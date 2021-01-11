@@ -135,10 +135,10 @@ class ActionListener : ListenerAdapter() {
 
         if (words.groupingBy { it }.eachCount().filter { it.value > 3 }.isNotEmpty()) {
             if (member != null && !member.isMod(guildId)) {
-                message.delete().queue {
+                message.delete().queue({
                     member.warn(guildId, "Message spam", channel, embedBuilder)
                     channel.sendMsg("${member.asMention} has been warned for spamming messages")
-                }
+                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
             }
         }
 
