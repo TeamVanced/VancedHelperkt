@@ -15,11 +15,7 @@ fun BaseCommand.useArguments(argumentCount: Int) {
     sendMessage("You need to provide at least $argumentCount argument(s)!")
 }
 
-fun TextChannel.sendMsg(message: String) {
-    sendMsg(message) {}
-}
-
-fun TextChannel.sendMsg(message: String, onComplete:(message: Message) -> Unit) {
+fun TextChannel.sendMsg(message: String, onComplete: (message: Message) -> Unit = {}) {
     try {
         if (guild.selfMember.hasPermission(this, Permission.MESSAGE_WRITE)) {
             sendMessage(message).queue {
@@ -29,11 +25,7 @@ fun TextChannel.sendMsg(message: String, onComplete:(message: Message) -> Unit) 
     } catch (e: Exception) {}
 }
 
-fun TextChannel.sendMsg(embed: MessageEmbed) {
-    sendMsg(embed) {}
-}
-
-fun TextChannel.sendMsg(embed: MessageEmbed, onComplete:(message: Message) -> Unit) {
+fun TextChannel.sendMsg(embed: MessageEmbed, onComplete:(message: Message) -> Unit = {}) {
     try {
         if (guild.selfMember.hasPermission(this, Permission.MESSAGE_WRITE)) {
             sendMessage(embed).queue {
