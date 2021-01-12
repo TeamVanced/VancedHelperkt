@@ -134,7 +134,7 @@ class ActionListener : ListenerAdapter() {
         }
 
         if (words.groupingBy { it }.eachCount().filter { it.value > 3 }.isNotEmpty()) {
-            if (member != null && !member.isMod(guildId)) {
+            if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
                     member.warn(guildId, "Message spam", channel, embedBuilder)
                     channel.sendMsg("${member.asMention} has been warned for spamming messages")
@@ -146,7 +146,7 @@ class ActionListener : ListenerAdapter() {
             val emote = emoteRegex.findAll(messageContent)
             if (emote.count() > 6) {
                 if (member != null) {
-                    if (!member.isMod(guildId)) {
+                    if (!member.isMod(guildId) && !event.author.isBot) {
                         message.delete().queue({
                             member.warn(guildId, "Emote spam", channel, embedBuilder)
                             channel.sendMsg("${member.asMention} has been warned for spamming emotes")
