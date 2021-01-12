@@ -119,6 +119,7 @@ class ActionListener : ListenerAdapter() {
         val words = messageContent.split("\\s+".toRegex()).map { word ->
             word.replace("^[,.]|[,.]$".toRegex(), "")
         }
+        var duplicateCount = 0
         channel.history.retrievePast(10).queue { messages ->
             val memberMessages = messages.filter { it.type != MessageType.GUILD_MEMBER_JOIN && !it.isWebhookMessage && it.author == event.author && it.contentRaw.equals(messageContent, ignoreCase = true) }.take(4)
             if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
@@ -133,7 +134,15 @@ class ActionListener : ListenerAdapter() {
             return@queue
         }
 
-        if (words.groupingBy { it }.eachCount().filter { it.value > 3 }.isNotEmpty()) {
+        for (i in 1 until words.size) {
+            if (words[i].equals(words[i - 1], ignoreCase = true)) {
+                duplicateCount++
+            } else {
+                duplicateCount = 0
+            }
+        }
+
+        if (duplicateCount >= 5) {
             if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
                     member.warn(guildId, "Message spam", channel, embedBuilder)
