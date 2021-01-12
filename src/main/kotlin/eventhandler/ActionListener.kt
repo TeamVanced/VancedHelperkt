@@ -198,7 +198,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
@@ -212,7 +212,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(1).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
