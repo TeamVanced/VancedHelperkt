@@ -4,7 +4,7 @@ import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.sendIncorrectQuote
@@ -43,7 +43,7 @@ class GetQuote(
                             if (quotes.size < 10) {
                                 quotes.sendQuotes()
                             } else {
-                                channel.sendMessage("Too many quotes matching this search!").queueAddReaction()
+                                sendMessage("Too many quotes matching this search!")
                             }
                         } else {
                             quotes[0].getQuote()
@@ -67,7 +67,7 @@ class GetQuote(
     }
 
     private fun List<Quote>.sendQuotes() {
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("Quotes")
                 setDescription("I found multiple results matching that quote!")
@@ -79,8 +79,6 @@ class GetQuote(
                     )
                 }
             }.build()
-        ).queue {
-            messageId = it.id
-        }
+        )
     }
 }

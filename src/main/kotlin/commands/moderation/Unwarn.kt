@@ -4,11 +4,9 @@ import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
 import database.warnsCollection
-import ext.sendUnwarnLog
-import ext.useArguments
-import ext.useCommandProperly
+import ext.*
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
@@ -17,7 +15,7 @@ class Unwarn : BaseCommand(
     commandName = "unwarn",
     commandDescription = "Unwarn a user",
     commandType = Moderation,
-    commandArguments = listOf("<User ID | User Mention> [warn number | all]")
+    commandArguments = mapOf("User ID | User Mention".required(), "warn number | all".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -33,10 +31,10 @@ class Unwarn : BaseCommand(
             fun removeWarn(removeAction: (member: Member) -> Unit) {
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)
-                    channel.sendMessage("Successfully unwarned ${member.user.asMention}").queueAddReaction()
+                    sendMessage("Successfully unwarned ${member.user.asMention}")
                     ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                    channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                    sendMessage("Provided user does not exist!")
                 })
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -52,7 +50,7 @@ class Unwarn : BaseCommand(
                     } else {
                         val warnIndex = args[1]
                         if (warnIndex.toIntOrNull() == null) {
-                            channel.sendMessage("$warnIndex is not a valid warn").queueAddReaction()
+                            sendMessage("$warnIndex is not a valid warn")
                             return
                         }
                         removeWarn {

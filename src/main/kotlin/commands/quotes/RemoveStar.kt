@@ -4,9 +4,10 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
+import ext.required
 import ext.sendIncorrectQuote
 import ext.useCommandProperly
 import org.bson.conversions.Bson
@@ -17,7 +18,7 @@ class RemoveStar : BaseCommand(
     commandName = "removestar",
     commandDescription = "Star a quote",
     commandType = Quotes,
-    commandArguments = listOf("<Quote ID | Message ID>"),
+    commandArguments = mapOf("Quote ID | Message ID".required()),
     commandAliases = listOf("rs", "rsq")
 ) {
 
@@ -42,10 +43,10 @@ class RemoveStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (!quote.stars.contains(authorId)) {
-                ctx.channel.sendMessage("You don't have this quote starred!").queueAddReaction()
+                sendMessage("You don't have this quote starred!")
             } else {
                 quotesCollection.updateOne(filter, Updates.pull("stars", authorId))
-                ctx.channel.sendMessage("Successfully removed star from quote #${quote.quoteId}").queueAddReaction()
+                sendMessage("Successfully removed star from quote #${quote.quoteId}")
             }
         } else {
             sendIncorrectQuote()

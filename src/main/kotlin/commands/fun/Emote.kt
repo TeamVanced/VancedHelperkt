@@ -2,14 +2,15 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Utility
+import commands.CommandType.Utility
+import ext.required
 import ext.useArguments
 
 class Emote : BaseCommand(
     commandName = "emote",
     commandDescription = "Get a corresponding emote link",
     commandType = Utility,
-    commandArguments = listOf("<emotes>"),
+    commandArguments = mapOf("emotes".required()),
     commandAliases = listOf("e")
 ) {
 
@@ -32,7 +33,7 @@ class Emote : BaseCommand(
                     emotelinks.add("Not an emote")
                 }
             }
-            channel.sendMessage(emotelinks.distinct().joinToString("\n")).queueAddReaction()
+            sendMessage(emotelinks.distinct().joinToString("\n"))
         } else {
             useArguments(1)
         }

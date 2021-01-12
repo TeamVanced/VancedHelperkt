@@ -2,7 +2,8 @@ package commands.utility
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Utility
+import commands.CommandType.Utility
+import ext.required
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 
@@ -10,7 +11,7 @@ class Avatar : BaseCommand(
     commandName = "avatar",
     commandDescription = "Get a user avatar",
     commandType = Utility,
-    commandArguments = listOf("[User Mention | User ID]"),
+    commandArguments = mapOf("User Mention | User ID".required()),
     commandAliases = listOf("av")
 ) {
 
@@ -27,20 +28,20 @@ class Avatar : BaseCommand(
 
     private fun sendAvatar(userId: String, ctx: CommandContext) {
         if (userId.isEmpty()) {
-            channel.sendMessage("Provided user does not exist!").queueAddReaction()
+            sendMessage("Provided user does not exist!")
             return
         }
         ctx.guild.retrieveMemberById(userId).queue({
-            channel.sendMessage(
+            sendMessage(
                 embedBuilder.apply {
                     val url = it.user.avatarUrl + "?size=256"
                     setTitle("${it.user.name}'s avatar")
                     setImage(url)
                     setDescription("[Avatar URL]($url)")
                 }.build()
-            ).queueAddReaction()
+            )
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-            channel.sendMessage("Provided user does not exist!").queueAddReaction()
+            sendMessage("Provided user does not exist!")
         })
 
     }

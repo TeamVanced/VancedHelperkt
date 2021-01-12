@@ -2,9 +2,10 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
 import database.collections.Emote
 import database.emotesCollection
+import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
 
@@ -13,7 +14,7 @@ class EmoteBoard : BaseCommand(
     commandDescription = "Get most frequently used emotes",
     commandType = Fun,
     commandAliases = listOf("eb"),
-    commandArguments = listOf("[least | clean]")
+    commandArguments = mapOf("least | clean".optional())
 ) {
 
     private val Emote.description: String get() = "$emote (Used $usedCount times)\n"
@@ -24,10 +25,10 @@ class EmoteBoard : BaseCommand(
         if (args.isEmpty()) {
             val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.take(10)
             if (ebemotes.isEmpty()) {
-                ctx.event.channel.sendMessage("Frequently used emotes not found").queueAddReaction()
+                sendMessage("Frequently used emotes not found")
                 return
             }
-            channel.sendMessage(
+            sendMessage(
                 embedBuilder.apply {
                     setTitle("Emoteboard")
                     val description = mutableListOf<String>()
@@ -36,7 +37,7 @@ class EmoteBoard : BaseCommand(
                     }
                     setDescription(description.joinToString("\n"))
                 }.build()
-            ).queueAddReaction()
+            )
         } else {
             when (args[0]) {
                 "least" -> {
@@ -48,7 +49,7 @@ class EmoteBoard : BaseCommand(
                         notUsedCounter += it.emote.length + 1 // + 1 is for " "
                         notUsedCounter < 1021
                     }
-                    channel.sendMessage(
+                    sendMessage(
                         embedBuilder.apply {
                             setTitle("Emoteboard")
                             ebemotes.forEach {
@@ -60,11 +61,11 @@ class EmoteBoard : BaseCommand(
                                 false
                             )
                         }.build()
-                    ).queueAddReaction()
+                    )
                 }
                 "clean" -> {
                     emotesCollection.deleteMany(Emote::usedCount eq 0)
-                    channel.sendMessage("Successfully removed unused emotes from database").queueAddReaction()
+                    sendMessage("Successfully removed unused emotes from database")
                 }
                 else -> {
                     useCommandProperly()

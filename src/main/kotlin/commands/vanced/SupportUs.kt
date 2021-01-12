@@ -2,7 +2,7 @@ package commands.vanced
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Vanced
+import commands.CommandType.Vanced
 import database.prefix
 
 class SupportUs : BaseCommand(
@@ -13,7 +13,7 @@ class SupportUs : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("How to support us")
                 setDescription("Vanced does not take donations! This means, that any donation links you might find are fake!\n\nAs mentioned above, Vanced does not take donations, but there's other way to support us, that you can find below.")
@@ -42,7 +42,7 @@ class SupportUs : BaseCommand(
                 )
                 setThumbnail("https://i.imgur.com/mFkZnUB.png")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
 }

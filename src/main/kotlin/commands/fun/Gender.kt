@@ -2,9 +2,10 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
+import ext.optional
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -13,7 +14,7 @@ class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Guess the gender",
     commandType = Fun,
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
 
     private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
@@ -21,7 +22,7 @@ class Gender : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.channel.sendMessage("You are not allowed to use this command").queueAddReaction()
+            sendMessage("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -31,9 +32,9 @@ class Gender : BaseCommand(
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
                     detectGender(it.user.name)
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
-                    channel.sendMessage("Provided member does not exist!").queueAddReaction()
+                    sendMessage("Provided member does not exist!")
                 }.handle(ErrorResponse.UNKNOWN_USER) {
-                    channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                    sendMessage("Provided user does not exist!")
                 })
             } else {
                 detectGender(args.joinToString(" "))
@@ -48,13 +49,13 @@ class Gender : BaseCommand(
         val json = "$baseUrl&email=${thing.replace(" ", ".")}@gmail.com".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("Gender Detector")
                 setDescription("$thing is $gender\nAccuracy: $accuracy%")
                 setFooter("Powered by gender-api.com")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
 }

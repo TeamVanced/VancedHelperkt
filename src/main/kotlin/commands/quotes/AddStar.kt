@@ -4,9 +4,10 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
+import ext.required
 import ext.sendIncorrectQuote
 import ext.useCommandProperly
 import org.bson.conversions.Bson
@@ -17,7 +18,7 @@ class AddStar : BaseCommand(
     commandName = "addstar",
     commandDescription = "Star a quote",
     commandType = Quotes,
-    commandArguments = listOf("<Quote ID | Message ID>"),
+    commandArguments = mapOf("Quote ID | Message I>".required()),
     commandAliases = listOf("as", "sq")
 ) {
 
@@ -42,10 +43,10 @@ class AddStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (quote.stars.contains(authorId)) {
-                ctx.channel.sendMessage("Bruh you already starred this").queueAddReaction()
+                sendMessage("Bruh you already starred this")
             } else {
                 quotesCollection.updateOne(filter, Updates.push("stars", authorId))
-                ctx.channel.sendMessage("Successfully starred quote #${quote.quoteId}").queueAddReaction()
+                sendMessage("Successfully starred quote #${quote.quoteId}")
             }
         } else {
             sendIncorrectQuote()

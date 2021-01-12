@@ -1,7 +1,7 @@
 package commands.vanced
 
 import commands.BasePagerCommand
-import commands.CommandTypes.Vanced
+import commands.CommandType.Vanced
 
 class Info : BasePagerCommand(
     commandName = "info",

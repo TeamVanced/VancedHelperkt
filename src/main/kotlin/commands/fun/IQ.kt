@@ -2,7 +2,8 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.optional
 import net.dv8tion.jda.api.entities.MessageChannel
 import org.apache.commons.math3.distribution.NormalDistribution
 
@@ -10,7 +11,7 @@ class IQ : BaseCommand(
     commandName = "iq",
     commandDescription = "Calculate IQ level",
     commandType = Fun,
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -25,12 +26,12 @@ class IQ : BaseCommand(
     }
 
     private fun calculateIQ(arg: String, channel: MessageChannel) {
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("IQ Calculator")
                 setDescription("$arg has an iq of ${calcIQ()}")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
     private fun calcIQ(): Int {

@@ -3,14 +3,15 @@ package commands.utility
 import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
-import commands.CommandTypes.Utility
+import commands.CommandType.Utility
 import database.prefix
+import ext.optional
 
 class Help(private val commandManager: CommandManager) : BaseCommand(
     commandName = "help",
     commandDescription = "Get all available commands from bot",
     commandType = Utility,
-    commandArguments = listOf("[command name]")
+    commandArguments = mapOf("command name".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -21,9 +22,9 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
         if (args.isNotEmpty()) {
             val command = commandManager.getCommand(args[0])
             if (command != null) {
-                channel.sendMessage((command as BaseCommand).getHelpEmbed()).queueAddReaction()
+                sendMessage((command as BaseCommand).getHelpEmbed())
             } else {
-                channel.sendMessage("Command not found!").queueAddReaction()
+                sendMessage("Command not found!")
             }
         } else {
             val commands = mutableMapOf<String, List<String>>()
@@ -42,7 +43,7 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
                     false
                 )
             }
-            channel.sendMessage(embed.build()).queueAddReaction()
+            sendMessage(embed.build())
         }
     }
 

@@ -3,7 +3,8 @@ package commands.quotes
 import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
+import ext.optional
 import ext.useArguments
 import ext.useCommandProperly
 
@@ -13,7 +14,7 @@ class Quote(
     commandName = "quote",
     commandDescription = "Quote manager",
     commandType = Quotes,
-    commandArguments = listOf("<get | add | remove | addstar | removestar>")
+    commandArguments = mapOf("get | add | remove | addstar | removestar".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {

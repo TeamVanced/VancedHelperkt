@@ -2,8 +2,9 @@ package commands.database
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Database
+import commands.CommandType.Database
 import database.*
+import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.eq
@@ -12,7 +13,7 @@ class Settings : BaseCommand(
     commandName = "settings",
     commandDescription = "Configurable settings for helper",
     commandType = Database,
-    commandArguments = listOf("<prefix | boosterchat | boosterrole | muterole | modlogchannel | infochannel | errorchannel | addowner | removeowner | addquoterole | removequoterole | addcolourmerole | removecolourmerole | clear>"),
+    commandArguments = mapOf("prefix | boosterchat | boosterrole | muterole | modlogchannel | infochannel | errorchannel | addowner | removeowner | addquoterole | removequoterole | addcolourmerole | removecolourmerole | clear".required()),
     devOnly = true
 ) {
 
@@ -25,103 +26,103 @@ class Settings : BaseCommand(
                 when (args[0]) {
                     "prefix" -> {
                         prefix = value
-                        channel.sendMessage("Successfully set the prefix to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the prefix to `$value`!")
                     }
                     "boosterchat" -> {
                         boosterChat = value
-                        channel.sendMessage("Successfully set the booster chat to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the booster chat to `$value`!")
                     }
                     "boosterrole" -> {
                         boosterRole = value
-                        channel.sendMessage("Successfully set the booster role to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the booster role to `$value`!")
                     }
                     "muterole" -> {
                         muteRole = value
-                        channel.sendMessage("Successfully set the mute role to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the mute role to `$value`!")
                     }
                     "logchannel" -> {
                         logChannel = value
-                        channel.sendMessage("Successfully set the log channel to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the log channel to `$value`!")
                     }
                     "modlogchannel" -> {
                         modlogChannel = value
-                        channel.sendMessage("Successfully set the mod log channel to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the mod log channel to `$value`!")
                     }
                     "boosterchannel" -> {
                         boosterChannel = value
-                        channel.sendMessage("Successfully set the booster channel to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the booster channel to `$value`!")
                     }
                     "errorchannel" -> {
                         errorChannel = value
-                        channel.sendMessage("Successfully set the error channel to `$value`!").queueAddReaction()
+                        sendMessage("Successfully set the error channel to `$value`!")
                     }
                     "addowner" -> {
                         if (owners.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
+                            sendMessage("`$value` already exists in the collection!")
                             return@with
                         }
                         addOwner(value)
-                        channel.sendMessage("Successfully added `$value` to owners!").queueAddReaction()
+                        sendMessage("Successfully added `$value` to owners!")
                     }
                     "removeowner" -> {
                         if (!owners.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
+                            sendMessage("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeOwner(value)
-                        channel.sendMessage("Successfully removed `$value` from owners!").queueAddReaction()
+                        sendMessage("Successfully removed `$value` from owners!")
                     }
                     "addmodrole" -> {
                         if (modRoles.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
+                            sendMessage("`$value` already exists in the collection!")
                             return@with
                         }
                         addModRole(value)
-                        channel.sendMessage("Successfully added `$value` to moderators!").queueAddReaction()
+                        sendMessage("Successfully added `$value` to moderators!")
                     }
                     "removemodrole" -> {
                         if (!modRoles.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
+                            sendMessage("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeModRole(value)
-                        channel.sendMessage("Successfully removed `$value` from moderators!").queueAddReaction()
+                        sendMessage("Successfully removed `$value` from moderators!")
                     }
                     "addquoterole" -> {
                         if (quoteRoles.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
+                            sendMessage("`$value` already exists in the collection!")
                             return@with
                         }
                         addQuoteRole(value)
-                        channel.sendMessage("Successfully added `$value` to allowed quote roles!").queueAddReaction()
+                        sendMessage("Successfully added `$value` to allowed quote roles!")
                     }
                     "removequoterole" -> {
                         if (!quoteRoles.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
+                            sendMessage("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeQuoteRole(value)
-                        channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
+                        sendMessage("Successfully removed `$value` from allowed quote roles!")
                     }
                     "addcolourmerole" -> {
                         if (colourmeRoles.contains(value)) {
-                            channel.sendMessage("`$value` already exists in the collection!").queueAddReaction()
+                            sendMessage("`$value` already exists in the collection!")
                             return@with
                         }
                         addColourmeRole(value)
-                        channel.sendMessage("Successfully added `$value` to allowed colourme roles!").queueAddReaction()
+                        sendMessage("Successfully added `$value` to allowed colourme roles!")
                     }
                     "removecolourmerole" -> {
                         if (!colourmeRoles.contains(value)) {
-                            channel.sendMessage("`$value` does not exist in the collection!").queueAddReaction()
+                            sendMessage("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeColourmeRole(value)
-                        channel.sendMessage("Successfully removed `$value` from allowed quote roles!").queueAddReaction()
+                        sendMessage("Successfully removed `$value` from allowed quote roles!")
                     }
                     "clear" -> {
                         settingsCollection.findOneAndDelete(Settings::guildId eq this)
-                        channel.sendMessage("Successfully cleared settings").queueAddReaction()
+                        sendMessage("Successfully cleared settings")
                     }
                     else -> {
                         useCommandProperly()

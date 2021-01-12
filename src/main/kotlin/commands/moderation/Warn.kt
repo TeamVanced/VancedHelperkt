@@ -2,10 +2,8 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
-import ext.useArguments
-import ext.useCommandProperly
-import ext.warn
+import commands.CommandType.Moderation
+import ext.*
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 
@@ -13,7 +11,7 @@ class Warn : BaseCommand(
     commandName = "warn",
     commandDescription = "Warn a user",
     commandType = Moderation,
-    commandArguments = listOf("<User ID | User Mention>")
+    commandArguments = mapOf("User ID | User Mention".required(), "Reason".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -29,15 +27,13 @@ class Warn : BaseCommand(
             }
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    channel.sendMessage("You can't warn this member!").queueAddReaction()
+                    sendMessage("You can't warn this member!")
                     return@queue
                 }
                 member.warn(guildId, reason, channel, embedBuilder)
-                channel.sendMessage("Successfully warned ${member.user.asMention}").queue {
-                    messageId = it.id
-                }
+                sendMessage("Successfully warned ${member.user.asMention}")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                sendMessage("Provided user does not exist!")
             })
 
         } else {

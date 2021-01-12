@@ -2,14 +2,16 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.optional
+import ext.required
 import ext.useArguments
 
 class How : BaseCommand(
     commandName = "how",
     commandDescription = "See how [predicate] is [the thing]",
     commandType = Fun,
-    commandArguments = listOf("<predicate> [| <the thing>]")
+    commandArguments = mapOf("predicate".required(), "| the thing".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -33,12 +35,12 @@ class How : BaseCommand(
         val percentage = (0..100).random()
         val barAmount = percentage / 10
         val bar = "▰".repeat(barAmount) + "▱".repeat(10 - barAmount)
-        channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("${predicate.capitalize().removeSuffix(" ")} Meter")
                 setDescription("$thing is $percentage% $predicate\n$bar")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
 }

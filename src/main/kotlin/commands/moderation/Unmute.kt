@@ -2,8 +2,9 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
 import database.muteRole
+import ext.required
 import ext.sendUnmuteLog
 import ext.useArguments
 import ext.useCommandProperly
@@ -14,7 +15,8 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 class Unmute : BaseCommand(
     commandName = "unmute",
     commandDescription = "Unmute a member",
-    commandType = Moderation
+    commandType = Moderation,
+    commandArguments = mapOf("User ID | User Mention".required())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -26,7 +28,7 @@ class Unmute : BaseCommand(
             if (role != null) {
                 removeRole(user, role, ctx)
             } else {
-                channel.sendMessage("Mute role does not exist, how the fuck can user be muted???").queueAddReaction()
+                sendMessage("Mute role does not exist, how the fuck can user be muted???")
             }
         } else {
             useArguments(1)
@@ -44,13 +46,13 @@ class Unmute : BaseCommand(
                 if (member.roles.contains(role)) {
                     ctx.guild.removeRoleFromMember(member, role).queue {
                         ctx.authorAsMember?.let { it1 -> embedBuilder.sendUnmuteLog(member.user, it1.user, guildId) }
-                        channel.sendMessage("Successfully unmuted ${member.asMention}").queueAddReaction()
+                        sendMessage("Successfully unmuted ${member.asMention}")
                     }
                 } else {
-                    channel.sendMessage("Provided user is not muted!").queueAddReaction()
+                    sendMessage("Provided user is not muted!")
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                channel.sendMessage("Provided user does not exist!").queueAddReaction()
+                sendMessage("Provided user does not exist!")
             })
         } else {
             useCommandProperly()

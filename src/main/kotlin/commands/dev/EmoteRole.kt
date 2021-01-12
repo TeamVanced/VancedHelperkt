@@ -2,11 +2,12 @@ package commands.dev
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Dev
+import commands.CommandType.Dev
 import database.collections.EmoteRole
 import database.emoteRolesCollection
 import database.getEmoteRoles
 import database.updateEmoteRoles
+import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 
@@ -14,7 +15,7 @@ class EmoteRole : BaseCommand(
     commandName = "emoterole",
     commandDescription = "Set a reaction detection to a message and add roles to members automatically",
     commandType = Dev,
-    commandArguments = listOf("<message ID>", "<emote>", "<role ID>")
+    commandArguments = mapOf("message ID".required(), "emote".required(), "role ID".required())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -43,10 +44,10 @@ class EmoteRole : BaseCommand(
                             }
                         }
                     }
-                    channel.sendMessage("Successfully configured emote role!").queue()
+                    sendMessage("Successfully configured emote role!")
                 } else {
                     guildId.updateEmoteRoles(messageId, emote, roleId)
-                    channel.sendMessage("Successfully reconfigured emote role!").queueAddReaction()
+                    sendMessage("Successfully reconfigured emote role!")
                 }
             } else {
                 useCommandProperly()

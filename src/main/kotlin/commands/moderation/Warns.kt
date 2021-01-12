@@ -3,8 +3,9 @@ package commands.moderation
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Moderation
+import commands.CommandType.Moderation
 import database.warnsCollection
+import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.findOne
@@ -12,7 +13,8 @@ import org.litote.kmongo.findOne
 class Warns : BaseCommand(
     commandName = "warns",
     commandDescription = "Get warns for specified user",
-    commandType = Moderation
+    commandType = Moderation,
+    commandArguments = mapOf("User ID | User Mention".required())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -30,7 +32,7 @@ class Warns : BaseCommand(
             if (warn != null) {
                 val reasons = warn.reasons
                 if (reasons.isNotEmpty()) {
-                    channel.sendMessage(
+                    sendMessage(
                         embedBuilder.apply {
                             setTitle("Warns for ${warn.userName}")
                             for (i in reasons.indices) {
@@ -41,12 +43,12 @@ class Warns : BaseCommand(
                                 )
                             }
                         }.build()
-                    ).queueAddReaction()
+                    )
                 } else {
-                    channel.sendMessage("User $user has no warns").queueAddReaction()
+                    sendMessage("User $user has no warns")
                 }
             } else {
-                channel.sendMessage("User $user has no warns").queueAddReaction()
+                sendMessage("User $user has no warns")
             }
         } else {
             useArguments(1)

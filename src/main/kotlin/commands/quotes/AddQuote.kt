@@ -2,10 +2,11 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.hasQuotePerms
+import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 import net.dv8tion.jda.api.exceptions.ErrorHandler
@@ -19,13 +20,13 @@ class AddQuote : BaseCommand(
     commandDescription = "Add a quote",
     commandType = Quotes,
     commandAliases = listOf("aq"),
-    commandArguments = listOf("<Message link> | <Message ID> | <#Channel> <Message ID>")
+    commandArguments = mapOf("Message link | Message ID | #Channel Message ID".required())
 ) {
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.channel.sendMessage("You are not allowed to use this command").queueAddReaction()
+            sendMessage("You are not allowed to use this command")
             return
         }
         val args = ctx.args.apply { remove("add") }
@@ -51,7 +52,7 @@ class AddQuote : BaseCommand(
                             )
                         }
                         else -> {
-                            ctx.channel.sendMessage("Use the command properly bruh").queueAddReaction()
+                            sendMessage("Use the command properly bruh")
                         }
                     }
                 }
@@ -74,7 +75,7 @@ class AddQuote : BaseCommand(
     private fun createQuote(ctx: CommandContext, channelID: String, messageID: String) {
         ctx.event.jda.getTextChannelById(channelID)?.retrieveMessageById(messageID)?.queue({ it ->
             if (quotesCollection.findOne(Quote::messageID eq messageID) != null) {
-                ctx.channel.sendMessage("Pog, that quote is already added :stonks:").queueAddReaction()
+                sendMessage("Pog, that quote is already added :stonks:")
                 return@queue
             }
 
@@ -102,13 +103,13 @@ class AddQuote : BaseCommand(
                 )
             )
 
-            ctx.channel.sendMessage("Quote #$quoteid successfully created!").queueAddReaction()
+            sendMessage("Quote #$quoteid successfully created!")
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {
-            ctx.channel.sendMessage("Pretty sure that's not a valid message lul").queueAddReaction()
+            sendMessage("Pretty sure that's not a valid message lul")
         }.handle(ErrorResponse.UNKNOWN_CHANNEL) {
-            ctx.channel.sendMessage("Pretty sure that's not a valid channel lul").queueAddReaction()
+            sendMessage("Pretty sure that's not a valid channel lul")
         }.handle(ErrorResponse.EMPTY_MESSAGE) {
-            ctx.channel.sendMessage("That's an empty message pal").queueAddReaction()
+            sendMessage("That's an empty message pal")
         })
     }
 

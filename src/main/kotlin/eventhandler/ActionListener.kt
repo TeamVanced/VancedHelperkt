@@ -4,12 +4,11 @@ import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
-import ext.sendBanLog
-import ext.sendUnbanLog
-import ext.warn
+import ext.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
+import net.dv8tion.jda.api.entities.MessageType
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.emote.EmoteAddedEvent
 import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent
@@ -108,21 +107,53 @@ class ActionListener : ListenerAdapter() {
             if (role != null && member != null) {
                 event.guild.removeRoleFromMember(member, role).queue()
             }
-
         }
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val message = event.message.contentRaw
+        val message = event.message
+        val messageContent = message.contentRaw
         val guildId = event.guild.id
-        if (message.contains(emoteRegex)) {
-            val emote = emoteRegex.findAll(message)
-            if (emote.count() > 6) {
-                event.message.delete().queue({
-                    event.member?.warn(guildId, "Emote spam", event.channel, embedBuilder)
-                    event.channel.sendMessage("${event.member?.asMention} has been warned for spamming emotes").queue()
+        val channel = event.channel
+        val member = event.member
+        val words = messageContent.split("\\s+".toRegex()).map { word ->
+            word.replace("^[,.]|[,.]$".toRegex(), "")
+        }
+        channel.history.retrievePast(10).queue { messages ->
+            val memberMessages = messages.filter { it.type != MessageType.GUILD_MEMBER_JOIN && !it.isWebhookMessage && it.author == event.author && it.contentRaw.equals(messageContent, ignoreCase = true) }.take(4)
+            if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
+                return@queue
+            }
+
+            channel.deleteMessages(memberMessages).queue({
+                event.member?.warn(guildId, "Message spam", channel, embedBuilder)
+                channel.sendMsg("${event.member?.asMention} has been warned for spamming messages")
+            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+
+            return@queue
+        }
+
+        if (words.groupingBy { it }.eachCount().filter { it.value > 3 }.isNotEmpty()) {
+            if (member != null && !member.isMod(guildId)) {
+                message.delete().queue({
+                    member.warn(guildId, "Message spam", channel, embedBuilder)
+                    channel.sendMsg("${member.asMention} has been warned for spamming messages")
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-                return
+            }
+        }
+
+        if (messageContent.contains(emoteRegex)) {
+            val emote = emoteRegex.findAll(messageContent)
+            if (emote.count() > 6) {
+                if (member != null) {
+                    if (!member.isMod(guildId)) {
+                        message.delete().queue({
+                            member.warn(guildId, "Emote spam", channel, embedBuilder)
+                            channel.sendMsg("${member.asMention} has been warned for spamming emotes")
+                        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                        return
+                    }
+                }
             }
             val filter = BasicDBObject().append("guildId", guildId)
             emote.forEach {
@@ -167,7 +198,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
@@ -181,7 +212,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(1).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user

@@ -12,15 +12,14 @@ import utils.getJson
 abstract class BasePagerCommand(
     override val commandName: String,
     override val commandDescription: String,
-    override val commandType: CommandTypes,
-    override val commandAliases: List<String> = listOf(commandName),
-    override val commandArguments: List<String> = emptyList()
+    override val commandType: CommandType,
+    override val commandAliases: List<String> = listOf(commandName)
 ) : BaseCommand(
     commandName = commandName,
     commandDescription = commandDescription,
     commandType = commandType,
     commandAliases = commandAliases,
-    commandArguments = commandArguments,
+    commandArguments = mapOf("Page number" to ArgumentType.Optional),
     addTrashCan = false
 ) {
 
@@ -37,9 +36,9 @@ abstract class BasePagerCommand(
             try {
                 embedPagerAdapter.newInstance(args[0].toInt())
             } catch (e: NumberFormatException) {
-                ctx.channel.sendMessage("Provided argument is not a number!").queueAddReaction()
+                sendMessage("Provided argument is not a number!")
             } catch (e: IndexOutOfBoundsException) {
-                ctx.channel.sendMessage("Provided page does not exist!").queueAddReaction()
+                sendMessage("Provided page does not exist!")
             }
         } else {
             embedPagerAdapter.newInstance()
@@ -51,7 +50,7 @@ abstract class BasePagerCommand(
     //will probably optimise this later
     private fun getPagesWithTableOfContent(): List<MessageEmbed> {
         val tableDesc = mutableListOf("0 | You are here ;)")
-        val jsonArray = "https://vancedapp.com/api/v1/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
+        val jsonArray = "https://vancedapp.com/webapi/strings/en/$jsonName.json".getJson()?.array<JsonObject>(jsonName)
         val embedPages = mutableListOf<EmbedBuilder>()
         val builtEmbedPages = mutableListOf<MessageEmbed>()
         for (i in jsonArray?.indices!!) {

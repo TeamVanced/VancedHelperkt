@@ -2,7 +2,8 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Fun
+import commands.CommandType.Fun
+import ext.optional
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.apache.commons.math3.distribution.NormalDistribution
 
@@ -11,7 +12,7 @@ class PPSize : BaseCommand(
     commandDescription = "Calculate PP size",
     commandType = Fun,
     commandAliases = listOf("pp", "coce"),
-    commandArguments = listOf("[The thing]")
+    commandArguments = mapOf("The thing".optional())
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -29,12 +30,12 @@ class PPSize : BaseCommand(
     private fun calculatePPSize(thing: String, event: GuildMessageReceivedEvent) {
         val ppsize = calcPP()
         val bar = "8" + "=".repeat(ppsize) + "D"
-        event.channel.sendMessage(
+        sendMessage(
             embedBuilder.apply {
                 setTitle("PP Size Calculator")
                 setDescription("$thing has a PP size of $ppsize inches\n$bar")
             }.build()
-        ).queueAddReaction()
+        )
     }
 
     private fun calcPP(): Int {

@@ -2,10 +2,11 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.BaseCommand
-import commands.CommandTypes.Quotes
+import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
+import ext.sendMsg
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
@@ -26,10 +27,10 @@ class StarBoard : BaseCommand(
         super.execute(ctx)
         sbquotes = quotesCollection.find(Quote::guildID eq guildId).filter { it.stars.size > 0 }.sortedByDescending { it.stars.size }.take(10)
         if (sbquotes.isEmpty()) {
-            ctx.event.channel.sendMessage("Quotes not found, try adding some").queueAddReaction()
+            sendMessage("Quotes not found, try adding some")
             return
         }
-        sendStarboard(ctx.channel)
+        sendStarboard()
     }
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {
@@ -58,10 +59,10 @@ class StarBoard : BaseCommand(
         }
     }.build()
 
-    private fun sendStarboard(channel: MessageChannel) {
-        channel.sendMessage(
+    private fun sendStarboard() {
+        channel.sendMsg(
             getStarboard()
-        ).queue { message ->
+        ) { message ->
             messageId = message.id
             (0..sbquotes.size).forEach {
                 message.addReaction(emotes[it]).queue()
