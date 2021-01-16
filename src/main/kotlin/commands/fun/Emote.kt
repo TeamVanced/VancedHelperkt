@@ -23,7 +23,7 @@ class Emote : BaseCommand(
             emotes.forEach { emote ->
                 val suffix = if (emote.startsWith("<a")) "gif" else "png"
                 if (emote.matches(regex)) {
-                    val link = "<https://cdn.discordapp.com/emojis/${emote.filter { it.isDigit() }}.$suffix?size=64>"
+                    val link = "<https://cdn.discordapp.com/emojis/${emote.substringAfterLast(":").dropLast(1)}.$suffix>"
                     if (emotes.size == 1) {
                         emotelinks.add(link.removePrefix("<").removeSuffix(">"))
                     } else {
