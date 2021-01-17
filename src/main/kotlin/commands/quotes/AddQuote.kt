@@ -104,7 +104,9 @@ class AddQuote : BaseCommand(
             )
 
             sendMessage("Quote #$quoteid successfully created!")
-        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {
+        }, ErrorHandler().handle(ErrorResponse.MISSING_ACCESS) {
+            sendMessage("I don't have permissions to view that message")
+        }.handle(ErrorResponse.UNKNOWN_MESSAGE) {
             sendMessage("Pretty sure that's not a valid message lul")
         }.handle(ErrorResponse.UNKNOWN_CHANNEL) {
             sendMessage("Pretty sure that's not a valid channel lul")
