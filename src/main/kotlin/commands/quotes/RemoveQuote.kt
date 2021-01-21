@@ -13,7 +13,7 @@ class RemoveQuote : BaseCommand(
     commandDescription = "Remove a quote",
     commandType = Quotes,
     commandArguments = mapOf("Quote ID | Message ID".optional()),
-    commandAliases = listOf("rmquote", "rmq")
+    commandAliases = listOf("rmquote", "rmq", "dq")
 ) {
 
     override fun execute(ctx: CommandContext) {
