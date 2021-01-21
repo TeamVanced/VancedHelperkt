@@ -19,7 +19,7 @@ class AddStar : BaseCommand(
     commandDescription = "Star a quote",
     commandType = Quotes,
     commandArguments = mapOf("Quote ID | Message I>".required()),
-    commandAliases = listOf("as", "sq")
+    commandAliases = listOf("as", "sq", "star")
 ) {
 
     override fun execute(ctx: CommandContext) {
