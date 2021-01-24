@@ -12,7 +12,7 @@ class Avatar : BaseCommand(
     commandDescription = "Get a user avatar",
     commandType = Utility,
     commandArguments = mapOf("User Mention | User ID".required()),
-    commandAliases = listOf("av")
+    commandAliases = listOf("av", "pfp", "icon")
 ) {
 
     override fun execute(ctx: CommandContext) {

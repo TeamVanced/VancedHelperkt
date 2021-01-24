@@ -14,7 +14,8 @@ class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Guess the gender",
     commandType = Fun,
-    commandArguments = mapOf("The thing".optional())
+    commandArguments = mapOf("The thing".optional()),
+    commandAliases = listOf("sex")
 ) {
 
     private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"

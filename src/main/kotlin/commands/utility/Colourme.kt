@@ -15,7 +15,7 @@ class Colourme : BaseCommand(
     commandDescription = "Create a custom role for yourself",
     commandType = Utility,
     commandArguments = mapOf("color".required(), "role name".required()),
-    commandAliases = listOf("colorme", "color")
+    commandAliases = listOf("colorme", "color", "colour")
 ) {
 
     override fun execute(ctx: CommandContext) {
