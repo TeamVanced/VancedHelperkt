@@ -47,22 +47,23 @@ class Country : BaseCommand(
     }
 
     private fun detectCountries(thing: String) {
-        val json = "$baseUrl&name=$thing".getJson()
+        val filteredThing = thing.filter { it.isLetter() }
+        val json = "$baseUrl&name=$filteredThing".getJson()
         val countries = json?.array<JsonObject>("country_of_origin")
         sendMessage(
             embedBuilder.apply {
                 setTitle("Country Detector")
                 if (countries != null && countries.isNotEmpty()) {
-                    setDescription("Possible country(es) for $thing")
+                    setDescription("Possible country(es) for $filteredThing")
                     countries.take(5).forEach {
                         addField(
                             it.string("country_name"),
-                            "Probability: ${it.double("probability")}",
+                            "Probability: ${it.double("probability")?.times(100)}%",
                             false
                         )
                     }
                 } else {
-                    setDescription("Countries not found for $thing")
+                    setDescription("Countries not found for $filteredThing")
                 }
                 setFooter("Powered by gender-api.com")
             }.build()
