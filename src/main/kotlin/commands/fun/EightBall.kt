@@ -10,7 +10,8 @@ class EightBall : BaseCommand(
     commandName = "8ball",
     commandDescription = "Let the magic 8ball decide your fate",
     commandType = Fun,
-    commandArguments = mapOf("Question".required())
+    commandArguments = mapOf("Question".required()),
+    commandAliases = listOf("8b", "fortune")
 ) {
 
     private val responses = arrayOf(

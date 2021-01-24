@@ -10,7 +10,8 @@ class F : BaseCommand(
     commandName = "f",
     commandDescription = "F",
     commandType = Fun,
-    commandArguments = mapOf("Thing to pay respect for".optional())
+    commandArguments = mapOf("Thing to pay respect for".optional()),
+    commandAliases = listOf("pressf", "payrespects")
 ) {
 
     override fun execute(ctx: CommandContext) {

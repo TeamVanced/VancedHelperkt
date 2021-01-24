@@ -11,7 +11,7 @@ class Emote : BaseCommand(
     commandDescription = "Get a corresponding emote link",
     commandType = Utility,
     commandArguments = mapOf("emotes".required()),
-    commandAliases = listOf("e")
+    commandAliases = listOf("emoji", "e")
 ) {
 
     override fun execute(ctx: CommandContext) {

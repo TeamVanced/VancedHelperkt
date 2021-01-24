@@ -11,7 +11,8 @@ class IQ : BaseCommand(
     commandName = "iq",
     commandDescription = "Calculate IQ level",
     commandType = Fun,
-    commandArguments = mapOf("The thing".optional())
+    commandArguments = mapOf("The thing".optional()),
+    commandAliases = listOf("howsmart")
 ) {
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
