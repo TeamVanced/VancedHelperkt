@@ -1,4 +1,4 @@
-package interaction
+package slashcommands.interaction
 
 import kotlinx.serialization.Serializable
 

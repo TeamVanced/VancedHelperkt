@@ -1,8 +1,8 @@
-package application
+package slashcommands.application
 
 /**
  * @param name 3-32 character name matching ^[\w-]{3,32}$ regex
- * @param description
+ * @param description this shit is unfinished
  */
 
 data class ApplicationCommand(

@@ -1,4 +1,4 @@
-package application
+package slashcommands.application
 
 enum class ApplicationCommandOptionType(val value: Int) {
     SUB_COMMAND(1,),

@@ -1,16 +1,13 @@
-import application.ApplicationCommand
-import application.ISlashCommandListener
+package slashcommands
 
-class DSKBuilder {
+import slashcommands.application.ApplicationCommand
+import slashcommands.application.ISlashCommandListener
 
-    private var botToken: String? = null
+class DSKBuilder(private val token: String) {
+
     private var commandListener: ISlashCommandListener? = null
     private var globalCommands = mutableListOf<ApplicationCommand>()
     private var guildCommands = mutableMapOf<String, List<ApplicationCommand>>()
-
-    fun setToken(token: String) {
-        botToken = token
-    }
 
     fun setSlashCommandListener(listener: ISlashCommandListener) {
         commandListener = listener
@@ -27,9 +24,8 @@ class DSKBuilder {
     }
 
     fun build() {
-        if (botToken == null) {
-            throw IllegalArgumentException("Token should not be null!")
-        }
+
+
 
     }
 

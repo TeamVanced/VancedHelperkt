@@ -1,17 +1,13 @@
-package application
+package slashcommands.application
 
-import interaction.Interaction
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
+import slashcommands.interaction.Interaction
 
-class SlashCommandReceivedEvent(json: String) {
+class SlashCommandReceivedEvent(private val interaction: Interaction) {
 
-    private val deserializedJson = Json.decodeFromString<Interaction>(json)
-
-    val type get() = deserializedJson.type
-    val data get() = deserializedJson.data
-    val guildId get() = deserializedJson.guild_id
-    val channelId get() = deserializedJson.channel_id
-    val member get() = deserializedJson.member
+    val type get() = interaction.type
+    val data get() = interaction.data
+    val guildId get() = interaction.guild_id
+    val channelId get() = interaction.channel_id
+    val member get() = interaction.member
 
 }

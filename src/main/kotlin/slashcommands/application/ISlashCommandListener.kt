@@ -1,4 +1,4 @@
-package application
+package slashcommands.application
 
 interface ISlashCommandListener {
 

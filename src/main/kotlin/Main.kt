@@ -1,5 +1,4 @@
 import commandhandler.CommandListener
-import errorhandler.ErrorListener
 import eventhandler.ActionListener
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
@@ -10,7 +9,7 @@ class Main {
 
     fun start() {
         jda = JDABuilder.createDefault(config.token)
-            .addEventListeners(ActionListener(), CommandListener(), ErrorListener())
+            .addEventListeners(ActionListener(), CommandListener())
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .enableIntents(GatewayIntent.GUILD_MEMBERS)
             .setActivity(Activity.listening("${defaultPrefix}help"))

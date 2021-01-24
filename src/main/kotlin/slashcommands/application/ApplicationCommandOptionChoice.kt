@@ -1,4 +1,4 @@
-package application
+package slashcommands.application
 
 data class ApplicationCommandOptionChoice(
     val name: String,

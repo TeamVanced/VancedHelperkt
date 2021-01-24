@@ -1,4 +1,4 @@
-package interaction
+package slashcommands.interaction
 
 enum class InteractionType(val value: Int) {
 

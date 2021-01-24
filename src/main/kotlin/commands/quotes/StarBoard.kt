@@ -7,7 +7,6 @@ import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
 import ext.sendMsg
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import org.litote.kmongo.eq

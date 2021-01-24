@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
-import java.lang.Exception
 
 fun BaseCommand.useCommandProperly() {
     sendMessage("Use the command properly!")

@@ -7,7 +7,6 @@ import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
-import ext.sendMsg
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
