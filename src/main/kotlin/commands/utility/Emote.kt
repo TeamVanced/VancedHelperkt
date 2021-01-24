@@ -1,4 +1,4 @@
-package commands.`fun`
+package commands.utility
 
 import commandhandler.CommandContext
 import commands.BaseCommand
