@@ -1,7 +1,6 @@
 package commands
 
 import commandhandler.CommandContext
-import commandhandler.ICommand
 import commandhandler.IMessageReactionListener
 import database.prefix
 import ext.sendMsg
@@ -18,14 +17,14 @@ import java.awt.Color
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 open class BaseCommand(
-    override val commandType: CommandType,
-    override val commandName: String,
-    override val commandDescription: String,
-    override val commandArguments: Map<String, ArgumentType> = mapOf(),
-    override val commandAliases: List<String> = listOf(commandName),
-    override val devOnly: Boolean = false,
+    open val commandType: CommandType,
+    open val commandName: String,
+    open val commandDescription: String,
+    open val commandArguments: Map<String, ArgumentType> = mapOf(),
+    open val commandAliases: List<String> = listOf(commandName),
+    open val devOnly: Boolean = false,
     private val addTrashCan: Boolean = true,
-) : ICommand, IMessageReactionListener {
+) : IMessageReactionListener {
 
     val contentIDRegex = "\\b\\d{18}\\b".toRegex()
     val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
@@ -41,7 +40,7 @@ open class BaseCommand(
     private var userMessageId: String = ""
 
     @OverridingMethodsMustInvokeSuper
-    override fun execute(ctx: CommandContext) {
+    open fun execute(ctx: CommandContext) {
         channel = ctx.channel
         userMessageId = ctx.event.messageId
         commandAuthorId = ctx.author.id
