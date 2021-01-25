@@ -12,7 +12,7 @@ class Purge : BaseCommand(
     commandName = "purge",
     commandDescription = "Purge a number of messages between 2 and 100 in the channel",
     commandType = Moderation,
-    commandAliases = listOf("prune"),
+    commandAliases = listOf("prune", "clear"),
     commandArguments = mapOf("amount".required())
 ) {
 

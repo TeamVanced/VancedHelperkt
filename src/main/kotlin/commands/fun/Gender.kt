@@ -14,7 +14,8 @@ class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Guess the gender",
     commandType = Fun,
-    commandArguments = mapOf("The thing".optional())
+    commandArguments = mapOf("The thing".optional()),
+    commandAliases = listOf("sex")
 ) {
 
     private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
@@ -46,13 +47,14 @@ class Gender : BaseCommand(
     }
 
     private fun detectGender(thing: String) {
-        val json = "$baseUrl&email=${thing.replace(" ", ".")}@gmail.com".getJson()
+        val filteredThing = thing.filter { it.isLetter() }
+        val json = "$baseUrl&email=${filteredThing.replace(" ", ".")}@gmail.com".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
         sendMessage(
             embedBuilder.apply {
                 setTitle("Gender Detector")
-                setDescription("$thing is $gender\nAccuracy: $accuracy%")
+                setDescription("$filteredThing is $gender\nAccuracy: $accuracy%")
                 setFooter("Powered by gender-api.com")
             }.build()
         )

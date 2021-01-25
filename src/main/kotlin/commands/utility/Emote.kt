@@ -1,4 +1,4 @@
-package commands.`fun`
+package commands.utility
 
 import commandhandler.CommandContext
 import commands.BaseCommand
@@ -11,7 +11,7 @@ class Emote : BaseCommand(
     commandDescription = "Get a corresponding emote link",
     commandType = Utility,
     commandArguments = mapOf("emotes".required()),
-    commandAliases = listOf("e")
+    commandAliases = listOf("emoji", "e")
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -23,7 +23,7 @@ class Emote : BaseCommand(
             emotes.forEach { emote ->
                 val suffix = if (emote.startsWith("<a")) "gif" else "png"
                 if (emote.matches(regex)) {
-                    val link = "<https://cdn.discordapp.com/emojis/${emote.filter { it.isDigit() }}.$suffix?size=64>"
+                    val link = "<https://cdn.discordapp.com/emojis/${emote.substringAfterLast(":").dropLast(1)}.$suffix>"
                     if (emotes.size == 1) {
                         emotelinks.add(link.removePrefix("<").removeSuffix(">"))
                     } else {

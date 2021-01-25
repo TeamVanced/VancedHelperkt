@@ -11,7 +11,8 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
     commandName = "help",
     commandDescription = "Get all available commands from bot",
     commandType = Utility,
-    commandArguments = mapOf("command name".optional())
+    commandArguments = mapOf("command name".optional()),
+    commandAliases = listOf("h")
 ) {
 
     override fun execute(ctx: CommandContext) {

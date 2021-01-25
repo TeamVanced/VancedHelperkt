@@ -23,10 +23,10 @@ import java.awt.Color
 
 class CommandManager {
 
-    val commands = mutableListOf<ICommand>()
+    val commands = mutableListOf<BaseCommand>()
     val commandTypes = mutableListOf<CommandType>()
 
-    fun addCommand(command: ICommand) {
+    fun addCommand(command: BaseCommand) {
         if (commands.contains(command)) {
             println("Command already exists, skipping...")
             return
@@ -39,7 +39,7 @@ class CommandManager {
 
     }
 
-    fun getCommand(commandName: String): ICommand? {
+    fun getCommand(commandName: String): BaseCommand? {
         return commands.firstOrNull { cmd ->
             cmd.commandName == commandName || cmd.commandAliases.contains(commandName)
         }
@@ -54,7 +54,7 @@ class CommandManager {
         }
     }
 
-    fun execWithChecks(command: ICommand, event: GuildMessageReceivedEvent, args: List<String>) {
+    fun execWithChecks(command: BaseCommand, event: GuildMessageReceivedEvent, args: List<String>) {
         val commandContext = CommandContext(event, args.subList(1, args.size) as MutableList<String>)
 
         val guildId = event.guild.id
@@ -83,7 +83,7 @@ class CommandManager {
 
     fun onReactionAdd(event: MessageReactionAddEvent) {
         commands.forEach {
-            if ((it as BaseCommand).messageId == event.messageId) {
+            if (it.messageId == event.messageId) {
                 it.onReactionAdd(event)
                 return
             }
@@ -91,8 +91,8 @@ class CommandManager {
     }
 
     fun onReactionRemove(event: MessageReactionRemoveEvent) {
-        commands.filter { it is IMessageReactionListener }.forEach {
-            if ((it as BaseCommand).messageId == event.messageId) {
+        commands.forEach {
+            if (it.messageId == event.messageId) {
                 it.onReactionRemove(event)
                 return
             }

@@ -19,7 +19,7 @@ class RemoveStar : BaseCommand(
     commandDescription = "Star a quote",
     commandType = Quotes,
     commandArguments = mapOf("Quote ID | Message ID".required()),
-    commandAliases = listOf("rs", "rsq")
+    commandAliases = listOf("rs", "rsq", "unstar")
 ) {
 
     override fun execute(ctx: CommandContext) {
