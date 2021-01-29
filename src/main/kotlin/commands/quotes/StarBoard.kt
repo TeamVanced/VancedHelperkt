@@ -6,8 +6,8 @@ import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
-import ext.sendMsg
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import org.litote.kmongo.eq
 
@@ -26,23 +26,25 @@ class StarBoard : BaseCommand(
         super.execute(ctx)
         sbquotes = quotesCollection.find(Quote::guildID eq guildId).filter { it.stars.size > 0 }.sortedByDescending { it.stars.size }.take(10)
         if (sbquotes.isEmpty()) {
-            sendMessage("Quotes not found, try adding some")
+            ctx.event.channel.sendMsg("Quotes not found, try adding some")
             return
         }
-        sendStarboard()
+        sendStarboard(ctx.channel)
     }
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {
         super.onReactionAdd(event)
-        if (event.userId != commandAuthorId)
+        val botMessageId = event.channel.botMessage?.id
+        if (event.userId != event.channel.userMessage?.author?.id)
             return
-        if (event.reactionEmote.asReactionCode == emotes[0]) {
-            channel.editMessageById(messageId, getStarboard()).queue()
+
+        if (event.reactionEmote.asReactionCode == emotes[0] && botMessageId != null) {
+            event.channel.editMessageById(botMessageId, getStarboard()).queue()
             return
         }
-        if (emotes.contains(event.reactionEmote.asReactionCode))
-            channel.editMessageById(
-                messageId,
+        if (emotes.contains(event.reactionEmote.asReactionCode) && botMessageId != null)
+            event.channel.editMessageById(
+                botMessageId,
                 embedBuilder.getQuote(sbquotes[emotes.indexOf(event.reactionEmote.asReactionCode) - 1])
             ).queue()
     }
@@ -58,11 +60,11 @@ class StarBoard : BaseCommand(
         }
     }.build()
 
-    private fun sendStarboard() {
+    private fun sendStarboard(channel: TextChannel) {
         channel.sendMsg(
             getStarboard()
         ) { message ->
-            messageId = message.id
+            commandMessage[channel] = message
             (0..sbquotes.size).forEach {
                 message.addReaction(emotes[it]).queue()
             }

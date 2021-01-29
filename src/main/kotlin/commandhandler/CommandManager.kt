@@ -13,12 +13,14 @@ import commands.vanced.*
 import database.modRoles
 import database.owners
 import database.prefix
-import ext.sendMsg
+import ext.sendMessageWithChecks
 import ext.sendStacktrace
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
+import net.dv8tion.jda.api.exceptions.ErrorHandler
+import net.dv8tion.jda.api.requests.ErrorResponse
 import java.awt.Color
 
 class CommandManager {
@@ -67,14 +69,14 @@ class CommandManager {
                         it.id
                     )
                 })) {
-                event.channel.sendMsg("You are not allowed to use this command!")
+                event.channel.sendMessageWithChecks("You are not allowed to use this command!")
                 return@queue
             }
 
             try {
                 command.execute(commandContext)
             } catch (e: Exception) {
-                event.channel.sendMsg("Sorry, something went wrong")
+                event.channel.sendMessageWithChecks("Sorry, something went wrong")
                 EmbedBuilder().setColor(Color.red).sendStacktrace(event.guild, e.cause?.message, e.stackTraceToString())
             }
         }
@@ -82,21 +84,17 @@ class CommandManager {
     }
 
     fun onReactionAdd(event: MessageReactionAddEvent) {
-        commands.forEach {
-            if (it.messageId == event.messageId) {
-                it.onReactionAdd(event)
-                return
-            }
-        }
+        event.channel.retrieveMessageById(event.messageId).queue({ message ->
+            commands.firstOrNull { it.commandMessage.containsKey(event.channel) && it.commandMessage.containsValue(message) }?.onReactionAdd(event)
+            return@queue
+        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
     }
 
     fun onReactionRemove(event: MessageReactionRemoveEvent) {
-        commands.forEach {
-            if (it.messageId == event.messageId) {
-                it.onReactionRemove(event)
-                return
-            }
-        }
+        event.channel.retrieveMessageById(event.messageId).queue({ message ->
+            commands.firstOrNull { it.commandMessage.containsKey(event.channel) && it.commandMessage.containsValue(message) }?.onReactionRemove(event)
+            return@queue
+        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
     }
 
     init {

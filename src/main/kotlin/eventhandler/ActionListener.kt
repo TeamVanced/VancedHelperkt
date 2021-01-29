@@ -128,7 +128,7 @@ class ActionListener : ListenerAdapter() {
 
             channel.deleteMessages(memberMessages).queue({
                 event.member?.warn(guildId, "Message spam", channel, embedBuilder)
-                channel.sendMsg("${event.member?.asMention} has been warned for spamming messages")
+                channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
 
             return@queue
@@ -146,7 +146,7 @@ class ActionListener : ListenerAdapter() {
             if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
                     member.warn(guildId, "Message spam", channel, embedBuilder)
-                    channel.sendMsg("${member.asMention} has been warned for spamming messages")
+                    channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
             }
         }
@@ -158,7 +158,7 @@ class ActionListener : ListenerAdapter() {
                     if (!member.isMod(guildId) && !event.author.isBot) {
                         message.delete().queue({
                             member.warn(guildId, "Emote spam", channel, embedBuilder)
-                            channel.sendMsg("${member.asMention} has been warned for spamming emotes")
+                            channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
                         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                         return
                     }

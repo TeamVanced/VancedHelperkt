@@ -7,6 +7,7 @@ import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -23,7 +24,7 @@ class Country : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            sendMessage("You are not allowed to use this command")
+            ctx.event.channel.sendMsg("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -31,26 +32,26 @@ class Country : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    detectCountries(it.user.name.substringBefore(" "))
+                    ctx.channel.detectCountries(it.user.name.substringBefore(" "))
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
-                    sendMessage("Provided member does not exist!")
+                    ctx.event.channel.sendMsg("Provided member does not exist!")
                 }.handle(ErrorResponse.UNKNOWN_USER) {
-                    sendMessage("Provided user does not exist!")
+                    ctx.event.channel.sendMsg("Provided user does not exist!")
                 })
             } else {
-                detectCountries(args.joinToString(" "))
+                ctx.channel.detectCountries(args.joinToString(" "))
             }
         } else {
-            detectCountries(event.author.name)
+            ctx.channel.detectCountries(event.author.name)
         }
 
     }
 
-    private fun detectCountries(thing: String) {
+    private fun TextChannel.detectCountries(thing: String) {
         val filteredThing = thing.filter { it.isLetter() }
         val json = "$baseUrl&name=$filteredThing".getJson()
         val countries = json?.array<JsonObject>("country_of_origin")
-        sendMessage(
+        sendMsg(
             embedBuilder.apply {
                 setTitle("Country Detector")
                 if (countries != null && countries.isNotEmpty()) {

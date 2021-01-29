@@ -3,10 +3,11 @@ package commands
 import commandhandler.CommandContext
 import commandhandler.IMessageReactionListener
 import database.prefix
-import ext.sendMsg
+import ext.sendMessageWithChecks
 import ext.transformToArg
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
@@ -30,32 +31,32 @@ open class BaseCommand(
     val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
 
     val trashEmote = "\uD83D\uDDD1"
-    lateinit var channel: TextChannel
 
     open val embedBuilder get() = EmbedBuilder().setColor(Color((Math.random() * 0x1000000).toInt()))
 
-    var messageId = ""
-    var commandAuthorId = ""
+    val commandMessage = mutableMapOf<MessageChannel, Message>()
+    val userMessage = mutableMapOf<MessageChannel, Message>()
+
+    val MessageChannel.botMessage get() = commandMessage[this]
+    val MessageChannel.userMessage get() = this@BaseCommand.userMessage[this]
     var guildId = ""
     private var userMessageId: String = ""
 
     @OverridingMethodsMustInvokeSuper
     open fun execute(ctx: CommandContext) {
-        channel = ctx.channel
-        userMessageId = ctx.event.messageId
-        commandAuthorId = ctx.author.id
+        userMessage[ctx.channel] = ctx.event.message
         guildId = ctx.guild.id
     }
 
     @OverridingMethodsMustInvokeSuper
     override fun onReactionAdd(event: MessageReactionAddEvent) {
-        if (event.userId != commandAuthorId)
+        if (event.userId != event.channel.userMessage?.author?.id)
             return
 
         event.user?.let {
             event.reaction.removeReaction(it).queue {
                 if (event.reactionEmote.asReactionCode == trashEmote) {
-                    channel.deleteMessagesByIds(listOf(messageId, userMessageId)).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE){})
+                    event.textChannel.deleteMessagesByIds(listOf(event.channel.botMessage?.id, event.channel.userMessage?.id)).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE){})
                 }
             }
         }
@@ -63,21 +64,26 @@ open class BaseCommand(
 
     override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
 
-    fun sendMessage(message: String) {
-        channel.sendMsg(message) {
+    inline fun TextChannel.sendMsg(message: String, crossinline onSend: (message: Message) -> Unit = {}) {
+        sendMessageWithChecks(message) {
             it.addReaction()
+            onSend(it)
         }
     }
 
-    fun sendMessage(embed: MessageEmbed) {
-        channel.sendMsg(embed) {
+    inline fun TextChannel.sendMsg(embed: MessageEmbed, crossinline onSend: (message: Message) -> Unit = {}) {
+        sendMessageWithChecks(embed) {
             it.addReaction()
+            onSend(it)
         }
     }
 
     fun Message.addReaction() {
-        if (messageId != "") channel.removeReactionById(messageId, trashEmote).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-        messageId = id
+        val messageId = channel.botMessage?.id
+        if (messageId != null) {
+            channel.removeReactionById(messageId, trashEmote).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+        }
+        commandMessage[channel] = this
         addReaction(trashEmote).queue()
     }
 

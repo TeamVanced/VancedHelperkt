@@ -31,7 +31,7 @@ class Mute : BaseCommand(
                 }
             }
 
-            channel.sendMsg("Mute role does not exist, creating...") {
+            ctx.event.channel.sendMsg("Mute role does not exist, creating...") {
                 ctx.guild.createRole().setName("VancedHelper-Mute").queue({ role ->
                     val shardManager = ctx.event.jda.shardManager
                     ctx.guild.channels.forEach {
@@ -40,11 +40,11 @@ class Mute : BaseCommand(
                     addRole(args, user, role, ctx)
                     guildId.muteRole = role.id
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                    sendMessage("Guild reached maximum amount of roles!")
+                    ctx.event.channel.sendMsg("Guild reached maximum amount of roles!")
                 })
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
     }
 
@@ -52,24 +52,24 @@ class Mute : BaseCommand(
         val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
         val id = user.filter { it.isDigit() }
         if (id.isEmpty()) {
-            useCommandProperly()
+            ctx.channel.useCommandProperly()
             return
         }
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    sendMessage("You can't mute this member!")
+                    ctx.event.channel.sendMsg("You can't mute this member!")
                     return@queue
                 }
                 ctx.guild.addRoleToMember(member, role).queue {
-                    sendMessage("Successfully muted ${member.asMention}")
+                    ctx.event.channel.sendMsg("Successfully muted ${member.asMention}")
                     ctx.authorAsMember?.let { it1 -> embedBuilder.sendMuteLog(member.user, it1.user, reason, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                sendMessage("Provided user does not exist!")
+                ctx.event.channel.sendMsg("Provided user does not exist!")
             })
         } else {
-            useCommandProperly()
+            ctx.channel.useCommandProperly()
         }
     }
 

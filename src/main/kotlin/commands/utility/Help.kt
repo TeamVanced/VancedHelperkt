@@ -18,14 +18,13 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         val args = ctx.args
-        val channel = ctx.event.channel
 
         if (args.isNotEmpty()) {
             val command = commandManager.getCommand(args[0])
             if (command != null) {
-                sendMessage((command as BaseCommand).getHelpEmbed())
+                ctx.event.channel.sendMsg((command).getHelpEmbed())
             } else {
-                sendMessage("Command not found!")
+                ctx.event.channel.sendMsg("Command not found!")
             }
         } else {
             val commands = mutableMapOf<String, List<String>>()
@@ -44,7 +43,7 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
                     false
                 )
             }
-            sendMessage(embed.build())
+            ctx.event.channel.sendMsg(embed.build())
         }
     }
 

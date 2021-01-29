@@ -38,7 +38,7 @@ fun Member.warn(guildId: String, reason: String, channel: TextChannel, embedBuil
     if (warnsCollection.findOne(filter)?.reasons?.size == 3) {
         try {
             kick("Too many infractions").queue {
-                channel.sendMsg("Kicked ${user.asTag}")
+                channel.sendMessageWithChecks("Kicked ${user.asTag}")
                 warnsCollection.deleteOne(filter)
             }
         } catch (e: HierarchyException) {}

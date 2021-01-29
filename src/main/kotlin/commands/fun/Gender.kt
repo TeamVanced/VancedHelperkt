@@ -6,6 +6,7 @@ import commands.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import utils.getJson
@@ -23,7 +24,7 @@ class Gender : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            sendMessage("You are not allowed to use this command")
+            ctx.event.channel.sendMsg("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -31,27 +32,27 @@ class Gender : BaseCommand(
         if (args.isNotEmpty()) {
             if (args[0].contains(contentIDRegex)) {
                 ctx.guild.retrieveMemberById(contentIDRegex.find(args[0])!!.value).queue({
-                    detectGender(it.user.name)
+                    ctx.channel.detectGender(it.user.name)
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER) {
-                    sendMessage("Provided member does not exist!")
+                    ctx.event.channel.sendMsg("Provided member does not exist!")
                 }.handle(ErrorResponse.UNKNOWN_USER) {
-                    sendMessage("Provided user does not exist!")
+                    ctx.event.channel.sendMsg("Provided user does not exist!")
                 })
             } else {
-                detectGender(args.joinToString(" "))
+                ctx.channel.detectGender(args.joinToString(" "))
             }
         } else {
-            detectGender(event.author.name)
+            ctx.channel.detectGender(event.author.name)
         }
 
     }
 
-    private fun detectGender(thing: String) {
+    private fun TextChannel.detectGender(thing: String) {
         val filteredThing = thing.filter { it.isLetter() }
         val json = "$baseUrl&email=${filteredThing.replace(" ", ".")}@gmail.com".getJson()
         val gender = json?.string("gender")
         val accuracy = json?.int("accuracy")
-        sendMessage(
+        sendMsg(
             embedBuilder.apply {
                 setTitle("Gender Detector")
                 setDescription("$filteredThing is $gender\nAccuracy: $accuracy%")

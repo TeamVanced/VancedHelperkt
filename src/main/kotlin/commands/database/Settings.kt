@@ -26,111 +26,111 @@ class Settings : BaseCommand(
                 when (args[0]) {
                     "prefix" -> {
                         prefix = value
-                        sendMessage("Successfully set the prefix to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the prefix to `$value`!")
                     }
                     "boosterchat" -> {
                         boosterChat = value
-                        sendMessage("Successfully set the booster chat to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the booster chat to `$value`!")
                     }
                     "boosterrole" -> {
                         boosterRole = value
-                        sendMessage("Successfully set the booster role to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the booster role to `$value`!")
                     }
                     "muterole" -> {
                         muteRole = value
-                        sendMessage("Successfully set the mute role to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the mute role to `$value`!")
                     }
                     "logchannel" -> {
                         logChannel = value
-                        sendMessage("Successfully set the log channel to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the log channel to `$value`!")
                     }
                     "modlogchannel" -> {
                         modlogChannel = value
-                        sendMessage("Successfully set the mod log channel to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the mod log channel to `$value`!")
                     }
                     "boosterchannel" -> {
                         boosterChannel = value
-                        sendMessage("Successfully set the booster channel to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the booster channel to `$value`!")
                     }
                     "errorchannel" -> {
                         errorChannel = value
-                        sendMessage("Successfully set the error channel to `$value`!")
+                        ctx.event.channel.sendMsg("Successfully set the error channel to `$value`!")
                     }
                     "addowner" -> {
                         if (owners.contains(value)) {
-                            sendMessage("`$value` already exists in the collection!")
+                            ctx.event.channel.sendMsg("`$value` already exists in the collection!")
                             return@with
                         }
                         addOwner(value)
-                        sendMessage("Successfully added `$value` to owners!")
+                        ctx.event.channel.sendMsg("Successfully added `$value` to owners!")
                     }
                     "removeowner" -> {
                         if (!owners.contains(value)) {
-                            sendMessage("`$value` does not exist in the collection!")
+                            ctx.event.channel.sendMsg("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeOwner(value)
-                        sendMessage("Successfully removed `$value` from owners!")
+                        ctx.event.channel.sendMsg("Successfully removed `$value` from owners!")
                     }
                     "addmodrole" -> {
                         if (modRoles.contains(value)) {
-                            sendMessage("`$value` already exists in the collection!")
+                            ctx.event.channel.sendMsg("`$value` already exists in the collection!")
                             return@with
                         }
                         addModRole(value)
-                        sendMessage("Successfully added `$value` to moderators!")
+                        ctx.event.channel.sendMsg("Successfully added `$value` to moderators!")
                     }
                     "removemodrole" -> {
                         if (!modRoles.contains(value)) {
-                            sendMessage("`$value` does not exist in the collection!")
+                            ctx.event.channel.sendMsg("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeModRole(value)
-                        sendMessage("Successfully removed `$value` from moderators!")
+                        ctx.event.channel.sendMsg("Successfully removed `$value` from moderators!")
                     }
                     "addquoterole" -> {
                         if (quoteRoles.contains(value)) {
-                            sendMessage("`$value` already exists in the collection!")
+                            ctx.event.channel.sendMsg("`$value` already exists in the collection!")
                             return@with
                         }
                         addQuoteRole(value)
-                        sendMessage("Successfully added `$value` to allowed quote roles!")
+                        ctx.event.channel.sendMsg("Successfully added `$value` to allowed quote roles!")
                     }
                     "removequoterole" -> {
                         if (!quoteRoles.contains(value)) {
-                            sendMessage("`$value` does not exist in the collection!")
+                            ctx.event.channel.sendMsg("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeQuoteRole(value)
-                        sendMessage("Successfully removed `$value` from allowed quote roles!")
+                        ctx.event.channel.sendMsg("Successfully removed `$value` from allowed quote roles!")
                     }
                     "addcolourmerole" -> {
                         if (colourmeRoles.contains(value)) {
-                            sendMessage("`$value` already exists in the collection!")
+                            ctx.event.channel.sendMsg("`$value` already exists in the collection!")
                             return@with
                         }
                         addColourmeRole(value)
-                        sendMessage("Successfully added `$value` to allowed colourme roles!")
+                        ctx.event.channel.sendMsg("Successfully added `$value` to allowed colourme roles!")
                     }
                     "removecolourmerole" -> {
                         if (!colourmeRoles.contains(value)) {
-                            sendMessage("`$value` does not exist in the collection!")
+                            ctx.event.channel.sendMsg("`$value` does not exist in the collection!")
                             return@with
                         }
                         removeColourmeRole(value)
-                        sendMessage("Successfully removed `$value` from allowed quote roles!")
+                        ctx.event.channel.sendMsg("Successfully removed `$value` from allowed quote roles!")
                     }
                     "clear" -> {
                         settingsCollection.findOneAndDelete(Settings::guildId eq this)
-                        sendMessage("Successfully cleared settings")
+                        ctx.event.channel.sendMsg("Successfully cleared settings")
                     }
                     else -> {
-                        useCommandProperly()
+                        ctx.channel.useCommandProperly()
                     }
                 }
             }
         } else {
-            useArguments(2)
+            ctx.channel.useArguments(2)
         }
     }
 

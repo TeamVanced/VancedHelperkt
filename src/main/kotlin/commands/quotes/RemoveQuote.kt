@@ -7,6 +7,7 @@ import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.*
+import net.dv8tion.jda.api.entities.TextChannel
 
 class RemoveQuote : BaseCommand(
     commandName = "removequote",
@@ -19,7 +20,7 @@ class RemoveQuote : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            sendMessage("You are not allowed to use this command")
+            ctx.event.channel.sendMsg("You are not allowed to use this command")
             return
         }
         val args = ctx.args.apply { remove("removequote") }
@@ -28,25 +29,25 @@ class RemoveQuote : BaseCommand(
             val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)
             when {
                 args0.matches(contentIDRegex) -> quotesCollection.findOneAndDelete(guildFilter.append("messageID", args0))
-                    .checkDelete(ctx)
+                    .checkDelete(ctx.channel)
                 args0.toLongOrNull() != null -> quotesCollection.findOneAndDelete(
                     guildFilter.append(
                         "quoteId",
                         args0.toLong()
                     )
-                ).checkDelete(ctx)
-                else -> useCommandProperly()
+                ).checkDelete(ctx.channel)
+                else -> ctx.channel.useCommandProperly()
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
     }
 
-    private fun Quote?.checkDelete(ctx: CommandContext) {
+    private fun Quote?.checkDelete(channel: TextChannel) {
         if (this == null) {
-            sendIncorrectQuote()
+            channel.sendIncorrectQuote()
         } else {
-            sendMessage("Quote $quoteId deleted successfully!")
+            channel.sendMsg("Quote $quoteId deleted successfully!")
         }
     }
 

@@ -22,7 +22,7 @@ class CreateEmbed : BaseCommand(
         val args = ctx.args
         if (args.isNotEmpty()) {
             val json = args.joinToString(" ")
-            sendMessage(
+            ctx.event.channel.sendMsg(
                 embedBuilder.apply {
                     try {
                         with(Klaxon().parse<JsonEmbed>(json)) {
@@ -46,13 +46,13 @@ class CreateEmbed : BaseCommand(
                             }
                         }
                     } catch (e: Exception) {
-                        sendMessage("Could not create an embed")
+                        ctx.event.channel.sendMsg("Could not create an embed")
                         return
                     }
                 }.build()
             )
         } else {
-            useCommandProperly()
+            ctx.channel.useCommandProperly()
         }
     }
 

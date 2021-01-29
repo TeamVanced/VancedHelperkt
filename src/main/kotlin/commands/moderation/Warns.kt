@@ -24,7 +24,7 @@ class Warns : BaseCommand(
             val user = args[0]
             val id = user.filter { it.isDigit() }
             if (id.isEmpty()) {
-                useCommandProperly()
+                ctx.channel.useCommandProperly()
                 return
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -32,7 +32,7 @@ class Warns : BaseCommand(
             if (warn != null) {
                 val reasons = warn.reasons
                 if (reasons.isNotEmpty()) {
-                    sendMessage(
+                    ctx.event.channel.sendMsg(
                         embedBuilder.apply {
                             setTitle("Warns for ${warn.userName}")
                             for (i in reasons.indices) {
@@ -45,13 +45,13 @@ class Warns : BaseCommand(
                         }.build()
                     )
                 } else {
-                    sendMessage("User $user has no warns")
+                    ctx.event.channel.sendMsg("User $user has no warns")
                 }
             } else {
-                sendMessage("User $user has no warns")
+                ctx.event.channel.sendMsg("User $user has no warns")
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
     }
 

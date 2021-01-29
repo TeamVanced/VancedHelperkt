@@ -31,10 +31,10 @@ class RemoveStar : BaseCommand(
             when {
                 message.matches(contentIDRegex) -> quotesCollection.removeStar(ctx, Quote::messageID eq message)
                 message.toLongOrNull() != null -> quotesCollection.removeStar(ctx, Quote::quoteId eq message.toLong())
-                else -> sendIncorrectQuote()
+                else -> ctx.channel.sendIncorrectQuote()
             }
         } else {
-            useCommandProperly()
+            ctx.channel.useCommandProperly()
         }
     }
 
@@ -43,13 +43,13 @@ class RemoveStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (!quote.stars.contains(authorId)) {
-                sendMessage("You don't have this quote starred!")
+                ctx.event.channel.sendMsg("You don't have this quote starred!")
             } else {
                 quotesCollection.updateOne(filter, Updates.pull("stars", authorId))
-                sendMessage("Successfully removed star from quote #${quote.quoteId}")
+                ctx.event.channel.sendMsg("Successfully removed star from quote #${quote.quoteId}")
             }
         } else {
-            sendIncorrectQuote()
+            ctx.channel.sendIncorrectQuote()
         }
     }
 

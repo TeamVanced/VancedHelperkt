@@ -36,7 +36,7 @@ class EmoteRole : BaseCommand(
                             roleId = roleId
                         )
                     )
-                    ctx.guild.getTextChannelById(channel.id)?.retrieveMessageById(messageId)?.queue {
+                    ctx.guild.getTextChannelById(ctx.channel.id)?.retrieveMessageById(messageId)?.queue {
                         if (emoteId != null) {
                             val guildEmote = ctx.guild.getEmoteById(emoteId)
                             if (guildEmote != null) {
@@ -44,16 +44,16 @@ class EmoteRole : BaseCommand(
                             }
                         }
                     }
-                    sendMessage("Successfully configured emote role!")
+                    ctx.event.channel.sendMsg("Successfully configured emote role!")
                 } else {
                     guildId.updateEmoteRoles(messageId, emote, roleId)
-                    sendMessage("Successfully reconfigured emote role!")
+                    ctx.event.channel.sendMsg("Successfully reconfigured emote role!")
                 }
             } else {
-                useCommandProperly()
+                ctx.channel.useCommandProperly()
             }
         } else {
-            useArguments(3)
+            ctx.channel.useArguments(3)
         }
     }
 

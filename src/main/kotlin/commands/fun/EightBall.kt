@@ -40,9 +40,9 @@ class EightBall : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.args.isNotEmpty()) {
-            sendMessage(responses.random())
+            ctx.event.channel.sendMsg(responses.random())
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
 
     }
