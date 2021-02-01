@@ -26,6 +26,7 @@ import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
 import java.awt.Color
+import java.time.Duration
 
 class ActionListener : ListenerAdapter() {
 
@@ -207,7 +208,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
@@ -221,7 +222,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
