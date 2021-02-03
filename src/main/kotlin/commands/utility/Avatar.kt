@@ -32,9 +32,14 @@ class Avatar : BaseCommand(
             return
         }
         ctx.guild.retrieveMemberById(userId).queue({
+            val userUrl = it.user.avatarUrl
+            if (userUrl == null) {
+                ctx.event.channel.sendMsg("Could not get Avatar URL for you")
+                return@queue
+            }
             ctx.event.channel.sendMsg(
                 embedBuilder.apply {
-                    val url = it.user.avatarUrl + "?size=256"
+                    val url = "$userUrl?size=256"
                     setTitle("${it.user.name}'s avatar")
                     setImage(url)
                     setDescription("[Avatar URL]($url)")
