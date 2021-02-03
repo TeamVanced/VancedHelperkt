@@ -5,6 +5,7 @@ import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
 import ext.*
+import jda
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -128,7 +129,7 @@ class ActionListener : ListenerAdapter() {
             }
 
             channel.deleteMessages(memberMessages).queue({
-                event.member?.warn(guildId, "Message spam", channel, embedBuilder)
+                jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel, embedBuilder) }
                 channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
 
@@ -146,7 +147,7 @@ class ActionListener : ListenerAdapter() {
         if (duplicateCount >= 5) {
             if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
-                    member.warn(guildId, "Message spam", channel, embedBuilder)
+                    jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel, embedBuilder) }
                     channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
             }
@@ -158,7 +159,7 @@ class ActionListener : ListenerAdapter() {
                 if (member != null) {
                     if (!member.isMod(guildId) && !event.author.isBot) {
                         message.delete().queue({
-                            member.warn(guildId, "Emote spam", channel, embedBuilder)
+                            jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel, embedBuilder) }
                             channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
                         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                         return

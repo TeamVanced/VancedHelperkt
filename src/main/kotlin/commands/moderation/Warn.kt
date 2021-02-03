@@ -30,7 +30,7 @@ class Warn : BaseCommand(
                     ctx.event.channel.sendMsg("You can't warn this member!")
                     return@queue
                 }
-                member.warn(guildId, reason, ctx.channel, embedBuilder)
+                member.warn(ctx.author, guildId, reason, ctx.channel, embedBuilder)
                 ctx.event.channel.sendMsg("Successfully warned ${member.user.asMention}")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                 ctx.event.channel.sendMsg("Provided user does not exist!")
