@@ -1,8 +1,11 @@
 package utils
 
 import commands.BaseCommand
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.api.exceptions.ErrorHandler
+import net.dv8tion.jda.api.requests.ErrorResponse
 
 class EmbedPagerAdapter(
     private val command: BaseCommand,
@@ -15,39 +18,45 @@ class EmbedPagerAdapter(
     fun newInstance(position: Int = 0) {
         currentPage = position
         event.channel.sendMessage(embeds[currentPage]).queue {
-            command.messageId = it.id
+            command.commandMessage[event.channel] = it
             emotes.forEach { emote ->
                 event.channel.addReactionById(it.id, emote).queue()
             }
         }
     }
 
-    private fun editPage() {
-        event.channel.editMessageById(command.messageId, embeds[currentPage]).queue()
+    /**
+     * @param message K: Message channel; V: message ID
+     */
+    private fun editPage(message: Pair<MessageChannel, String?>) {
+        val messageId = message.second
+        if (messageId != null) {
+            message.first.editMessageById(messageId, embeds[currentPage]).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+        }
     }
 
-    fun nextPage() {
+    fun nextPage(message: Pair<MessageChannel, String?>) {
         if (currentPage != embeds.size - 1) {
             currentPage++
-            editPage()
+            editPage(message)
         }
     }
 
-    fun lastPage() {
+    fun lastPage(message: Pair<MessageChannel, String?>) {
         currentPage = embeds.size - 1
-        editPage()
+        editPage(message)
     }
 
-    fun previousPage() {
+    fun previousPage(message: Pair<MessageChannel, String?>) {
         if (currentPage != 0) {
             currentPage--
-            editPage()
+            editPage(message)
         }
     }
 
-    fun firstPage() {
+    fun firstPage(message: Pair<MessageChannel, String?>) {
         currentPage = 0
-        editPage()
+        editPage(message)
     }
 
 }

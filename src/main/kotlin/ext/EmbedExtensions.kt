@@ -20,7 +20,7 @@ fun EmbedBuilder.sendStacktrace(guild: Guild, title: String?, stacktrace: String
                 setTitle(title)
                 setDescription(stacktrace?.take(2045) + "...")
             }.build()
-        ).setContent(guild.id.owners.joinToString(" ") { it.asMention }).build()
+        ).setContent("423915768191647755".asMention).build()
     )?.queue()
 }
 

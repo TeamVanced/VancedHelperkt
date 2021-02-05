@@ -22,21 +22,21 @@ class Purge : BaseCommand(
         if (args.isNotEmpty()) {
             val amount = args[0].toIntOrNull()
             if (amount == null || amount > 100 || amount < 2) {
-                sendMessage("Provide a valid amount!")
+                ctx.event.channel.sendMsg("Provide a valid amount!")
                 return
             }
-            channel.history.retrievePast(amount).queue { messagesList ->
+            ctx.channel.history.retrievePast(amount).queue { messagesList ->
                 val messages = messagesList.filter { !it.timeCreated.isBefore(OffsetDateTime.now().minus(2, ChronoUnit.WEEKS)) }.take(100)
                 if (messages.isEmpty()) {
-                    sendMessage("Messages not found!")
+                    ctx.event.channel.sendMsg("Messages not found!")
                     return@queue
                 }
-                channel.deleteMessages(messages).queue {
-                    sendMessage("Succesfully deleted $amount messages")
+                ctx.channel.deleteMessages(messages).queue {
+                    ctx.event.channel.sendMsg("Succesfully deleted $amount messages")
                 }
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
 
     }

@@ -5,6 +5,7 @@ import com.mongodb.client.model.Updates
 import database.*
 import database.collections.Emote
 import ext.*
+import jda
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -26,6 +27,7 @@ import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
 import java.awt.Color
+import java.time.Duration
 
 class ActionListener : ListenerAdapter() {
 
@@ -127,8 +129,8 @@ class ActionListener : ListenerAdapter() {
             }
 
             channel.deleteMessages(memberMessages).queue({
-                event.member?.warn(guildId, "Message spam", channel, embedBuilder)
-                channel.sendMsg("${event.member?.asMention} has been warned for spamming messages")
+                jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel, embedBuilder) }
+                channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
 
             return@queue
@@ -145,8 +147,8 @@ class ActionListener : ListenerAdapter() {
         if (duplicateCount >= 5) {
             if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
-                    member.warn(guildId, "Message spam", channel, embedBuilder)
-                    channel.sendMsg("${member.asMention} has been warned for spamming messages")
+                    jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel, embedBuilder) }
+                    channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
             }
         }
@@ -157,8 +159,8 @@ class ActionListener : ListenerAdapter() {
                 if (member != null) {
                     if (!member.isMod(guildId) && !event.author.isBot) {
                         message.delete().queue({
-                            member.warn(guildId, "Emote spam", channel, embedBuilder)
-                            channel.sendMsg("${member.asMention} has been warned for spamming emotes")
+                            jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel, embedBuilder) }
+                            channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
                         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                         return
                     }
@@ -207,7 +209,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
@@ -221,7 +223,7 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user

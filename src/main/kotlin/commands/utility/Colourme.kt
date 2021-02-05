@@ -31,13 +31,13 @@ class Colourme : BaseCommand(
 
             ctx.guild.retrieveMemberById(ctx.author.id).queue member@ { member ->
                 if (member.roles.none { guildId.colourmeRoles.contains(it.id) }) {
-                    sendMessage("You are not allowed to use this command!")
+                    ctx.event.channel.sendMsg("You are not allowed to use this command!")
                     return@member
                 }
                 val roleName = args.apply { removeAt(0) }.joinToString(" ")
 
                 if (roleName.length > 100) {
-                    sendMessage("Role name can't be more than 100 characters!")
+                    ctx.event.channel.sendMsg("Role name can't be more than 100 characters!")
                     return@member
                 }
 
@@ -46,11 +46,11 @@ class Colourme : BaseCommand(
                     ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
                         ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
                             ctx.guild.addRoleToMember(member, role).queue {
-                                sendMessage("Successfully added the role!")
+                                ctx.event.channel.sendMsg("Successfully added the role!")
                             }
                         }
                     }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                        sendMessage("Guild reached maximum amount of roles!")
+                        ctx.event.channel.sendMsg("Guild reached maximum amount of roles!")
                     })
                 }
 
@@ -64,7 +64,7 @@ class Colourme : BaseCommand(
 
             }
         } else {
-            useArguments(2)
+            ctx.channel.useArguments(2)
         }
     }
 

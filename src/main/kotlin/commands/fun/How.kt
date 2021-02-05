@@ -6,6 +6,7 @@ import commands.CommandType.Fun
 import ext.optional
 import ext.required
 import ext.useArguments
+import net.dv8tion.jda.api.entities.TextChannel
 
 class How : BaseCommand(
     commandName = "how",
@@ -22,20 +23,20 @@ class How : BaseCommand(
             val predicate = joinedArray.substringBefore("|")
             val thing = joinedArray.substringAfter("|", "")
             if (thing.isNotEmpty()) {
-                calculate(predicate, thing)
+                ctx.channel.calculate(predicate, thing)
             } else {
-                calculate(predicate, ctx.author.asMention)
+                ctx.channel.calculate(predicate, ctx.author.asMention)
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
     }
 
-    private fun calculate(predicate: String, thing: String) {
+    private fun TextChannel.calculate(predicate: String, thing: String) {
         val percentage = (0..100).random()
         val barAmount = percentage / 10
         val bar = "▰".repeat(barAmount) + "▱".repeat(10 - barAmount)
-        sendMessage(
+        sendMsg(
             embedBuilder.apply {
                 setTitle("${predicate.capitalize().removeSuffix(" ")} Meter")
                 setDescription("$thing is $percentage% $predicate\n$bar")

@@ -2,10 +2,11 @@ package commands
 
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
+import ext.optional
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
-import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import utils.EmbedPagerAdapter
 import utils.getJson
 
@@ -19,29 +20,29 @@ abstract class BasePagerCommand(
     commandDescription = commandDescription,
     commandType = commandType,
     commandAliases = commandAliases,
-    commandArguments = mapOf("Page number" to ArgumentType.Optional),
+    commandArguments = mapOf("Page number".optional()),
     addTrashCan = false
 ) {
 
     abstract val jsonName: String
     private val emotes = listOf("⏪", "⬅️", trashEmote, "➡️", "⏩")
-    private lateinit var embedPagerAdapter: EmbedPagerAdapter
+    private var embedPagerAdapter = mutableMapOf<MessageChannel, EmbedPagerAdapter>()
     private val pagesWithTableOfContent = getPagesWithTableOfContent()
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        embedPagerAdapter = EmbedPagerAdapter(this, ctx.event, emotes, pagesWithTableOfContent)
+        embedPagerAdapter[ctx.channel] = EmbedPagerAdapter(this, ctx.event, emotes, pagesWithTableOfContent)
         val args = ctx.args
         if (args.isNotEmpty()) {
             try {
-                embedPagerAdapter.newInstance(args[0].toInt())
+                embedPagerAdapter[ctx.channel]?.newInstance(args[0].toInt())
             } catch (e: NumberFormatException) {
-                sendMessage("Provided argument is not a number!")
+                ctx.event.channel.sendMsg("Provided argument is not a number!")
             } catch (e: IndexOutOfBoundsException) {
-                sendMessage("Provided page does not exist!")
+                ctx.event.channel.sendMsg("Provided page does not exist!")
             }
         } else {
-            embedPagerAdapter.newInstance()
+            embedPagerAdapter[ctx.channel]?.newInstance()
         }
 
     }
@@ -96,17 +97,18 @@ abstract class BasePagerCommand(
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {
         super.onReactionAdd(event)
-        if (event.userId != commandAuthorId)
+        val channel = event.channel
+        val message = channel to channel.botMessage?.id
+        if (event.userId != channel.userMessage?.author?.id)
             return
 
+        val channelAdapter = embedPagerAdapter[channel]
         when (event.reactionEmote.asReactionCode) {
-            emotes[0] -> embedPagerAdapter.firstPage()
-            emotes[1] -> embedPagerAdapter.previousPage()
-            emotes[3] -> embedPagerAdapter.nextPage()
-            emotes[4] -> embedPagerAdapter.lastPage()
+            emotes[0] -> channelAdapter?.firstPage(message)
+            emotes[1] -> channelAdapter?.previousPage(message)
+            emotes[3] -> channelAdapter?.nextPage(message)
+            emotes[4] -> channelAdapter?.lastPage(message)
         }
     }
-
-    override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
 
 }

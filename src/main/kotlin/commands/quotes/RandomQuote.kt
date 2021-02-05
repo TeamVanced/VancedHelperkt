@@ -16,11 +16,11 @@ class RandomQuote : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         try {
-            sendMessage(
+            ctx.event.channel.sendMsg(
                 embedBuilder.getQuote(quotesCollection.find().toList().random())
             )
         } catch (e: NoSuchElementException) {
-            sendMessage("There are no quotes in this server! Try adding some")
+            ctx.event.channel.sendMsg("There are no quotes in this server! Try adding some")
         }
 
     }

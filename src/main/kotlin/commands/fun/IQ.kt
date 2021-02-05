@@ -4,7 +4,7 @@ import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandType.Fun
 import ext.optional
-import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.TextChannel
 import org.apache.commons.math3.distribution.NormalDistribution
 
 class IQ : BaseCommand(
@@ -18,16 +18,16 @@ class IQ : BaseCommand(
         super.execute(ctx)
         val args = ctx.args
         if (args.isNotEmpty()) {
-            calculateIQ(args.joinToString(" "), ctx.channel)
+            ctx.channel.calculateIQ(args.joinToString(" "))
         } else {
             val user = ctx.author.asMention
-            calculateIQ(user, ctx.channel)
+            ctx.channel.calculateIQ(user)
         }
 
     }
 
-    private fun calculateIQ(arg: String, channel: MessageChannel) {
-        sendMessage(
+    private fun TextChannel.calculateIQ(arg: String) {
+        sendMsg(
             embedBuilder.apply {
                 setTitle("IQ Calculator")
                 setDescription("$arg has an iq of ${calcIQ()}")

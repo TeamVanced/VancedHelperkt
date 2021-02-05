@@ -31,10 +31,10 @@ class AddStar : BaseCommand(
             when {
                 message.matches(contentIDRegex) -> quotesCollection.addStar(ctx, Quote::messageID eq message)
                 message.toLongOrNull() != null -> quotesCollection.addStar(ctx, Quote::quoteId eq message.toLong())
-                else -> sendIncorrectQuote()
+                else -> ctx.channel.sendIncorrectQuote()
             }
         } else {
-            useCommandProperly()
+            ctx.channel.useCommandProperly()
         }
     }
 
@@ -43,13 +43,13 @@ class AddStar : BaseCommand(
         val quote = findOne(filter)
         if (quote != null) {
             if (quote.stars.contains(authorId)) {
-                sendMessage("Bruh you already starred this")
+                ctx.event.channel.sendMsg("Bruh you already starred this")
             } else {
                 quotesCollection.updateOne(filter, Updates.push("stars", authorId))
-                sendMessage("Successfully starred quote #${quote.quoteId}")
+                ctx.event.channel.sendMsg("Successfully starred quote #${quote.quoteId}")
             }
         } else {
-            sendIncorrectQuote()
+            ctx.channel.sendIncorrectQuote()
         }
     }
 

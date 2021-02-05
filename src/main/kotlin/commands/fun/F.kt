@@ -18,9 +18,9 @@ class F : BaseCommand(
         super.execute(ctx)
         val args = ctx.args
         if (args.isNotEmpty()) {
-            sendMessage("$pressF ${ctx.author.name} pays respect for ${args.joinToString(" ")}")
+            ctx.event.channel.sendMsg("$pressF ${ctx.author.name} pays respect for ${args.joinToString(" ")}")
         } else {
-            sendMessage(pressF)
+            ctx.event.channel.sendMsg(pressF)
         }
     }
 

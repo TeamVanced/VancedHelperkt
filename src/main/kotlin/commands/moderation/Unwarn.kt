@@ -25,16 +25,16 @@ class Unwarn : BaseCommand(
             val user = args[0]
             val id = user.filter { it.isDigit() }
             if (id.isEmpty()) {
-                useCommandProperly()
+                ctx.channel.useCommandProperly()
                 return
             }
             fun removeWarn(removeAction: (member: Member) -> Unit) {
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)
-                    sendMessage("Successfully unwarned ${member.user.asMention}")
+                    ctx.event.channel.sendMsg("Successfully unwarned ${member.user.asMention}")
                     ctx.authorAsMember?.let { embedBuilder.sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                    sendMessage("Provided user does not exist!")
+                    ctx.event.channel.sendMsg("Provided user does not exist!")
                 })
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -50,7 +50,7 @@ class Unwarn : BaseCommand(
                     } else {
                         val warnIndex = args[1]
                         if (warnIndex.toIntOrNull() == null) {
-                            sendMessage("$warnIndex is not a valid warn")
+                            ctx.event.channel.sendMsg("$warnIndex is not a valid warn")
                             return
                         }
                         removeWarn {
@@ -66,7 +66,7 @@ class Unwarn : BaseCommand(
                 }
             }
         } else {
-            useArguments(1)
+            ctx.channel.useArguments(1)
         }
     }
 

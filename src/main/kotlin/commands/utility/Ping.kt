@@ -3,7 +3,6 @@ package commands.utility
 import commandhandler.CommandContext
 import commands.BaseCommand
 import commands.CommandType.Utility
-import ext.sendMsg
 import net.dv8tion.jda.api.utils.TimeUtil
 
 class Ping : BaseCommand(
@@ -14,7 +13,7 @@ class Ping : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        channel.sendMsg("Pinging...") { message ->
+        ctx.channel.sendMsg("Pinging...") { message ->
             message.editMessage("Pong! Took ${message.idLong.timeCreatedMillis() - ctx.event.message.idLong.timeCreatedMillis()}ms").queue {
                 it.addReaction()
             }
