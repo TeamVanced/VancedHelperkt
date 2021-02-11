@@ -6,8 +6,6 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import ext.sendStacktrace
 import jda
-import net.dv8tion.jda.api.EmbedBuilder
-import java.awt.Color
 import java.net.SocketTimeoutException
 
 class ErrorFilter : Filter<ILoggingEvent>() {
@@ -17,8 +15,7 @@ class ErrorFilter : Filter<ILoggingEvent>() {
         if (event?.level == Level.ERROR) {
             jda?.guilds?.forEach {
                 if (throwable !is SocketTimeoutException && throwable?.stackTraceElementProxyArray != null) {
-                    EmbedBuilder().setColor(Color.red).sendStacktrace(
-                        it,
+                    it.sendStacktrace(
                         throwable.className,
                         throwable.stackTraceElementProxyArray?.joinToString("\n")
                     )

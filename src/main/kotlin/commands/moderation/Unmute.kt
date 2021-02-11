@@ -45,7 +45,7 @@ class Unmute : BaseCommand(
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (member.roles.contains(role)) {
                     ctx.guild.removeRoleFromMember(member, role).queue {
-                        ctx.authorAsMember?.let { it1 -> embedBuilder.sendUnmuteLog(member.user, it1.user, guildId) }
+                        ctx.authorAsMember?.let { it1 -> sendUnmuteLog(member.user, it1.user, guildId) }
                         ctx.event.channel.sendMsg("Successfully unmuted ${member.asMention}")
                     }
                 } else {

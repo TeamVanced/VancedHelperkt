@@ -62,8 +62,9 @@ class CommandManager {
         val guildId = event.guild.id
         val modRoles = guildId.modRoles
         val owners = guildId.owners
+        val guild = event.guild
 
-        event.guild.retrieveMemberById(event.author.id).queue { member ->
+        guild.retrieveMemberById(event.author.id).queue { member ->
             if ((command.devOnly && !owners.contains(member.id)) || (command.commandType == CommandType.Moderation && !member.roles.any {
                     modRoles.contains(
                         it.id
@@ -77,7 +78,7 @@ class CommandManager {
                 command.execute(commandContext)
             } catch (e: Exception) {
                 event.channel.sendMessageWithChecks("Sorry, something went wrong")
-                EmbedBuilder().setColor(Color.red).sendStacktrace(event.guild, e.cause?.message, e.stackTraceToString())
+                guild.sendStacktrace(e.cause?.message, e.stackTraceToString())
             }
         }
 

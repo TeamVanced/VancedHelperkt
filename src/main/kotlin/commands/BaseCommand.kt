@@ -54,11 +54,11 @@ open class BaseCommand(
             return
 
         event.user?.let {
-            event.reaction.removeReaction(it).queue {
+            event.reaction.removeReaction(it).queue({
                 if (event.reactionEmote.asReactionCode == trashEmote) {
-                    event.textChannel.deleteMessagesByIds(listOf(event.channel.botMessage?.id, event.channel.userMessage?.id)).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE){})
+                    event.textChannel.deleteMessagesByIds(listOf(event.channel.botMessage?.id, event.channel.userMessage?.id)).queue(null, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE){}.handle(ErrorResponse.UNKNOWN_CHANNEL) {}.handle(ErrorResponse.MISSING_ACCESS) {}.handle(ErrorResponse.MISSING_PERMISSIONS) {})
                 }
-            }
+            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {}.handle(ErrorResponse.UNKNOWN_CHANNEL) {}.handle(ErrorResponse.MISSING_ACCESS) {})
         }
     }
 

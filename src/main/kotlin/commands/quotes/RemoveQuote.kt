@@ -23,7 +23,7 @@ class RemoveQuote : BaseCommand(
             ctx.event.channel.sendMsg("You are not allowed to use this command")
             return
         }
-        val args = ctx.args.apply { remove("removequote") }
+        val args = ctx.args
         if (args.isNotEmpty()) {
             val args0 = args[0]
             val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)

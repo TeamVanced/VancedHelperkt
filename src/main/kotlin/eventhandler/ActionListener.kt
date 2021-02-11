@@ -31,7 +31,6 @@ import java.time.Duration
 
 class ActionListener : ListenerAdapter() {
 
-    private val embedBuilder get() = EmbedBuilder().setColor(Color.pink)
     private val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
 
     override fun onReady(event: ReadyEvent) {
@@ -52,18 +51,16 @@ class ActionListener : ListenerAdapter() {
                 )?.queue()
             }
             val filter = BasicDBObject().append("guildId", guildId)
-            guild.emotes.forEach {
-                if (!it.isAnimated) {
-                    val emote = "<:${it.name}:${it.id}>"
-                    if (emotesCollection.findOne(filter.append("emote", emote)) == null) {
-                        emotesCollection.insertOne(
-                            Emote(
-                                guildId = guildId,
-                                emote = emote,
-                                usedCount = 0
-                            )
+            guild.emotes.filter { !it.isAnimated }.forEach {
+                val emote = "<:${it.name}:${it.id}>"
+                if (emotesCollection.findOne(filter.append("emote", emote)) == null) {
+                    emotesCollection.insertOne(
+                        Emote(
+                            guildId = guildId,
+                            emote = emote,
+                            usedCount = 0
                         )
-                    }
+                    )
                 }
             }
         }
@@ -129,7 +126,7 @@ class ActionListener : ListenerAdapter() {
             }
 
             channel.deleteMessages(memberMessages).queue({
-                jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel, embedBuilder) }
+                jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel) }
                 channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
 
@@ -147,7 +144,7 @@ class ActionListener : ListenerAdapter() {
         if (duplicateCount >= 5) {
             if (!event.author.isBot && member != null && !member.isMod(guildId)) {
                 message.delete().queue({
-                    jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel, embedBuilder) }
+                    jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel) }
                     channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
             }
@@ -159,7 +156,7 @@ class ActionListener : ListenerAdapter() {
                 if (member != null) {
                     if (!member.isMod(guildId) && !event.author.isBot) {
                         message.delete().queue({
-                            jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel, embedBuilder) }
+                            jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel) }
                             channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
                         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
                         return
@@ -209,13 +206,13 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue { banLogs ->
             val banLog = banLogs[0]
             if (banLog.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
+                        sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
@@ -229,7 +226,7 @@ class ActionListener : ListenerAdapter() {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
-                        embedBuilder.sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
+                        sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
