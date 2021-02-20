@@ -23,7 +23,7 @@ class GetQuote(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val args = ctx.args.apply { remove("get") }
+        val args = ctx.args
         val contentIDRegex = "\\b\\d{18}\\b".toRegex()
         val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)
         if (args.isNotEmpty()) {
@@ -37,7 +37,7 @@ class GetQuote(
                     )
                 ).getQuote(ctx.channel)
                 else -> {
-                    val quotes = quotesCollection.find().filter { it.messageContent.contains(message, true) }
+                    val quotes = quotesCollection.find().filter { it.messageContent.contains(args.joinToString(" "), true) }
                     if (quotes.isNotEmpty()) {
                         if (quotes.size > 1) {
                             if (quotes.size < 10) {
@@ -60,7 +60,7 @@ class GetQuote(
 
     private fun Quote?.getQuote(channel: TextChannel) {
         if (this != null) {
-            embedBuilder.sendQuote(this, channel)
+            sendQuote(this, channel)
         } else {
             channel.sendIncorrectQuote()
         }

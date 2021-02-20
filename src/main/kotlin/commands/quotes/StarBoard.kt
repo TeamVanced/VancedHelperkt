@@ -45,7 +45,7 @@ class StarBoard : BaseCommand(
         if (emotes.contains(event.reactionEmote.asReactionCode) && botMessageId != null)
             event.channel.editMessageById(
                 botMessageId,
-                embedBuilder.getQuote(sbquotes[emotes.indexOf(event.reactionEmote.asReactionCode) - 1])
+                getQuote(sbquotes[emotes.indexOf(event.reactionEmote.asReactionCode) - 1])
             ).queue()
     }
 

@@ -24,11 +24,11 @@ class Quote(
         if (args.isNotEmpty()) {
             with(commandManager) {
                 when (val command = args[0]) {
-                    "get" -> execWithChecks(getCommand("getquote")!!, event, args)
-                    "add" -> execWithChecks(getCommand("addquote")!!, event, args)
-                    "remove" -> execWithChecks(getCommand("removequote")!!, event, args)
-                    "addstar" -> execWithChecks(getCommand(command)!!, event, args)
-                    "removestar" -> execWithChecks(getCommand(command)!!, event, args)
+                    "get" -> execWithChecks(getCommand("getquote")!!, event, args.no0())
+                    "add" -> execWithChecks(getCommand("addquote")!!, event, args.no0())
+                    "remove" -> execWithChecks(getCommand("removequote")!!, event, args.no0())
+                    "addstar" -> execWithChecks(getCommand(command)!!, event, args.no0())
+                    "removestar" -> execWithChecks(getCommand(command)!!, event, args.no0())
                     else -> ctx.channel.useCommandProperly()
                 }
             }
@@ -37,5 +37,7 @@ class Quote(
         }
 
     }
+
+    fun MutableList<String>.no0(): MutableList<String> = apply { removeAt(0) }
 
 }

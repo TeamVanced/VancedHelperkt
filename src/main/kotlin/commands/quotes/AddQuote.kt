@@ -29,7 +29,7 @@ class AddQuote : BaseCommand(
             ctx.event.channel.sendMsg("You are not allowed to use this command")
             return
         }
-        val args = ctx.args.apply { remove("add") }
+        val args = ctx.args
         val urlRegex = "https://discord(?:app)?.com/channels/\\d+/(?<channel>\\d+)/(?<message>\\d+)".toRegex()
         if (args.isNotEmpty()) {
             when {

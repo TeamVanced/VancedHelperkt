@@ -24,7 +24,7 @@ class RemoveStar : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val args = ctx.args.apply { remove("addstar") }
+        val args = ctx.args
         val contentIDRegex = "\\b\\d{18}\\b".toRegex()
         if (args.isNotEmpty()) {
             val message = args[0]

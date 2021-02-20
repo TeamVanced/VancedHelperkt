@@ -23,7 +23,7 @@ fun Member.isBooster(guildId: String): Boolean {
     return roles.any { boosterRole == it.id }
 }
 
-fun Member.warn(mod: User, guildId: String, reason: String, channel: TextChannel, embedBuilder: EmbedBuilder) {
+fun Member.warn(mod: User, guildId: String, reason: String, channel: TextChannel) {
     val filter = BasicDBObject("userId", user.id).append("guildId", guildId)
     if (warnsCollection.findOneAndUpdate(filter, Updates.push("reasons", reason)) == null) {
         warnsCollection.insertOne(
@@ -35,7 +35,7 @@ fun Member.warn(mod: User, guildId: String, reason: String, channel: TextChannel
             )
         )
     }
-    embedBuilder.sendWarnLog(user, mod, reason, guildId)
+    sendWarnLog(user, mod, reason, guildId)
     if (warnsCollection.findOne(filter)?.reasons?.size == 3) {
         try {
             kick("Too many infractions").queue {

@@ -63,7 +63,7 @@ class Mute : BaseCommand(
                 }
                 ctx.guild.addRoleToMember(member, role).queue {
                     ctx.event.channel.sendMsg("Successfully muted ${member.asMention}")
-                    ctx.authorAsMember?.let { it1 -> embedBuilder.sendMuteLog(member.user, it1.user, reason, guildId) }
+                    ctx.authorAsMember?.let { it1 -> sendMuteLog(member.user, it1.user, reason, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                 ctx.event.channel.sendMsg("Provided user does not exist!")
