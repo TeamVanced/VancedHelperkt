@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
-import java.awt.Color
 import java.time.Duration
 
 class ActionListener : ListenerAdapter() {
@@ -118,48 +117,59 @@ class ActionListener : ListenerAdapter() {
         val words = messageContent.split("\\s+".toRegex()).map { word ->
             word.replace("^[,.]|[,.]$".toRegex(), "")
         }
-        var duplicateCount = 0
-        channel.history.retrievePast(10).queue { messages ->
-            val memberMessages = messages.filter { it.type != MessageType.GUILD_MEMBER_JOIN && !it.isWebhookMessage && it.author == event.author && it.contentRaw.equals(messageContent, ignoreCase = true) }.take(4)
-            if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
+        val isSpamChannel = with(event.channel) { idLong == 361807727531393026 || idLong == 658364415439142913 }
+
+        if (!isSpamChannel) {
+            var duplicateCount = 0
+            channel.history.retrievePast(10).queue { messages ->
+                val memberMessages = messages.filter {
+                    it.type != MessageType.GUILD_MEMBER_JOIN && !it.isWebhookMessage && it.author == event.author && it.contentRaw.equals(
+                        messageContent,
+                        ignoreCase = true
+                    )
+                }.take(4)
+                if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
+                    return@queue
+                }
+
+                channel.deleteMessages(memberMessages).queue({
+                    jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel) }
+                    channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
+                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+
                 return@queue
             }
 
-            channel.deleteMessages(memberMessages).queue({
-                jda?.selfUser?.let { it1 -> event.member?.warn(it1, guildId, "Message spam", channel) }
-                channel.sendMessageWithChecks("${event.member?.asMention} has been warned for spamming messages")
-            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-
-            return@queue
-        }
-
-        for (i in 1 until words.size) {
-            if (words[i].equals(words[i - 1], ignoreCase = true)) {
-                duplicateCount++
-            } else {
-                duplicateCount = 0
+            for (i in 1 until words.size) {
+                if (words[i].equals(words[i - 1], ignoreCase = true)) {
+                    duplicateCount++
+                } else {
+                    duplicateCount = 0
+                }
             }
-        }
 
-        if (duplicateCount >= 5) {
-            if (!event.author.isBot && member != null && !member.isMod(guildId)) {
-                message.delete().queue({
-                    jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel) }
-                    channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
-                }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+            if (duplicateCount >= 5) {
+                if (!event.author.isBot && member != null && !member.isMod(guildId)) {
+                    message.delete().queue({
+                        jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Message spam", channel) }
+                        channel.sendMessageWithChecks("${member.asMention} has been warned for spamming messages")
+                    }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                }
             }
         }
 
         if (messageContent.contains(emoteRegex)) {
             val emote = emoteRegex.findAll(messageContent)
-            if (emote.count() > 6) {
-                if (member != null) {
-                    if (!member.isMod(guildId) && !event.author.isBot) {
-                        message.delete().queue({
-                            jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel) }
-                            channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
-                        }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
-                        return
+            if (!isSpamChannel) {
+                if (emote.count() > 6) {
+                    if (member != null) {
+                        if (!member.isMod(guildId) && !event.author.isBot) {
+                            message.delete().queue({
+                                jda?.selfUser?.let { it1 -> member.warn(it1, guildId, "Emote spam", channel) }
+                                channel.sendMessageWithChecks("${member.asMention} has been warned for spamming emotes")
+                            }, ErrorHandler().handle(ErrorResponse.UNKNOWN_MESSAGE) {})
+                            return
+                        }
                     }
                 }
             }
