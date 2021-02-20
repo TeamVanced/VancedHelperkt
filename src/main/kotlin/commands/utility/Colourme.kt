@@ -44,7 +44,7 @@ class Colourme : BaseCommand(
                 val ccrole = member.roles.filter { it.name.endsWith("CC") }
                 fun addRole() {
                     ctx.guild.createRole().setColor(color).setName("$roleName-CC").queue({ role ->
-                        ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first().position + 1).queue {
+                        ctx.guild.modifyRolePositions().selectPosition(role).moveTo(member.roles.first { it.color != null }.position + 1).queue {
                             ctx.guild.addRoleToMember(member, role).queue {
                                 ctx.event.channel.sendMsg("Successfully added the role!")
                             }
