@@ -6,10 +6,6 @@ import database.*
 import database.collections.Emote
 import ext.*
 import jda
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.audit.ActionType
 import net.dv8tion.jda.api.audit.TargetType
@@ -30,6 +26,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
+import java.util.concurrent.TimeUnit
 
 class ActionListener : ListenerAdapter() {
 
@@ -221,16 +218,13 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(5000)
-            event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(5).queue { banLogs ->
-                val banLog = banLogs.firstOrNull { it.user == event.user }
-                if (banLog?.targetType == TargetType.MEMBER) {
-                    val mod = banLog.user
-                    if (mod != null) {
-                        event.guild.retrieveMember(mod).queue {
-                            sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
-                        }
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(5).queueAfter(5, TimeUnit.SECONDS) { banLogs ->
+            val banLog = banLogs.firstOrNull { it.user == event.user }
+            if (banLog?.targetType == TargetType.MEMBER) {
+                val mod = banLog.user
+                if (mod != null) {
+                    event.guild.retrieveMember(mod).queue {
+                        sendBanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
@@ -238,16 +232,13 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(5000)
-            event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(5).queue { banLogs ->
-                val banLog = banLogs.firstOrNull { it.user == event.user }
-                if (banLog?.targetType == TargetType.MEMBER) {
-                    val mod = banLog.user
-                    if (mod != null) {
-                        event.guild.retrieveMember(mod).queue {
-                            sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
-                        }
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(5).queueAfter(5, TimeUnit.SECONDS) { banLogs ->
+            val banLog = banLogs.firstOrNull { it.user == event.user }
+            if (banLog?.targetType == TargetType.MEMBER) {
+                val mod = banLog.user
+                if (mod != null) {
+                    event.guild.retrieveMember(mod).queue {
+                        sendUnbanLog(event.user, it.user, banLog.reason, event.guild.id)
                     }
                 }
             }
