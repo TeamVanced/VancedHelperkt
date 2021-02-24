@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.findOne
 import utils.stinks
 import utils.stonks
-import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 class ActionListener : ListenerAdapter() {
 
@@ -114,9 +114,7 @@ class ActionListener : ListenerAdapter() {
         val guildId = event.guild.id
         val channel = event.channel
         val member = event.member
-        val words = messageContent.split("\\s+".toRegex()).map { word ->
-            word.replace("^[,.]|[,.]$".toRegex(), "")
-        }
+        val words = messageContent.replace(".", "").replace(",", "").split(" ")
         val isSpamChannel = with(event.channel) { idLong == 361807727531393026 || idLong == 658364415439142913 }
 
         if (!isSpamChannel) {
@@ -159,9 +157,9 @@ class ActionListener : ListenerAdapter() {
         }
 
         if (messageContent.contains(emoteRegex)) {
-            val emote = emoteRegex.findAll(messageContent)
+            val emotes = emoteRegex.findAll(messageContent)
             if (!isSpamChannel) {
-                if (emote.count() > 6) {
+                if (emotes.count() > 6) {
                     if (member != null) {
                         if (!member.isMod(guildId) && !event.author.isBot) {
                             message.delete().queue({
@@ -174,14 +172,18 @@ class ActionListener : ListenerAdapter() {
                 }
             }
             val filter = BasicDBObject().append("guildId", guildId)
-            emote.forEach {
-                val emoteFilter = filter.append("emote", it.value)
+            emotes.forEach { emote ->
+                val id = emote.value.substringAfterLast(":").dropLast(1)
+                if (!event.guild.emotes.map { it.id }.contains(id)) {
+                    return@forEach
+                }
+                val emoteFilter = filter.append("emote", emote.value)
                 val emoteCollection = emotesCollection.findOne(emoteFilter)
                 if (emoteCollection == null) {
                     emotesCollection.insertOne(
                         Emote(
                             guildId = guildId,
-                            emote = it.value,
+                            emote = emote.value,
                             usedCount = 1
                         )
                     )
@@ -216,9 +218,9 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(1).queue { banLogs ->
-            val banLog = banLogs[0]
-            if (banLog.targetType == TargetType.MEMBER) {
+        event.guild.retrieveAuditLogs().type(ActionType.BAN).limit(5).queueAfter(5, TimeUnit.SECONDS) { banLogs ->
+            val banLog = banLogs.firstOrNull { it.targetId == event.user.id }
+            if (banLog?.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
@@ -230,9 +232,9 @@ class ActionListener : ListenerAdapter() {
     }
 
     override fun onGuildUnban(event: GuildUnbanEvent) {
-        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).delay(Duration.ofSeconds(3)).queue { banLogs ->
-            val banLog = banLogs[0]
-            if (banLog.targetType == TargetType.MEMBER) {
+        event.guild.retrieveAuditLogs().type(ActionType.UNBAN).limit(5).queueAfter(5, TimeUnit.SECONDS) { banLogs ->
+            val banLog = banLogs.firstOrNull { it.targetId == event.user.id }
+            if (banLog?.targetType == TargetType.MEMBER) {
                 val mod = banLog.user
                 if (mod != null) {
                     event.guild.retrieveMember(mod).queue {
