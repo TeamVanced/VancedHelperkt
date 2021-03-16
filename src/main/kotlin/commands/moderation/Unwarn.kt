@@ -35,6 +35,8 @@ class Unwarn : BaseCommand(
                     ctx.authorAsMember?.let { sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                     ctx.event.channel.sendMsg("Provided user does not exist!")
+                }.handle(ErrorResponse.UNKNOWN_MEMBER) {
+                    ctx.event.channel.sendMsg("Provided member does not exist!")
                 })
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
