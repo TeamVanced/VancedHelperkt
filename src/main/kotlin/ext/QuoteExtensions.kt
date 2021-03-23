@@ -31,3 +31,11 @@ fun Member.hasQuotePerms(guildId: String): Boolean {
     val quoteRoles = guildId.quoteRoles
     return roles.any { quoteRoles.contains(it.id) }
 }
+
+fun BaseCommand.getQuote(quote: Quote?, channel: TextChannel) {
+    if (quote != null) {
+        sendQuote(quote, channel)
+    } else {
+        channel.sendIncorrectQuote()
+    }
+}

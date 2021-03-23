@@ -6,7 +6,6 @@ import database.boosterRole
 import database.collections.Warn
 import database.modRoles
 import database.warnsCollection
-import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User

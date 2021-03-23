@@ -23,13 +23,20 @@ class Quote(
         val event = ctx.event
         if (args.isNotEmpty()) {
             with(commandManager) {
-                when (val command = args[0]) {
-                    "get" -> execWithChecks(getCommand("getquote")!!, event, args.no0())
-                    "add" -> execWithChecks(getCommand("addquote")!!, event, args.no0())
-                    "remove" -> execWithChecks(getCommand("removequote")!!, event, args.no0())
-                    "addstar" -> execWithChecks(getCommand(command)!!, event, args.no0())
-                    "removestar" -> execWithChecks(getCommand(command)!!, event, args.no0())
-                    else -> ctx.channel.useCommandProperly()
+                val command = when (val cmd = args[0].toLowerCase()) {
+                    "get" -> getCommand("getquote")
+                    "add" -> getCommand("addquote")
+                    "remove" -> getCommand("removequote")
+                    else -> getCommand(cmd)
+                }
+                if (command != null) {
+                    execWithChecks(
+                        command,
+                        event,
+                        args.no0
+                    )
+                } else {
+                    ctx.channel.useCommandProperly()
                 }
             }
         } else {
@@ -38,6 +45,6 @@ class Quote(
 
     }
 
-    fun MutableList<String>.no0(): MutableList<String> = apply { removeAt(0) }
+    private val MutableList<String>.no0: MutableList<String> get() = apply { removeAt(0) }
 
 }

@@ -7,13 +7,12 @@ import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
 
 class RandomQuote : BaseCommand(
     commandName = "randomquote",
     commandDescription = "Get a random quote",
     commandType = Quotes,
-    commandAliases = listOf("rq")
+    commandAliases = listOf("rq", "random")
 ) {
 
     override fun execute(ctx: CommandContext) {
@@ -24,18 +23,14 @@ class RandomQuote : BaseCommand(
             if (userId.matches(contentIDRegex)) {
                 val quote = quotesCollection.find(Quote::authorID eq userId)
                 try {
-                    ctx.event.channel.sendMsg(
-                        getQuote(quote.toList().random())
-                    )
+                    ctx.event.channel.sendMsg(getQuote(quote.toList().random()))
                 } catch (e: NoSuchElementException) {
                     ctx.event.channel.sendMsg("There are no quotes in this server from the provided! Try adding some")
                 }
             }
         } else {
             try {
-                ctx.event.channel.sendMsg(
-                    getQuote(quotesCollection.find().toList().random())
-                )
+                ctx.event.channel.sendMsg(getQuote(quotesCollection.find().toList().random()))
             } catch (e: NoSuchElementException) {
                 ctx.event.channel.sendMsg("There are no quotes in this server! Try adding some")
             }

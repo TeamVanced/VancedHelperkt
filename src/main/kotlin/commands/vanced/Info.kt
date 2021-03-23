@@ -1,9 +1,9 @@
 package commands.vanced
 
-import commands.BasePagerCommand
+import commands.BaseArrowpageCommand
 import commands.CommandType.Vanced
 
-class Info : BasePagerCommand(
+class Info : BaseArrowpageCommand(
     commandName = "info",
     commandDescription = "Vanced FAQ",
     commandType = Vanced,

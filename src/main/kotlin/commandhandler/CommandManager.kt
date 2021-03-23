@@ -15,20 +15,18 @@ import database.owners
 import database.prefix
 import ext.sendMessageWithChecks
 import ext.sendStacktrace
-import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
-import java.awt.Color
 
 class CommandManager {
 
     val commands = mutableListOf<BaseCommand>()
     val commandTypes = mutableListOf<CommandType>()
 
-    fun addCommand(command: BaseCommand) {
+    private fun addCommand(command: BaseCommand) {
         if (commands.contains(command)) {
             println("Command already exists, skipping...")
             return
@@ -125,6 +123,7 @@ class CommandManager {
             RandomQuote(),
             RemoveQuote(),
             RemoveStar(),
+            SearchQuote(),
             StarBoard(),
             Avatar(),
             BAT(),
