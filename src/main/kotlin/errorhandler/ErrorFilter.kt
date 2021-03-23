@@ -6,7 +6,6 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import ext.sendStacktrace
 import jda
-import java.net.SocketTimeoutException
 
 class ErrorFilter : Filter<ILoggingEvent>() {
 
