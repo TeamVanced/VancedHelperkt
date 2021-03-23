@@ -14,9 +14,10 @@ class ErrorFilter : Filter<ILoggingEvent>() {
         val throwable = event?.throwableProxy
         if (event?.level == Level.ERROR) {
             jda?.guilds?.forEach {
-                if (throwable is SocketTimeoutException) {
+                if (throwable?.className == SocketTimeoutException::class.simpleName) {
                     return@forEach
                 }
+
                 if (throwable?.stackTraceElementProxyArray == null) {
                     return@forEach
                 }
