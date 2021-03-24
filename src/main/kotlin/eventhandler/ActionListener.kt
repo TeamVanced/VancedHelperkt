@@ -114,7 +114,7 @@ class ActionListener : ListenerAdapter() {
         val guildId = event.guild.id
         val channel = event.channel
         val member = event.member
-        val words = messageContent.replace(".", "").replace(",", "").split(" ")
+        val words = messageContent.replace(".", "").replace(",", "").replace("\n", " ").replace("\\s+".toRegex(), " ").split(" ")
         val isSpamChannel = with(event.channel) { idLong == 361807727531393026 || idLong == 658364415439142913 }
 
         if (!isSpamChannel) {
@@ -125,8 +125,8 @@ class ActionListener : ListenerAdapter() {
                         messageContent,
                         ignoreCase = true
                     )
-                }.take(4)
-                if (memberMessages.size < 4 || event.author.isBot || (member != null && member.isMod(guildId))) {
+                }.take(5)
+                if (memberMessages.size < 5 || event.author.isBot || (member != null && member.isMod(guildId))) {
                     return@queue
                 }
 

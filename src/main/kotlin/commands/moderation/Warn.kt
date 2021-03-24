@@ -34,6 +34,8 @@ class Warn : BaseCommand(
                 ctx.event.channel.sendMsg("Successfully warned ${member.user.asMention}")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                 ctx.event.channel.sendMsg("Provided user does not exist!")
+            }.handle(ErrorResponse.UNKNOWN_MEMBER) {
+                ctx.event.channel.sendMsg("Provided member does not exist!")
             })
 
         } else {

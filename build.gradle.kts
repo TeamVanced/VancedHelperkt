@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.serialization") version "1.4.30"
+    kotlin("jvm") version "1.4.31"
+    kotlin("plugin.serialization") version "1.4.31"
     application
 }
 
@@ -20,7 +20,7 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:1.5.0")
     implementation("io.ktor:ktor-server-core:1.5.0")
     implementation("io.ktor:ktor-server-netty:1.5.0")
-    implementation("net.dv8tion:JDA:4.2.0_223")
+    implementation("net.dv8tion:JDA:4.2.0_247")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
     implementation("com.beust:klaxon:5.0.1")

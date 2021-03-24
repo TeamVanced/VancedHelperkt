@@ -6,7 +6,6 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import ext.sendStacktrace
 import jda
-import java.net.SocketTimeoutException
 
 class ErrorFilter : Filter<ILoggingEvent>() {
 
@@ -14,9 +13,10 @@ class ErrorFilter : Filter<ILoggingEvent>() {
         val throwable = event?.throwableProxy
         if (event?.level == Level.ERROR) {
             jda?.guilds?.forEach {
-                if (throwable is SocketTimeoutException) {
+                if (throwable?.className == "java.net.SocketTimeoutException") {
                     return@forEach
                 }
+
                 if (throwable?.stackTraceElementProxyArray == null) {
                     return@forEach
                 }

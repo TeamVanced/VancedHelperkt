@@ -5,11 +5,8 @@ import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commands.BaseCommand
 import commands.CommandType.Quotes
-import database.collections.Quote
 import database.quotesCollection
-import ext.sendIncorrectQuote
-import ext.sendQuote
-import net.dv8tion.jda.api.entities.TextChannel
+import ext.getQuote
 import org.litote.kmongo.findOne
 
 class GetQuote(
@@ -29,56 +26,21 @@ class GetQuote(
         if (args.isNotEmpty()) {
             val message = args[0]
             when {
-                message.matches(contentIDRegex) -> quotesCollection.findOne(guildFilter.append("messageID", message)).getQuote(ctx.channel)
-                message.toLongOrNull() != null -> quotesCollection.findOne(
-                    guildFilter.append(
-                        "quoteId",
-                        message.toLong()
-                    )
-                ).getQuote(ctx.channel)
-                else -> {
-                    val quotes = quotesCollection.find().filter { it.messageContent.contains(args.joinToString(" "), true) }
-                    if (quotes.isNotEmpty()) {
-                        if (quotes.size > 1) {
-                            if (quotes.size < 10) {
-                                quotes.sendQuotes(ctx.channel)
-                            } else {
-                                ctx.event.channel.sendMsg("Too many quotes matching this search!")
-                            }
-                        } else {
-                            quotes[0].getQuote(ctx.channel)
-                        }
-                    } else {
-                        ctx.channel.sendIncorrectQuote()
-                    }
-                }
+                message.matches(contentIDRegex) -> getQuote(quotesCollection.findOne(guildFilter.append("messageID", message)), ctx.channel)
+                message.toLongOrNull() != null -> getQuote(
+                    quotesCollection.findOne(
+                        guildFilter.append(
+                            "quoteId",
+                            message.toLong()
+                        )
+                    ),
+                    ctx.channel
+                )
+                else -> commandManager.getCommand("searchquote")?.execute(ctx)
             }
         } else {
             commandManager.getCommand("randomquote")?.execute(ctx)
         }
     }
 
-    private fun Quote?.getQuote(channel: TextChannel) {
-        if (this != null) {
-            sendQuote(this, channel)
-        } else {
-            channel.sendIncorrectQuote()
-        }
-    }
-
-    private fun List<Quote>.sendQuotes(channel: TextChannel) {
-        channel.sendMsg(
-            embedBuilder.apply {
-                setTitle("Quotes")
-                setDescription("I found multiple results matching that quote!")
-                forEach {
-                    addField(
-                        "Quote #${it.quoteId} by ${it.authorName}",
-                        it.messageContent,
-                        false
-                    )
-                }
-            }.build()
-        )
-    }
 }

@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import utils.EmbedPagerAdapter
 import utils.getJson
 
-abstract class BasePagerCommand(
+abstract class BaseArrowpageCommand(
     override val commandName: String,
     override val commandDescription: String,
     override val commandType: CommandType,
