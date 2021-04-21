@@ -15,8 +15,10 @@ fun BaseCommand.sendQuote(quote: Quote, channel: TextChannel) {
 
 fun BaseCommand.getQuote(quote: Quote): MessageEmbed {
     return embedBuilder.apply {
+        val jumpTo = "\n\n[Jump to message](${quote.messageUrl})"
+
         setTitle(quote.authorName)
-        setDescription(quote.messageContent + "\n\n[Jump to message](${quote.messageUrl})")
+        setDescription(quote.messageContent.takeMax(2048 - jumpTo.length) + jumpTo)
         setThumbnail(quote.authorAvatar)
         setImage(quote.attachment)
         setFooter("⭐${quote.stars.size} | ID: ${quote.quoteId} • ${quote.messageTimestamp}")
