@@ -6,4 +6,10 @@ fun String.optional(): Pair<String, ArgumentType> = this to ArgumentType.Optiona
 
 fun String.required(): Pair<String, ArgumentType> = this to ArgumentType.Required
 
+fun String.takeMax(amount: Int): String {
+    return if (this.length > amount) {
+        this.take(amount - 3) + "..."
+    } else this
+}
+
 fun Map.Entry<String, ArgumentType>.transformToArg(): String = "${value.prefix}$key${value.suffix}"

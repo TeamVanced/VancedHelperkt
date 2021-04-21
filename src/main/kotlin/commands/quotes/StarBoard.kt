@@ -5,6 +5,7 @@ import commands.BaseMultipageCommand
 import commands.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
+import ext.addQuoteFields
 import ext.getQuote
 import net.dv8tion.jda.api.entities.MessageEmbed
 import org.litote.kmongo.eq
@@ -18,14 +19,7 @@ class StarBoard : BaseMultipageCommand<Quote>(
 
     override fun getMainPage(): MessageEmbed = embedBuilder.apply {
         setTitle("Starboard")
-        for (i in itemsList.indices) {
-            val item = itemsList[i]
-            addField(
-                "${emotes[i + 1]} Quote #${item.quoteId} by ${item.authorName} (${item.stars.size} :star:)",
-                item.messageContent,
-                false
-            )
-        }
+        addQuoteFields(emotes, itemsList)
     }.build()
 
     override fun getPage(item: Quote): MessageEmbed = getQuote(item)
