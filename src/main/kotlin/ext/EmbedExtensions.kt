@@ -1,5 +1,6 @@
 package ext
 
+import database.collections.Quote
 import database.errorChannel
 import database.modlogChannel
 import jda
@@ -18,7 +19,7 @@ fun Guild.sendStacktrace(title: String?, stacktrace: String?) {
         MessageBuilder().setEmbed(
             EmbedBuilder().setColor(Color.RED).apply {
                 setTitle(title)
-                setDescription(stacktrace?.take(2045) + "...")
+                setDescription(stacktrace?.takeMax(2045) + "...")
             }.build()
         ).setContent("423915768191647755".asMention).build()
     )?.queue()
@@ -71,4 +72,14 @@ fun sendUnwarnLog(user: User, mod: User, guildId: String) {
 
 fun sendUnmuteLog(user: User, mod: User, guildId: String) {
     sendModLog("User Unmuted", user, mod, null, guildId)
+}
+
+fun EmbedBuilder.addQuoteFields(emotes: Array<String>, items: List<Quote>) {
+    items.forEachIndexed { index, quote ->
+        addField(
+            "${emotes[index + 1]} Quote #${quote.quoteId} by ${quote.authorName} (${quote.stars.size} :star:)",
+            quote.messageContent.takeMax(1024),
+            false
+        )
+    }
 }

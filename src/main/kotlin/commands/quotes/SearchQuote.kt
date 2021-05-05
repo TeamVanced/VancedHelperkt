@@ -5,6 +5,7 @@ import commands.BaseMultipageCommand
 import commands.CommandType
 import database.collections.Quote
 import database.quotesCollection
+import ext.addQuoteFields
 import ext.getQuote
 import ext.required
 import ext.sendIncorrectQuote
@@ -21,14 +22,7 @@ class SearchQuote : BaseMultipageCommand<Quote>(
     override fun getMainPage(): MessageEmbed = embedBuilder.apply {
         setTitle("Quotes")
         setDescription("I found these results matching that quote!")
-        for (i in itemsList.indices) {
-            val item = itemsList[i]
-            addField(
-                "${emotes[i + 1]} Quote #${item.quoteId} by ${item.authorName} (${item.stars.size} :star:)",
-                item.messageContent,
-                false
-            )
-        }
+        addQuoteFields(emotes, itemsList)
     }.build()
 
     override fun getPage(item: Quote): MessageEmbed = getQuote(item)

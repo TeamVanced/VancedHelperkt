@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 
-abstract class BaseMultipageCommand <item: Any> (
+abstract class BaseMultipageCommand <T> (
     override val commandName: String,
     override val commandDescription: String,
     override val commandType: CommandType,
@@ -21,7 +21,7 @@ abstract class BaseMultipageCommand <item: Any> (
     addTrashCan = false
 ) {
 
-    var itemsList = listOf<item>()
+    var itemsList = listOf<T>()
     val emotes = arrayOf("🔢", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟")
 
     override fun execute(ctx: CommandContext) {
@@ -59,10 +59,10 @@ abstract class BaseMultipageCommand <item: Any> (
             ).queue()
     }
 
-    abstract fun getPage(item: item): MessageEmbed
+    abstract fun getPage(item: T): MessageEmbed
     abstract fun getMainPage(): MessageEmbed
 
-    abstract fun getItems(args: MutableList<String>): List<item>
+    abstract fun getItems(args: MutableList<String>): List<T>
 
     abstract fun handleEmptylist(ctx: CommandContext)
 
