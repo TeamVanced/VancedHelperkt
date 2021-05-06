@@ -6,6 +6,7 @@ import commands.BaseCommand
 import commands.CommandType.Moderation
 import database.warnsCollection
 import ext.required
+import ext.takeMax
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.findOne
@@ -38,7 +39,7 @@ class Warns : BaseCommand(
                             for (i in reasons.indices) {
                                 addField(
                                     "Warn ${i + 1}",
-                                    reasons[i],
+                                    reasons[i].takeMax(1024),
                                     false
                                 )
                             }
