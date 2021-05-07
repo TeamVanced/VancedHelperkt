@@ -42,7 +42,7 @@ fun sendModLog(title: String, user: User, mod: User, reason: String?, guildId: S
             if (reason != null) {
                 addField(
                     "Reason",
-                    reason,
+                    reason.takeMax(1024),
                     false
                 )
             }
