@@ -7,6 +7,7 @@ import ext.required
 import ext.useArguments
 import net.dv8tion.jda.api.entities.TextChannel
 import type.CommandType.Fun
+import java.util.*
 
 class How : BaseCommand(
     commandName = "how",
@@ -38,7 +39,7 @@ class How : BaseCommand(
         val bar = "▰".repeat(barAmount) + "▱".repeat(10 - barAmount)
         sendMsg(
             embedBuilder.apply {
-                setTitle("${predicate.capitalize().removeSuffix(" ")} Meter")
+                setTitle("${predicate.replaceFirstChar { it.titlecase(Locale.getDefault()) }.removeSuffix(" ")} Meter")
                 setDescription("$thing is $percentage% $predicate\n$bar")
             }.build()
         )

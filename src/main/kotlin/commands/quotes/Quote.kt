@@ -20,7 +20,7 @@ class Quote  : BaseCommand(
         val event = ctx.event
         if (args.isNotEmpty()) {
             with(commandManager) {
-                val command = when (val cmd = args[0].toLowerCase()) {
+                val command = when (val cmd = args[0].lowercase()) {
                     "get" -> getCommand("getquote")
                     "add" -> getCommand("addquote")
                     "remove" -> getCommand("removequote")

@@ -40,7 +40,7 @@ class CommandManager {
 
     fun execute(event: GuildMessageReceivedEvent) {
         val inputText = event.message.contentRaw.removePrefix(event.guild.id.prefix).split("\\s+".toRegex())
-        val command = getCommand(inputText[0].toLowerCase())
+        val command = getCommand(inputText[0].lowercase())
 
         if (command != null) {
             execWithChecks(command, event, inputText)
