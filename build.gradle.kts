@@ -16,15 +16,14 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("io.ktor:ktor-client-core:1.5.0")
-    implementation("io.ktor:ktor-client-okhttp:1.5.0")
-    implementation("io.ktor:ktor-server-core:1.5.0")
-    implementation("io.ktor:ktor-server-netty:1.5.0")
+
     implementation("net.dv8tion:JDA:4.2.0_247")
+
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
+
     implementation("org.apache.commons:commons-math3:3.6.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+
     implementation("org.litote.kmongo:kmongo:4.2.3")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
