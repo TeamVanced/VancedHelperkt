@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
 
     implementation("net.dv8tion:JDA:4.2.0_247") {
         exclude(
