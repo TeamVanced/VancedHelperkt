@@ -1,6 +1,6 @@
 package commands.dev
 
-import com.beust.klaxon.Klaxon
+import com.google.gson.Gson
 import commandhandler.CommandContext
 import commands.base.BaseCommand
 import type.CommandType.Dev
@@ -25,7 +25,7 @@ class CreateEmbed : BaseCommand(
             ctx.event.channel.sendMsg(
                 embedBuilder.apply {
                     try {
-                        with(Klaxon().parse<JsonEmbed>(json)) {
+                        with(Gson().fromJson(json, JsonEmbed::class.java)) {
                             setTitle(this?.title)
                             setDescription(this?.description)
                             if (this?.fields != null) {

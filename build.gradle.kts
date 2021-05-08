@@ -23,7 +23,6 @@ dependencies {
     implementation("net.dv8tion:JDA:4.2.0_247")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
-    implementation("com.beust:klaxon:5.0.1")
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("org.litote.kmongo:kmongo:4.2.3")
