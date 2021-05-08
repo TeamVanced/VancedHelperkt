@@ -16,7 +16,11 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("net.dv8tion:JDA:4.2.0_247")
+    implementation("net.dv8tion:JDA:4.2.0_247") {
+        exclude(
+            module = "opus-java"
+        )
+    }
 
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("ch.qos.logback:logback-core:1.2.3")
@@ -30,6 +34,8 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.0.1")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+
     implementation("org.reflections:reflections:0.9.12")
 }
 
@@ -38,6 +44,12 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Jar> {
+    archiveFileName.set("bot.jar")
+
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+
     manifest {
         attributes["Main-Class"] = "Main"
     }
