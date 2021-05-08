@@ -5,7 +5,6 @@ import commandhandler.CommandManager
 import network.JsonService
 import network.model.GuideJsonDtoMapper
 import network.util.baseGuideUrl
-import network.util.localGuideUrl
 import org.koin.dsl.module
 import repository.JsonRepositoryImpl
 import retrofit2.Retrofit
