@@ -1,9 +1,9 @@
 package commands.vanced
 
-import commands.base.BaseArrowpageCommand
+import commands.base.BaseGuideCommand
 import type.CommandType.Vanced
 
-class BugReport : BaseArrowpageCommand(
+class BugReport : BaseGuideCommand(
     commandName = "bugreport",
     commandDescription = "Report Vanced bugs. For broken toasters and such, consult your local Indian tech guru ;P",
     commandType = Vanced,

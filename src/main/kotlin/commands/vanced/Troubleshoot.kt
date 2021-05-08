@@ -1,9 +1,9 @@
 package commands.vanced
 
-import commands.base.BaseArrowpageCommand
+import commands.base.BaseGuideCommand
 import type.CommandType.Vanced
 
-class Troubleshoot : BaseArrowpageCommand(
+class Troubleshoot : BaseGuideCommand(
     commandName = "troubleshoot",
     commandDescription = "Troubleshoot Vanced issues. For your own issues, consult your therapist ;)",
     commandType = Vanced,

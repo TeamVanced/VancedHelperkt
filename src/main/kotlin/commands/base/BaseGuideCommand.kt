@@ -14,7 +14,7 @@ import repository.guide.GuideRepositoryImpl
 import type.CommandType
 import utils.EmbedPagerAdapter
 
-abstract class BaseArrowpageCommand(
+abstract class BaseGuideCommand(
     override val commandName: String,
     override val commandDescription: String,
     override val commandType: CommandType,
@@ -51,52 +51,6 @@ abstract class BaseArrowpageCommand(
         }
 
     }
-
-    //this shit is kinda retarded but it works
-    //will probably optimise this later
-//    private fun getPagesWithTableOfContent(): List<MessageEmbed> {
-//        val tableDesc = mutableListOf("0 | You are here ;)")
-//        val jsonArray = repository.fetch("$jsonName.json").data
-//        val embedPages = mutableListOf<EmbedBuilder>()
-//        val builtEmbedPages = mutableListOf<MessageEmbed>()
-//        jsonArray.forEachIndexed { index, element ->
-//            embedPages.add(
-//                embedBuilder.apply {
-//                    setTitle(element.title)
-//                    setDescription(element.description)
-//                    val fields = element.fields
-//                    fields?.forEach { field ->
-//                        with (field) {
-//                            addField(
-//                                title,
-//                                content,
-//                                false
-//                            )
-//                        }
-//
-//                    }
-//                }
-//            )
-//            tableDesc.add("${index + 1} | ${element.title}")
-//        }
-//        for (i in embedPages.indices) {
-//            val embed = embedPages[i]
-//            embed.setFooter("Page ${i + 1}/${embedPages.size}")
-//            builtEmbedPages.add(embed.build())
-//        }
-//        val tablePage = embedBuilder.apply {
-//            setTitle("Index")
-//            setDescription(
-//                "Review the table of contents below and jump to the page you need via reactions\n\n```\n${
-//                    tableDesc.joinToString(
-//                        "\n"
-//                    )
-//                }\n```"
-//            )
-//            setFooter("page 0/${embedPages.size}")
-//        }.build()
-//        return listOf(tablePage) + builtEmbedPages
-//    }
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {
         super.onReactionAdd(event)
