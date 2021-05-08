@@ -91,9 +91,9 @@ class CommandManager {
     init {
         Reflections("commands").getSubTypesOf(BaseCommand::class.java).forEach {
             try {
+                println(it)
                 addCommand(it.getDeclaredConstructor().newInstance())
             } catch (e: NoSuchMethodException) {}
-
         }
     }
 

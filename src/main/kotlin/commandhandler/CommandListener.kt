@@ -10,7 +10,7 @@ import org.koin.core.component.inject
 
 class CommandListener : ListenerAdapter(), KoinComponent {
 
-    val commandManager by inject<CommandManager>()
+    private val commandManager by inject<CommandManager>()
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.author.isBot || event.isWebhookMessage) {

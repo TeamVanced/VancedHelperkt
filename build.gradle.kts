@@ -28,6 +28,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("org.litote.kmongo:kmongo:4.2.3")
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     implementation("io.insert-koin:koin-core:3.0.1")
 
     implementation("org.reflections:reflections:0.9.12")

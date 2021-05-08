@@ -1,5 +1,8 @@
 import commandhandler.CommandListener
 import di.commandManagerModule
+import di.mapperModule
+import di.repositoryModule
+import di.retrofitModule
 import eventhandler.ActionListener
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
@@ -24,7 +27,12 @@ class Main {
         fun main(vararg args: String) {
 
             startKoin {
-                modules(commandManagerModule)
+                modules(
+                    commandManagerModule,
+                    retrofitModule,
+                    mapperModule,
+                    repositoryModule
+                )
             }
 
             Main().start()
