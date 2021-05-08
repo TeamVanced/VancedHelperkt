@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.5.0"
     application
 }
 
@@ -34,7 +34,7 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.0.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC")
 
     implementation("org.reflections:reflections:0.9.12")
 }
