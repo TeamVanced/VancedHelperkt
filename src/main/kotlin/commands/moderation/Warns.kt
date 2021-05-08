@@ -2,8 +2,8 @@ package commands.moderation
 
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
+import type.CommandType.Moderation
 import database.warnsCollection
 import ext.required
 import ext.takeMax

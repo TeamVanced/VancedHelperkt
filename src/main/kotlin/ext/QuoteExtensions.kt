@@ -1,6 +1,6 @@
 package ext
 
-import commands.BaseCommand
+import commands.base.BaseCommand
 import database.collections.Quote
 import database.quoteRoles
 import net.dv8tion.jda.api.entities.Member

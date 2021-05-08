@@ -1,6 +1,8 @@
-package commands
+package commands.base
 
 import commandhandler.CommandContext
+import type.ArgumentType
+import type.CommandType
 import ext.useArguments
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel

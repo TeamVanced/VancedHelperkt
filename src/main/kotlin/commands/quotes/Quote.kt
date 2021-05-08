@@ -1,16 +1,13 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
+import type.CommandType.Quotes
 import ext.optional
 import ext.useArguments
 import ext.useCommandProperly
 
-class Quote(
-    private val commandManager: CommandManager
-) : BaseCommand(
+class Quote  : BaseCommand(
     commandName = "quote",
     commandDescription = "Quote manager",
     commandType = Quotes,

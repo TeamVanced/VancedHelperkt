@@ -1,7 +1,8 @@
-package commands
+package commands.base
 
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
+import type.CommandType
 import ext.optional
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageChannel

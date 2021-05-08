@@ -1,8 +1,8 @@
 package commands.dev
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Dev
+import commands.base.BaseCommand
+import type.CommandType.Dev
 import database.collections.EmoteRole
 import database.emoteRolesCollection
 import database.getEmoteRoles

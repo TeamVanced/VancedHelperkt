@@ -1,8 +1,8 @@
 package commands.utility
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Utility
+import commands.base.BaseCommand
+import type.CommandType.Utility
 import config
 import ext.optional
 import utils.*

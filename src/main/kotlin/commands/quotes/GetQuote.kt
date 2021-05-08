@@ -2,16 +2,13 @@ package commands.quotes
 
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
+import type.CommandType.Quotes
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.findOne
 
-class GetQuote(
-    private val commandManager: CommandManager
-) : BaseCommand(
+class GetQuote : BaseCommand(
     commandName = "getquote",
     commandDescription = "Get a quote",
     commandType = Quotes,

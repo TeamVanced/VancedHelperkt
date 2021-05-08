@@ -1,8 +1,8 @@
 package commands.moderation
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
+import type.CommandType.Moderation
 import database.muteRole
 import ext.*
 import net.dv8tion.jda.api.Permission

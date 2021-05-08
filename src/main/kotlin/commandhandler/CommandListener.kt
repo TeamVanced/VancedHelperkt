@@ -5,10 +5,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class CommandListener : ListenerAdapter() {
+class CommandListener : ListenerAdapter(), KoinComponent {
 
-    private val commandManager = CommandManager()
+    val commandManager by inject<CommandManager>()
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.author.isBot || event.isWebhookMessage) {

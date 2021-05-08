@@ -1,15 +1,7 @@
 package commandhandler
 
-import commands.BaseCommand
-import commands.CommandType
-import commands.`fun`.*
-import commands.database.Settings
-import commands.dev.CreateEmbed
-import commands.dev.EmoteRole
-import commands.moderation.*
-import commands.quotes.*
-import commands.utility.*
-import commands.vanced.*
+import commands.base.BaseCommand
+import type.CommandType
 import database.modRoles
 import database.owners
 import database.prefix
@@ -20,6 +12,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import org.reflections.Reflections
 
 class CommandManager {
 
@@ -63,11 +56,10 @@ class CommandManager {
         val guild = event.guild
 
         guild.retrieveMemberById(event.author.id).queue { member ->
-            if ((command.devOnly && !owners.contains(member.id)) || (command.commandType == CommandType.Moderation && !member.roles.any {
-                    modRoles.contains(
-                        it.id
-                    )
-                })) {
+            if (
+                (command.devOnly && !owners.contains(member.id))
+                || (command.commandType == CommandType.Moderation && !(member.roles.any { modRoles.contains(it.id) } && owners.contains(member.id)))
+            ) {
                 event.channel.sendMessageWithChecks("You are not allowed to use this command!")
                 return@queue
             }
@@ -97,46 +89,11 @@ class CommandManager {
     }
 
     init {
-        arrayOf(
-            Settings(),
-            CreateEmbed(),
-            EmoteRole(),
-            Country(),
-            EightBall(),
-            Emote(),
-            EmoteBoard(),
-            F(),
-            Gender(),
-            How(),
-            IQ(),
-            PPSize(),
-            Mute(),
-            Purge(),
-            Unmute(),
-            Unwarn(),
-            Warn(),
-            Warns(),
-            AddQuote(),
-            AddStar(),
-            GetQuote(this),
-            Quote(this),
-            RandomQuote(),
-            RemoveQuote(),
-            RemoveStar(),
-            SearchQuote(),
-            StarBoard(),
-            Avatar(),
-            BAT(),
-            Colourme(),
-            Help(this),
-            Ping(),
-            BugReport(),
-            Features(),
-            Info(),
-            SupportUs(),
-            Troubleshoot()
-        ).forEach {
-            addCommand(it)
+        Reflections("commands").getSubTypesOf(BaseCommand::class.java).forEach {
+            try {
+                addCommand(it.getDeclaredConstructor().newInstance())
+            } catch (e: NoSuchMethodException) {}
+
         }
     }
 

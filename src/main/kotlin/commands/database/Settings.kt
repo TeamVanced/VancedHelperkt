@@ -1,8 +1,8 @@
 package commands.database
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Database
+import commands.base.BaseCommand
+import type.CommandType.Database
 import database.*
 import ext.required
 import ext.useArguments

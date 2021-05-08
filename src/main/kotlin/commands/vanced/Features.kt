@@ -1,7 +1,7 @@
 package commands.vanced
 
-import commands.BaseArrowpageCommand
-import commands.CommandType.Vanced
+import commands.base.BaseArrowpageCommand
+import type.CommandType.Vanced
 
 class Features : BaseArrowpageCommand(
     commandName = "features",

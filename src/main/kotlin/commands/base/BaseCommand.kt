@@ -1,7 +1,10 @@
-package commands
+package commands.base
 
 import commandhandler.CommandContext
+import commandhandler.CommandManager
 import commandhandler.IMessageReactionListener
+import type.ArgumentType
+import type.CommandType
 import database.prefix
 import ext.sendMessageWithChecks
 import ext.transformToArg
@@ -14,6 +17,8 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.awt.Color
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
@@ -25,7 +30,9 @@ open class BaseCommand(
     open val commandAliases: List<String> = listOf(commandName),
     open val devOnly: Boolean = false,
     private val addTrashCan: Boolean = true,
-) : IMessageReactionListener {
+) : IMessageReactionListener, KoinComponent {
+
+    val commandManager by inject<CommandManager>()
 
     val contentIDRegex = "\\b\\d{18}\\b".toRegex()
     val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()

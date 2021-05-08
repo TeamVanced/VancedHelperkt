@@ -1,8 +1,8 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commands.BaseMultipageCommand
-import commands.CommandType.Quotes
+import commands.base.BaseMultipageCommand
+import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.addQuoteFields

@@ -2,8 +2,8 @@ package commands.`fun`
 
 import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
+import type.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional

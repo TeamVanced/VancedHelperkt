@@ -1,8 +1,8 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
+import type.CommandType.Fun
 import ext.required
 import ext.useArguments
 

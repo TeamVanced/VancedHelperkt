@@ -2,8 +2,8 @@ package commands.dev
 
 import com.beust.klaxon.Klaxon
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Dev
+import commands.base.BaseCommand
+import type.CommandType.Dev
 import ext.required
 import ext.useCommandProperly
 import java.awt.Color

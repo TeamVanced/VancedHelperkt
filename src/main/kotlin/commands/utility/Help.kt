@@ -1,13 +1,12 @@
 package commands.utility
 
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Utility
+import commands.base.BaseCommand
+import type.CommandType.Utility
 import database.prefix
 import ext.optional
 
-class Help(private val commandManager: CommandManager) : BaseCommand(
+class Help : BaseCommand(
     commandName = "help",
     commandDescription = "Get all available commands from bot",
     commandType = Utility,

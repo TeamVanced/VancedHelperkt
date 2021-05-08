@@ -1,8 +1,8 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
+import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote

@@ -1,8 +1,8 @@
 package commands.moderation
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
+import type.CommandType.Moderation
 import ext.required
 import ext.useArguments
 import java.time.OffsetDateTime
