@@ -22,15 +22,17 @@ dependencies {
         )
     }
 
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation("ch.qos.logback:logback-core:1.2.3")
+    val logbackVersion = "1.2.3"
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
     implementation("org.litote.kmongo:kmongo:4.2.3")
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
     implementation("io.insert-koin:koin-core:3.0.1")
 
