@@ -2,11 +2,11 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.eq
+import type.CommandType.Quotes
 
 class RandomQuote : BaseCommand(
     commandName = "randomquote",

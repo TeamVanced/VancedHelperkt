@@ -2,8 +2,8 @@ package commands.vanced
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Vanced
 import database.prefix
+import type.CommandType.Vanced
 
 class SupportUs : BaseCommand(
     commandName = "supportus",

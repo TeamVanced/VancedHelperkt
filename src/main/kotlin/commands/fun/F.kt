@@ -2,8 +2,8 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import ext.optional
+import type.CommandType.Fun
 import utils.pressF
 
 class F : BaseCommand(

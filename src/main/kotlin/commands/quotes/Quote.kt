@@ -2,10 +2,10 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import ext.optional
 import ext.useArguments
 import ext.useCommandProperly
+import type.CommandType.Quotes
 
 class Quote  : BaseCommand(
     commandName = "quote",

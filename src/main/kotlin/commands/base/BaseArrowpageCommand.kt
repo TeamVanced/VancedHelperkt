@@ -1,7 +1,6 @@
 package commands.base
 
 import commandhandler.CommandContext
-import type.CommandType
 import ext.optional
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +10,8 @@ import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import org.koin.core.component.inject
-import repository.JsonRepositoryImpl
+import repository.guide.GuideRepositoryImpl
+import type.CommandType
 import utils.EmbedPagerAdapter
 
 abstract class BaseArrowpageCommand(
@@ -27,7 +27,7 @@ abstract class BaseArrowpageCommand(
     commandArguments = mapOf("Page number".optional()),
     addTrashCan = false
 ) {
-    private val repository by inject<JsonRepositoryImpl>()
+    private val repository by inject<GuideRepositoryImpl>()
 
     abstract val jsonName: String
     private val emotes = listOf("⏪", "⬅️", trashEmote, "➡️", "⏩")

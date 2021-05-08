@@ -2,7 +2,6 @@ package commands.dev
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Dev
 import database.collections.EmoteRole
 import database.emoteRolesCollection
 import database.getEmoteRoles
@@ -10,6 +9,7 @@ import database.updateEmoteRoles
 import ext.required
 import ext.useArguments
 import ext.useCommandProperly
+import type.CommandType.Dev
 
 class EmoteRole : BaseCommand(
     commandName = "emoterole",

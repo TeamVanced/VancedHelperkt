@@ -3,13 +3,13 @@ package commands.moderation
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Moderation
 import database.warnsCollection
 import ext.required
 import ext.takeMax
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.findOne
+import type.CommandType.Moderation
 
 class Warns : BaseCommand(
     commandName = "warns",

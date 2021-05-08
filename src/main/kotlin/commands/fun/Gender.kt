@@ -2,14 +2,18 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
-import utils.getJson
+import org.koin.core.component.inject
+import repository.gender.GenderRepositoryImpl
+import type.CommandType.Fun
 
 class Gender : BaseCommand(
     commandName = "gender",
@@ -19,7 +23,7 @@ class Gender : BaseCommand(
     commandAliases = listOf("sex")
 ) {
 
-    private val baseUrl = "https://gender-api.com/get?key=${config.genderToken}"
+    private val repository by inject<GenderRepositoryImpl>()
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -47,18 +51,22 @@ class Gender : BaseCommand(
 
     }
 
-    private fun TextChannel.detectGender(thing: String) {
-        val filteredThing = thing.filter { it.isLetter() }
-        val json = "$baseUrl&email=${filteredThing.replace(" ", ".")}@gmail.com".getJson()
-        val gender = json?.string("gender")
-        val accuracy = json?.int("accuracy")
-        sendMsg(
-            embedBuilder.apply {
-                setTitle("Gender Detector")
-                setDescription("$filteredThing is $gender\nAccuracy: $accuracy%")
-                setFooter("Powered by gender-api.com")
-            }.build()
-        )
+    private fun TextChannel.detectGender(name: String) {
+        val filteredName = name.filter { it.isLetter() }
+        val email = "${filteredName.replace(" ", ".")}@gmail.com"
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.get(
+                token = config.genderToken,
+                email = email
+            )
+            sendMsg(
+                embedBuilder.apply {
+                    setTitle("Gender Detector")
+                    setDescription("$filteredName is ${response.gender}\nAccuracy: ${response.accuracy}%")
+                    setFooter("Powered by gender-api.com")
+                }.build()
+            )
+        }
     }
 
 }

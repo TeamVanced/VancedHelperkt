@@ -2,11 +2,11 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import ext.optional
 import ext.required
 import ext.useArguments
 import net.dv8tion.jda.api.entities.TextChannel
+import type.CommandType.Fun
 
 class How : BaseCommand(
     commandName = "how",

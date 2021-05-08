@@ -3,10 +3,10 @@ package commands.quotes
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.findOne
+import type.CommandType.Quotes
 
 class GetQuote : BaseCommand(
     commandName = "getquote",

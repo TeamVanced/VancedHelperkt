@@ -1,4 +1,4 @@
-package network
+package domain.util
 
 interface EntityMapper<Entity, Model> {
 

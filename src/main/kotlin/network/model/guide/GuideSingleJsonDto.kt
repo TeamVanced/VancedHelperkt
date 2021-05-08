@@ -1,4 +1,4 @@
-package network.model
+package network.model.guide
 
 data class GuideSingleJsonDto(
     val title: String,

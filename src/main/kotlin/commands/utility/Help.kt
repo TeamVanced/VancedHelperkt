@@ -2,9 +2,9 @@ package commands.utility
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Utility
 import database.prefix
 import ext.optional
+import type.CommandType.Utility
 
 class Help : BaseCommand(
     commandName = "help",

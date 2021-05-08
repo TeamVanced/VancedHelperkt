@@ -1,16 +1,19 @@
 package commands.`fun`
 
-import com.beust.klaxon.JsonObject
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import config
 import ext.hasQuotePerms
 import ext.optional
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
-import utils.getJson
+import org.koin.core.component.inject
+import repository.country.CountryRepositoryImpl
+import type.CommandType.Fun
 
 class Country : BaseCommand(
     commandName = "country",
@@ -19,7 +22,7 @@ class Country : BaseCommand(
     commandArguments = mapOf("The thing".optional())
 ) {
 
-    private val baseUrl = "https://gender-api.com/get-country-of-origin?key=${config.genderToken}"
+    private val repository by inject<CountryRepositoryImpl>()
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -47,28 +50,32 @@ class Country : BaseCommand(
 
     }
 
-    private fun TextChannel.detectCountries(thing: String) {
-        val filteredThing = thing.filter { it.isLetter() }
-        val json = "$baseUrl&name=$filteredThing".getJson()
-        val countries = json?.array<JsonObject>("country_of_origin")
-        sendMsg(
-            embedBuilder.apply {
-                setTitle("Country Detector")
-                if (countries != null && countries.isNotEmpty()) {
-                    setDescription("Possible country(es) for $filteredThing")
-                    countries.take(5).forEach {
-                        addField(
-                            it.string("country_name"),
-                            "Probability: ${it.double("probability")?.times(100)}%",
-                            false
-                        )
+    private fun TextChannel.detectCountries(name: String) {
+        val filteredName = name.filter { it.isLetter() }
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.get(
+                token = config.genderToken,
+                name = filteredName
+            )
+            sendMsg(
+                embedBuilder.apply {
+                    setTitle("Country Detector")
+                    if (response.countries.isNotEmpty()) {
+                        setDescription("Possible country(es) for $filteredName")
+                        response.countries.take(5).forEach {
+                            addField(
+                                it.countryName,
+                                "Probability: ${it.probability}%",
+                                false
+                            )
+                        }
+                    } else {
+                        setDescription("Countries not found for $filteredName")
                     }
-                } else {
-                    setDescription("Countries not found for $filteredThing")
-                }
-                setFooter("Powered by gender-api.com")
-            }.build()
-        )
+                    setFooter("Powered by gender-api.com")
+                }.build()
+            )
+        }
     }
 
 }

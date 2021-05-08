@@ -1,9 +1,9 @@
-package network.model
+package network.model.guide
 
-import domain.model.GuideFieldModel
-import domain.model.GuideJsonModel
-import domain.model.GuideSingleJsonModel
-import network.EntityMapper
+import domain.model.guide.GuideFieldModel
+import domain.model.guide.GuideJsonModel
+import domain.model.guide.GuideSingleJsonModel
+import domain.util.EntityMapper
 
 class GuideJsonDtoMapper : EntityMapper<GuideJsonDto, GuideJsonModel> {
 

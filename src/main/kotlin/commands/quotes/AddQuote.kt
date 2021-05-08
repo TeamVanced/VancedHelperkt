@@ -2,7 +2,6 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.hasQuotePerms
@@ -13,6 +12,7 @@ import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
+import type.CommandType.Quotes
 import java.time.format.DateTimeFormatter
 
 class AddQuote : BaseCommand(

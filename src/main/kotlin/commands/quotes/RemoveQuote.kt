@@ -3,11 +3,11 @@ package commands.quotes
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.*
 import net.dv8tion.jda.api.entities.TextChannel
+import type.CommandType.Quotes
 
 class RemoveQuote : BaseCommand(
     commandName = "removequote",

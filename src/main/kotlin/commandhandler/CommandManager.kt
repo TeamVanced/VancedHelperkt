@@ -1,7 +1,6 @@
 package commandhandler
 
 import commands.base.BaseCommand
-import type.CommandType
 import database.modRoles
 import database.owners
 import database.prefix
@@ -13,6 +12,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
 import org.reflections.Reflections
+import type.CommandType
 
 class CommandManager {
 
@@ -91,7 +91,6 @@ class CommandManager {
     init {
         Reflections("commands").getSubTypesOf(BaseCommand::class.java).forEach {
             try {
-                println(it)
                 addCommand(it.getDeclaredConstructor().newInstance())
             } catch (e: NoSuchMethodException) {}
         }

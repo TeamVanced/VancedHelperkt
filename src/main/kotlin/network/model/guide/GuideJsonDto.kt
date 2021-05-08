@@ -1,4 +1,4 @@
-package network.model
+package network.model.guide
 
 import com.google.gson.annotations.SerializedName
 

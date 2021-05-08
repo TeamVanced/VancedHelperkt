@@ -2,10 +2,10 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Moderation
 import ext.*
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import type.CommandType.Moderation
 
 class Warn : BaseCommand(
     commandName = "warn",

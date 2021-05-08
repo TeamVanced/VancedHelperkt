@@ -2,7 +2,6 @@ package commands.quotes
 
 import commandhandler.CommandContext
 import commands.base.BaseMultipageCommand
-import type.CommandType
 import database.collections.Quote
 import database.quotesCollection
 import ext.addQuoteFields
@@ -10,6 +9,7 @@ import ext.getQuote
 import ext.required
 import ext.sendIncorrectQuote
 import net.dv8tion.jda.api.entities.MessageEmbed
+import type.CommandType
 
 class SearchQuote : BaseMultipageCommand<Quote>(
     commandName = "searchquote",

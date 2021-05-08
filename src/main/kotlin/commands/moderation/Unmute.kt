@@ -2,7 +2,6 @@ package commands.moderation
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Moderation
 import database.muteRole
 import ext.required
 import ext.sendUnmuteLog
@@ -11,6 +10,7 @@ import ext.useCommandProperly
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import type.CommandType.Moderation
 
 class Unmute : BaseCommand(
     commandName = "unmute",

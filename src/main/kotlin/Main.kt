@@ -2,7 +2,7 @@ import commandhandler.CommandListener
 import di.commandManagerModule
 import di.mapperModule
 import di.repositoryModule
-import di.retrofitModule
+import di.serviceModule
 import eventhandler.ActionListener
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
@@ -29,7 +29,7 @@ class Main {
             startKoin {
                 modules(
                     commandManagerModule,
-                    retrofitModule,
+                    serviceModule,
                     mapperModule,
                     repositoryModule
                 )

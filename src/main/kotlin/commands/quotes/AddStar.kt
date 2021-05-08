@@ -4,7 +4,6 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Quotes
 import database.collections.Quote
 import database.quotesCollection
 import ext.required
@@ -13,6 +12,7 @@ import ext.useCommandProperly
 import org.bson.conversions.Bson
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
+import type.CommandType.Quotes
 
 class AddStar : BaseCommand(
     commandName = "addstar",

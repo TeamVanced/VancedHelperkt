@@ -2,12 +2,12 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import database.collections.Emote
 import database.emotesCollection
 import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
+import type.CommandType.Fun
 
 class EmoteBoard : BaseCommand(
     commandName = "emoteboard",

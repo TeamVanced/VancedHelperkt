@@ -2,9 +2,9 @@ package commands.`fun`
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Fun
 import ext.required
 import ext.useArguments
+import type.CommandType.Fun
 
 class EightBall : BaseCommand(
     commandName = "8ball",

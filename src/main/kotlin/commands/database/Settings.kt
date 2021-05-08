@@ -2,12 +2,12 @@ package commands.database
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Database
 import database.*
 import ext.required
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.eq
+import type.CommandType.Database
 
 class Settings : BaseCommand(
     commandName = "settings",

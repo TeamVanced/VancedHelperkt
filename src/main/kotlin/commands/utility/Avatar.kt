@@ -2,10 +2,10 @@ package commands.utility
 
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Utility
 import ext.required
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import type.CommandType.Utility
 
 class Avatar : BaseCommand(
     commandName = "avatar",

@@ -3,9 +3,9 @@ package commands.dev
 import com.google.gson.Gson
 import commandhandler.CommandContext
 import commands.base.BaseCommand
-import type.CommandType.Dev
 import ext.required
 import ext.useCommandProperly
+import type.CommandType.Dev
 import java.awt.Color
 
 class CreateEmbed : BaseCommand(

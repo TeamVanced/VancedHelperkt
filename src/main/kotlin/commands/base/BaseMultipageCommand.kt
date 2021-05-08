@@ -1,12 +1,12 @@
 package commands.base
 
 import commandhandler.CommandContext
-import type.ArgumentType
-import type.CommandType
 import ext.useArguments
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import type.ArgumentType
+import type.CommandType
 
 abstract class BaseMultipageCommand <T> (
     override val commandName: String,
