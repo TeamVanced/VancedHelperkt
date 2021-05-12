@@ -23,9 +23,3 @@ jobs:
         
       - name: Build JAR
         run: ./gradlew jar
-
-      - name: Upload the JAR to GitHub artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: bot
-          path: build/libs/bot.jar

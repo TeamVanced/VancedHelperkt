@@ -1,11 +1,9 @@
 FROM gradle:jdk15
 LABEL maintainer="xfileFIN"
 WORKDIR /src
-COPY . /src
+COPY . /src/build/libs/bot.jar
 
-USER root
-RUN chown -R gradle /src
-RUN chmod +x /src/gradlew
-USER gradle
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ./gradlew run
+ENTRYPOINT ["/entrypoint.sh"]
