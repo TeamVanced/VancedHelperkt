@@ -2,9 +2,8 @@ package commands.base
 
 import commandhandler.CommandContext
 import ext.optional
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import ext.takeMax
+import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -32,7 +31,7 @@ abstract class BaseGuideCommand(
     abstract val jsonName: String
     private val emotes = listOf("⏪", "⬅️", trashEmote, "➡️", "⏩")
     private var embedPagerAdapter = mutableMapOf<MessageChannel, EmbedPagerAdapter>()
-    private lateinit var pagesWithTableOfContent: List<MessageEmbed>
+    private var pagesWithTableOfContent: List<MessageEmbed> = getTableOfContents()
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
@@ -68,50 +67,48 @@ abstract class BaseGuideCommand(
         }
     }
 
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            val tableDesc = mutableListOf("0 | You are here ;)")
-            val jsonArray = repository.fetch("$jsonName.json").data
-            val embedPages = mutableListOf<EmbedBuilder>()
-            val builtEmbedPages = mutableListOf<MessageEmbed>()
-            jsonArray.forEachIndexed { index, element ->
-                embedPages.add(
-                    embedBuilder.apply {
-                        setTitle(element.title)
-                        setDescription(element.description)
-                        val fields = element.fields
-                        fields?.forEach { field ->
-                            with (field) {
-                                addField(
-                                    title,
-                                    content,
-                                    false
-                                )
-                            }
-
+    private fun getTableOfContents() = runBlocking {
+        val tableDesc = mutableListOf("0 | You are here ;)")
+        val jsonArray = repository.fetch("$jsonName.json").data
+        val embedPages = mutableListOf<EmbedBuilder>()
+        val builtEmbedPages = mutableListOf<MessageEmbed>()
+        jsonArray.forEachIndexed { index, element ->
+            embedPages.add(
+                embedBuilder.apply {
+                    setTitle(element.title)
+                    setDescription(element.description)
+                    val fields = element.fields
+                    fields?.forEach { field ->
+                        with (field) {
+                            addField(
+                                title,
+                                content.takeMax(1024),
+                                false
+                            )
                         }
+
                     }
-                )
-                tableDesc.add("${index + 1} | ${element.title}")
-            }
-            for (i in embedPages.indices) {
-                val embed = embedPages[i]
-                embed.setFooter("Page ${i + 1}/${embedPages.size}")
-                builtEmbedPages.add(embed.build())
-            }
-            val tablePage = embedBuilder.apply {
-                setTitle("Index")
-                setDescription(
-                    "Review the table of contents below and jump to the page you need via reactions\n\n```\n${
-                        tableDesc.joinToString(
-                            "\n"
-                        )
-                    }\n```"
-                )
-                setFooter("page 0/${embedPages.size}")
-            }.build()
-            pagesWithTableOfContent = listOf(tablePage) + builtEmbedPages
+                }
+            )
+            tableDesc.add("${index + 1} | ${element.title}")
         }
+        for (i in embedPages.indices) {
+            val embed = embedPages[i]
+            embed.setFooter("Page ${i + 1}/${embedPages.size}")
+            builtEmbedPages.add(embed.build())
+        }
+        val tablePage = embedBuilder.apply {
+            setTitle("Index")
+            setDescription(
+                "Review the table of contents below and jump to the page you need via reactions\n\n```\n${
+                    tableDesc.joinToString(
+                        "\n"
+                    )
+                }\n```"
+            )
+            setFooter("page 0/${embedPages.size}")
+        }.build()
+        listOf(tablePage) + builtEmbedPages
     }
 
 }
