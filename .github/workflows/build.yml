@@ -20,6 +20,6 @@ jobs:
   
       - name: Grant rights
         run: chmod +x ./gradlew
-        
+
       - name: Build JAR
         run: ./gradlew jar
