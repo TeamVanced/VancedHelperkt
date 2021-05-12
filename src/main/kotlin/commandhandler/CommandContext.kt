@@ -10,4 +10,5 @@ data class CommandContext(
     val author get() = event.author
     val authorAsMember get() = event.guild.getMemberById(author.id)
     val guild get() = event.guild
+    val message get() = event.message
 }

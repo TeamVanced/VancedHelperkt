@@ -1,10 +1,10 @@
 package commands.utility
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Utility
+import commands.base.BaseCommand
 import ext.required
 import ext.useArguments
+import type.CommandType.Utility
 
 class Emote : BaseCommand(
     commandName = "emote",
@@ -33,9 +33,9 @@ class Emote : BaseCommand(
                     emotelinks.add("Not an emote")
                 }
             }
-            ctx.event.channel.sendMsg(emotelinks.distinct().joinToString("\n"))
+            ctx.message.replyMsg(emotelinks.distinct().joinToString("\n"))
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 

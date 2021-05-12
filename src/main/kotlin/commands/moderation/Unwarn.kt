@@ -3,13 +3,13 @@ package commands.moderation
 import com.mongodb.BasicDBObject
 import com.mongodb.client.model.Updates
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
 import database.warnsCollection
 import ext.*
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import type.CommandType.Moderation
 
 class Unwarn : BaseCommand(
     commandName = "unwarn",
@@ -25,18 +25,18 @@ class Unwarn : BaseCommand(
             val user = args[0]
             val id = user.filter { it.isDigit() }
             if (id.isEmpty()) {
-                ctx.channel.useCommandProperly()
+                ctx.message.useCommandProperly()
                 return
             }
             fun removeWarn(removeAction: (member: Member) -> Unit) {
                 ctx.guild.retrieveMemberById(id).queue({ member ->
                     removeAction(member)
-                    ctx.event.channel.sendMsg("Successfully unwarned ${member.user.asMention}")
+                    ctx.message.replyMsg("Successfully unwarned ${member.user.asMention}")
                     ctx.authorAsMember?.let { sendUnwarnLog(member.user, it.user, guildId) }
                 }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                    ctx.event.channel.sendMsg("Provided user does not exist!")
+                    ctx.message.replyMsg("Provided user does not exist!")
                 }.handle(ErrorResponse.UNKNOWN_MEMBER) {
-                    ctx.event.channel.sendMsg("Provided member does not exist!")
+                    ctx.message.replyMsg("Provided member does not exist!")
                 })
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -52,7 +52,7 @@ class Unwarn : BaseCommand(
                     } else {
                         val warnIndex = args[1]
                         if (warnIndex.toIntOrNull() == null) {
-                            ctx.event.channel.sendMsg("$warnIndex is not a valid warn")
+                            ctx.message.replyMsg("$warnIndex is not a valid warn")
                             return
                         }
                         removeWarn {
@@ -68,7 +68,7 @@ class Unwarn : BaseCommand(
                 }
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 

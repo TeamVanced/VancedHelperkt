@@ -1,8 +1,7 @@
 package commands.dev
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Dev
+import commands.base.BaseCommand
 import database.collections.EmoteRole
 import database.emoteRolesCollection
 import database.getEmoteRoles
@@ -10,6 +9,7 @@ import database.updateEmoteRoles
 import ext.required
 import ext.useArguments
 import ext.useCommandProperly
+import type.CommandType.Dev
 
 class EmoteRole : BaseCommand(
     commandName = "emoterole",
@@ -44,16 +44,16 @@ class EmoteRole : BaseCommand(
                             }
                         }
                     }
-                    ctx.event.channel.sendMsg("Successfully configured emote role!")
+                    ctx.message.replyMsg("Successfully configured emote role!")
                 } else {
                     guildId.updateEmoteRoles(messageId, emote, roleId)
-                    ctx.event.channel.sendMsg("Successfully reconfigured emote role!")
+                    ctx.message.replyMsg("Successfully reconfigured emote role!")
                 }
             } else {
-                ctx.channel.useCommandProperly()
+                ctx.message.useCommandProperly()
             }
         } else {
-            ctx.channel.useArguments(3)
+            ctx.message.useArguments(3)
         }
     }
 

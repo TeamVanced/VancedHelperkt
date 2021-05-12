@@ -1,9 +1,9 @@
 package commands.vanced
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Vanced
+import commands.base.BaseCommand
 import database.prefix
+import type.CommandType.Vanced
 
 class SupportUs : BaseCommand(
     commandName = "supportus",
@@ -13,7 +13,7 @@ class SupportUs : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        ctx.event.channel.sendMsg(
+        ctx.message.replyMsg(
             embedBuilder.apply {
                 setTitle("How to support us")
                 setDescription("Vanced does not take donations! This means, that any donation links you might find are fake!\n\nAs mentioned above, Vanced does not take donations, but there's other way to support us, that you can find below.")

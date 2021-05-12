@@ -1,14 +1,14 @@
 package ext
 
-import commands.BaseCommand
+import commands.base.BaseCommand
 import database.collections.Quote
 import database.quoteRoles
 import net.dv8tion.jda.api.entities.Member
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 
-fun BaseCommand.sendQuote(quote: Quote, channel: TextChannel) {
-    channel.sendMsg(
+fun BaseCommand.sendQuote(quote: Quote, message: Message) {
+    message.replyWithChecks(
         getQuote(quote)
     )
 }
@@ -25,8 +25,8 @@ fun BaseCommand.getQuote(quote: Quote): MessageEmbed {
     }.build()
 }
 
-fun TextChannel.sendIncorrectQuote() {
-    sendMessageWithChecks("That's not a valid quote bro")
+fun Message.sendIncorrectQuote() {
+    replyWithChecks("That's not a valid quote bro")
 }
 
 fun Member.hasQuotePerms(guildId: String): Boolean {
@@ -34,10 +34,10 @@ fun Member.hasQuotePerms(guildId: String): Boolean {
     return roles.any { quoteRoles.contains(it.id) }
 }
 
-fun BaseCommand.getQuote(quote: Quote?, channel: TextChannel) {
+fun BaseCommand.getQuote(quote: Quote?, message: Message) {
     if (quote != null) {
-        sendQuote(quote, channel)
+        sendQuote(quote, message)
     } else {
-        channel.sendIncorrectQuote()
+        message.sendIncorrectQuote()
     }
 }

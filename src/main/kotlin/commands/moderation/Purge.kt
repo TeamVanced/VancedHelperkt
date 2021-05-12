@@ -1,10 +1,10 @@
 package commands.moderation
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
 import ext.required
 import ext.useArguments
+import type.CommandType.Moderation
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 
@@ -22,21 +22,21 @@ class Purge : BaseCommand(
         if (args.isNotEmpty()) {
             val amount = args[0].toIntOrNull()
             if (amount == null || amount > 100 || amount < 2) {
-                ctx.event.channel.sendMsg("Provide a valid amount!")
+                ctx.message.replyMsg("Provide a valid amount!")
                 return
             }
             ctx.channel.history.retrievePast(amount).queue { messagesList ->
                 val messages = messagesList.filter { !it.timeCreated.isBefore(OffsetDateTime.now().minus(2, ChronoUnit.WEEKS)) }.take(100)
                 if (messages.isEmpty()) {
-                    ctx.event.channel.sendMsg("Messages not found!")
+                    ctx.message.replyMsg("Messages not found!")
                     return@queue
                 }
                 ctx.channel.deleteMessages(messages).queue {
-                    ctx.event.channel.sendMsg("Succesfully deleted $amount messages")
+                    ctx.message.replyMsg("Succesfully deleted $amount messages")
                 }
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
 
     }

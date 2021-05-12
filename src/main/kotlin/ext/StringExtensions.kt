@@ -1,6 +1,6 @@
 package ext
 
-import commands.ArgumentType
+import type.ArgumentType
 
 fun String.optional(): Pair<String, ArgumentType> = this to ArgumentType.Optional
 

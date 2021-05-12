@@ -1,13 +1,14 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
 import database.collections.Emote
 import database.emotesCollection
 import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
+import org.litote.kmongo.nin
+import type.CommandType.Fun
 
 class EmoteBoard : BaseCommand(
     commandName = "emoteboard",
@@ -25,10 +26,10 @@ class EmoteBoard : BaseCommand(
         if (args.isEmpty()) {
             val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.take(10)
             if (ebemotes.isEmpty()) {
-                ctx.event.channel.sendMsg("Frequently used emotes not found")
+                ctx.message.replyMsg("Frequently used emotes not found")
                 return
             }
-            ctx.event.channel.sendMsg(
+            ctx.message.replyMsg(
                 embedBuilder.apply {
                     setTitle("Emoteboard")
                     val description = mutableListOf<String>()
@@ -49,7 +50,7 @@ class EmoteBoard : BaseCommand(
                         notUsedCounter += it.emote.length + 1 // + 1 is for " "
                         notUsedCounter < 1021
                     }
-                    ctx.event.channel.sendMsg(
+                    ctx.message.replyMsg(
                         embedBuilder.apply {
                             setTitle("Emoteboard")
                             ebemotes.forEach {
@@ -65,10 +66,14 @@ class EmoteBoard : BaseCommand(
                 }
                 "clean" -> {
                     emotesCollection.deleteMany(Emote::usedCount eq 0)
-                    ctx.event.channel.sendMsg("Successfully removed unused emotes from database")
+                    ctx.message.replyMsg("Successfully removed unused emotes from database")
+                }
+                "cleanserver" -> {
+                    emotesCollection.deleteMany(Emote::emote nin ctx.guild.emotes.map { "<:${it.name}:${it.id}>" })
+                    ctx.message.replyMsg("Successfully removed emotes that are not from this server from database")
                 }
                 else -> {
-                    ctx.channel.useCommandProperly()
+                    ctx.message.useCommandProperly()
                 }
             }
         }

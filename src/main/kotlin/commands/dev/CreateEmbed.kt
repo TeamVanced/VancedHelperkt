@@ -1,11 +1,11 @@
 package commands.dev
 
-import com.beust.klaxon.Klaxon
+import com.google.gson.Gson
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Dev
+import commands.base.BaseCommand
 import ext.required
 import ext.useCommandProperly
+import type.CommandType.Dev
 import java.awt.Color
 
 class CreateEmbed : BaseCommand(
@@ -22,10 +22,10 @@ class CreateEmbed : BaseCommand(
         val args = ctx.args
         if (args.isNotEmpty()) {
             val json = args.joinToString(" ")
-            ctx.event.channel.sendMsg(
+            ctx.message.replyMsg(
                 embedBuilder.apply {
                     try {
-                        with(Klaxon().parse<JsonEmbed>(json)) {
+                        with(Gson().fromJson(json, JsonEmbed::class.java)) {
                             setTitle(this?.title)
                             setDescription(this?.description)
                             if (this?.fields != null) {
@@ -46,13 +46,13 @@ class CreateEmbed : BaseCommand(
                             }
                         }
                     } catch (e: Exception) {
-                        ctx.event.channel.sendMsg("Could not create an embed")
+                        ctx.message.replyMsg("Could not create an embed")
                         return
                     }
                 }.build()
             )
         } else {
-            ctx.channel.useCommandProperly()
+            ctx.message.useCommandProperly()
         }
     }
 

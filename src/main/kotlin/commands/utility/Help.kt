@@ -1,13 +1,12 @@
 package commands.utility
 
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Utility
+import commands.base.BaseCommand
 import database.prefix
 import ext.optional
+import type.CommandType.Utility
 
-class Help(private val commandManager: CommandManager) : BaseCommand(
+class Help : BaseCommand(
     commandName = "help",
     commandDescription = "Get all available commands from bot",
     commandType = Utility,
@@ -22,9 +21,9 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
         if (args.isNotEmpty()) {
             val command = commandManager.getCommand(args[0])
             if (command != null) {
-                ctx.event.channel.sendMsg((command).getHelpEmbed())
+                ctx.message.replyMsg((command).getHelpEmbed())
             } else {
-                ctx.event.channel.sendMsg("Command not found!")
+                ctx.message.replyMsg("Command not found!")
             }
         } else {
             val commands = mutableMapOf<String, List<String>>()
@@ -43,7 +42,7 @@ class Help(private val commandManager: CommandManager) : BaseCommand(
                     false
                 )
             }
-            ctx.event.channel.sendMsg(embed.build())
+            ctx.message.replyMsg(embed.build())
         }
     }
 

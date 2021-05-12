@@ -1,12 +1,12 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
 import database.collections.Quote
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.eq
+import type.CommandType.Quotes
 
 class RandomQuote : BaseCommand(
     commandName = "randomquote",
@@ -23,16 +23,16 @@ class RandomQuote : BaseCommand(
             if (userId.matches(contentIDRegex)) {
                 val quote = quotesCollection.find(Quote::authorID eq userId)
                 try {
-                    ctx.event.channel.sendMsg(getQuote(quote.toList().random()))
+                    ctx.message.replyMsg(getQuote(quote.toList().random()))
                 } catch (e: NoSuchElementException) {
-                    ctx.event.channel.sendMsg("There are no quotes in this server from the provided! Try adding some")
+                    ctx.message.replyMsg("There are no quotes in this server from the provided! Try adding some")
                 }
             }
         } else {
             try {
-                ctx.event.channel.sendMsg(getQuote(quotesCollection.find().toList().random()))
+                ctx.message.replyMsg(getQuote(quotesCollection.find().toList().random()))
             } catch (e: NoSuchElementException) {
-                ctx.event.channel.sendMsg("There are no quotes in this server! Try adding some")
+                ctx.message.replyMsg("There are no quotes in this server! Try adding some")
             }
         }
 

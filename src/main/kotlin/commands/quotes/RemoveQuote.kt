@@ -2,12 +2,12 @@ package commands.quotes
 
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
 import database.collections.Quote
 import database.quotesCollection
 import ext.*
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.Message
+import type.CommandType.Quotes
 
 class RemoveQuote : BaseCommand(
     commandName = "removequote",
@@ -20,7 +20,7 @@ class RemoveQuote : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.event.channel.sendMsg("You are not allowed to use this command")
+            ctx.message.replyMsg("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -29,25 +29,25 @@ class RemoveQuote : BaseCommand(
             val guildFilter = BasicDBObject().append("guildID", ctx.guild.id)
             when {
                 args0.matches(contentIDRegex) -> quotesCollection.findOneAndDelete(guildFilter.append("messageID", args0))
-                    .checkDelete(ctx.channel)
+                    .checkDelete(ctx.message)
                 args0.toLongOrNull() != null -> quotesCollection.findOneAndDelete(
                     guildFilter.append(
                         "quoteId",
                         args0.toLong()
                     )
-                ).checkDelete(ctx.channel)
-                else -> ctx.channel.useCommandProperly()
+                ).checkDelete(ctx.message)
+                else -> ctx.message.useCommandProperly()
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 
-    private fun Quote?.checkDelete(channel: TextChannel) {
+    private fun Quote?.checkDelete(channel: Message) {
         if (this == null) {
             channel.sendIncorrectQuote()
         } else {
-            channel.sendMsg("Quote $quoteId deleted successfully!")
+            channel.replyMsg("Quote $quoteId deleted successfully!")
         }
     }
 

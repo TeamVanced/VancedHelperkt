@@ -1,14 +1,17 @@
 package commands.moderation
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
 import database.muteRole
-import ext.*
+import ext.required
+import ext.sendMuteLog
+import ext.useArguments
+import ext.useCommandProperly
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import type.CommandType.Moderation
 
 class Mute : BaseCommand(
     commandName = "mute",
@@ -31,7 +34,7 @@ class Mute : BaseCommand(
                 }
             }
 
-            ctx.event.channel.sendMsg("Mute role does not exist, creating...") {
+            ctx.message.replyMsg("Mute role does not exist, creating...") {
                 ctx.guild.createRole().setName("VancedHelper-Mute").queue({ role ->
                     val shardManager = ctx.event.jda.shardManager
                     ctx.guild.channels.forEach {
@@ -40,11 +43,11 @@ class Mute : BaseCommand(
                     addRole(args, user, role, ctx)
                     guildId.muteRole = role.id
                 }, ErrorHandler().handle(ErrorResponse.MAX_ROLES_PER_GUILD) {
-                    ctx.event.channel.sendMsg("Guild reached maximum amount of roles!")
+                    ctx.message.replyMsg("Guild reached maximum amount of roles!")
                 })
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 
@@ -52,24 +55,24 @@ class Mute : BaseCommand(
         val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
         val id = user.filter { it.isDigit() }
         if (id.isEmpty()) {
-            ctx.channel.useCommandProperly()
+            ctx.message.useCommandProperly()
             return
         }
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    ctx.event.channel.sendMsg("You can't mute this member!")
+                    ctx.message.replyMsg("You can't mute this member!")
                     return@queue
                 }
                 ctx.guild.addRoleToMember(member, role).queue {
-                    ctx.event.channel.sendMsg("Successfully muted ${member.asMention}")
+                    ctx.message.replyMsg("Successfully muted ${member.asMention}")
                     ctx.authorAsMember?.let { it1 -> sendMuteLog(member.user, it1.user, reason, guildId) }
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                ctx.event.channel.sendMsg("Provided user does not exist!")
+                ctx.message.replyMsg("Provided user does not exist!")
             })
         } else {
-            ctx.channel.useCommandProperly()
+            ctx.message.useCommandProperly()
         }
     }
 

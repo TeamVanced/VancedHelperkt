@@ -1,9 +1,9 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
 import ext.optional
+import type.CommandType.Fun
 import utils.pressF
 
 class F : BaseCommand(
@@ -18,9 +18,9 @@ class F : BaseCommand(
         super.execute(ctx)
         val args = ctx.args
         if (args.isNotEmpty()) {
-            ctx.event.channel.sendMsg("$pressF ${ctx.author.name} pays respect for ${args.joinToString(" ")}")
+            ctx.message.replyMsg("$pressF ${ctx.author.name} pays respect for ${args.joinToString(" ")}")
         } else {
-            ctx.event.channel.sendMsg(pressF)
+            ctx.message.replyMsg(pressF)
         }
     }
 

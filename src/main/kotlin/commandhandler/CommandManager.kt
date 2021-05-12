@@ -1,25 +1,18 @@
 package commandhandler
 
-import commands.BaseCommand
-import commands.CommandType
-import commands.`fun`.*
-import commands.database.Settings
-import commands.dev.CreateEmbed
-import commands.dev.EmoteRole
-import commands.moderation.*
-import commands.quotes.*
-import commands.utility.*
-import commands.vanced.*
+import commands.base.BaseCommand
 import database.modRoles
 import database.owners
 import database.prefix
-import ext.sendMessageWithChecks
+import ext.replyWithChecks
 import ext.sendStacktrace
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent
 import net.dv8tion.jda.api.exceptions.ErrorHandler
 import net.dv8tion.jda.api.requests.ErrorResponse
+import org.reflections.Reflections
+import type.CommandType
 
 class CommandManager {
 
@@ -47,7 +40,7 @@ class CommandManager {
 
     fun execute(event: GuildMessageReceivedEvent) {
         val inputText = event.message.contentRaw.removePrefix(event.guild.id.prefix).split("\\s+".toRegex())
-        val command = getCommand(inputText[0].toLowerCase())
+        val command = getCommand(inputText[0].lowercase())
 
         if (command != null) {
             execWithChecks(command, event, inputText)
@@ -63,19 +56,18 @@ class CommandManager {
         val guild = event.guild
 
         guild.retrieveMemberById(event.author.id).queue { member ->
-            if ((command.devOnly && !owners.contains(member.id)) || (command.commandType == CommandType.Moderation && !member.roles.any {
-                    modRoles.contains(
-                        it.id
-                    )
-                })) {
-                event.channel.sendMessageWithChecks("You are not allowed to use this command!")
+            if (
+                (command.devOnly && !owners.contains(member.id))
+                || (command.commandType == CommandType.Moderation && !(member.roles.any { modRoles.contains(it.id) } && owners.contains(member.id)))
+            ) {
+                event.message.replyWithChecks("You are not allowed to use this command!")
                 return@queue
             }
 
             try {
                 command.execute(commandContext)
             } catch (e: Exception) {
-                event.channel.sendMessageWithChecks("Sorry, something went wrong")
+                event.message.replyWithChecks("Sorry, something went wrong")
                 guild.sendStacktrace(e.cause?.message, e.stackTraceToString())
             }
         }
@@ -97,46 +89,10 @@ class CommandManager {
     }
 
     init {
-        arrayOf(
-            Settings(),
-            CreateEmbed(),
-            EmoteRole(),
-            Country(),
-            EightBall(),
-            Emote(),
-            EmoteBoard(),
-            F(),
-            Gender(),
-            How(),
-            IQ(),
-            PPSize(),
-            Mute(),
-            Purge(),
-            Unmute(),
-            Unwarn(),
-            Warn(),
-            Warns(),
-            AddQuote(),
-            AddStar(),
-            GetQuote(this),
-            Quote(this),
-            RandomQuote(),
-            RemoveQuote(),
-            RemoveStar(),
-            SearchQuote(),
-            StarBoard(),
-            Avatar(),
-            BAT(),
-            Colourme(),
-            Help(this),
-            Ping(),
-            BugReport(),
-            Features(),
-            Info(),
-            SupportUs(),
-            Troubleshoot()
-        ).forEach {
-            addCommand(it)
+        Reflections("commands").getSubTypesOf(BaseCommand::class.java).forEach {
+            try {
+                addCommand(it.getDeclaredConstructor().newInstance())
+            } catch (e: NoSuchMethodException) {}
         }
     }
 

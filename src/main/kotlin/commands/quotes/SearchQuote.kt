@@ -1,8 +1,7 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commands.BaseMultipageCommand
-import commands.CommandType
+import commands.base.BaseMultipageCommand
 import database.collections.Quote
 import database.quotesCollection
 import ext.addQuoteFields
@@ -10,6 +9,7 @@ import ext.getQuote
 import ext.required
 import ext.sendIncorrectQuote
 import net.dv8tion.jda.api.entities.MessageEmbed
+import type.CommandType
 
 class SearchQuote : BaseMultipageCommand<Quote>(
     commandName = "searchquote",
@@ -29,6 +29,6 @@ class SearchQuote : BaseMultipageCommand<Quote>(
 
     override fun getItems(args: MutableList<String>): List<Quote> = quotesCollection.find().filter { it.messageContent.contains(args.joinToString(" "), true) }.sortedByDescending { it.stars.size }.take(10)
 
-    override fun handleEmptylist(ctx: CommandContext) = ctx.channel.sendIncorrectQuote()
+    override fun handleEmptylist(ctx: CommandContext) = ctx.message.sendIncorrectQuote()
 
 }

@@ -2,14 +2,14 @@ package commands.moderation
 
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Moderation
+import commands.base.BaseCommand
 import database.warnsCollection
 import ext.required
 import ext.takeMax
 import ext.useArguments
 import ext.useCommandProperly
 import org.litote.kmongo.findOne
+import type.CommandType.Moderation
 
 class Warns : BaseCommand(
     commandName = "warns",
@@ -25,7 +25,7 @@ class Warns : BaseCommand(
             val user = args[0]
             val id = user.filter { it.isDigit() }
             if (id.isEmpty()) {
-                ctx.channel.useCommandProperly()
+                ctx.message.useCommandProperly()
                 return
             }
             val filter = BasicDBObject("userId", id).append("guildId", guildId)
@@ -33,7 +33,7 @@ class Warns : BaseCommand(
             if (warn != null) {
                 val reasons = warn.reasons
                 if (reasons.isNotEmpty()) {
-                    ctx.event.channel.sendMsg(
+                    ctx.message.replyMsg(
                         embedBuilder.apply {
                             setTitle("Warns for ${warn.userName}")
                             for (i in reasons.indices) {
@@ -46,13 +46,13 @@ class Warns : BaseCommand(
                         }.build()
                     )
                 } else {
-                    ctx.event.channel.sendMsg("User $user has no warns")
+                    ctx.message.replyMsg("User $user has no warns")
                 }
             } else {
-                ctx.event.channel.sendMsg("User $user has no warns")
+                ctx.message.replyMsg("User $user has no warns")
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 

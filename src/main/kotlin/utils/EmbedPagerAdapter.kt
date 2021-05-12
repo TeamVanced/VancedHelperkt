@@ -1,6 +1,6 @@
 package utils
 
-import commands.BaseCommand
+import commands.base.BaseCommand
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent

@@ -1,12 +1,16 @@
 package commands.utility
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Utility
+import commands.base.BaseCommand
 import config
 import ext.optional
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.core.component.inject
+import repository.coin.CoinRepositoryImpl
+import type.CommandType.Utility
 import utils.*
-import java.text.DecimalFormat
 
 class BAT : BaseCommand(
     commandName = "bat",
@@ -15,58 +19,66 @@ class BAT : BaseCommand(
     commandType = Utility
 ) {
 
+    private val repository by inject<CoinRepositoryImpl>()
+
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        val json = "https://coinlib.io/api/v1/coin?key=${config.coinlibToken}&pref=EUR&symbol=BAT".getJson()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = repository.get(
+                    token = config.coinlibToken,
+                    pref = "EUR",
+                    symbol = "BAT"
+                )
 
-        val args = ctx.args
-        val channel = ctx.event.channel
+                val args = ctx.args
+                val message = ctx.message
 
-        val price = json?.string("price")?.toDouble()
-        if (args.isNotEmpty()) {
-            val amount = args[0].toIntOrNull()
-            if (amount != null) {
-                if (price != null) {
-                    channel.sendMsg(
-                        "${amount * price} EUR"
+                val price = response.price
+                if (args.isNotEmpty()) {
+                    val amount = args[0].toIntOrNull()
+                    if (amount != null) {
+                        message.replyMsg(
+                            "${amount * price} EUR"
+                        )
+                    } else {
+                        message.replyMsg("Provided argument is not a number!")
+                    }
+                } else {
+                    message.replyMsg(
+                        embedBuilder.apply {
+                            setTitle("${response.name} (${response.symbol})")
+                            addField(
+                                "EUR",
+                                price.toString(),
+                                false
+                            )
+                            addField(
+                                "Price Change",
+                                "`1h` - ${response.delta1H.stonkify()}\n" +
+                                        "`24h` - ${response.delta24H.stonkify()}\n" +
+                                        "`7d` - ${response.delta7D.stonkify()}\n" +
+                                        "`30d` - ${response.delta30D.stonkify()}",
+                                false
+                            )
+                            setFooter("Powered by coinlib.io")
+                        }.build()
                     )
                 }
-            } else {
-                channel.sendMsg("Provided argument is not a number!")
+            } catch (e: Exception) {
+                ctx.message.replyMsg("An error occurred while trying to fetch data")
             }
-        } else {
-            channel.sendMsg(
-                embedBuilder.apply {
-                    setTitle("${json?.string("name")} (${json?.string("symbol")})")
-                    addField(
-                        "EUR",
-                        price.apply { DecimalFormat("#.#####").format(this) }.toString(),
-                        false
-                    )
-                    addField(
-                        "Price Change",
-                        "`1h` - ${json?.string("delta_1h")?.stonkify()}\n" +
-                                "`24h` - ${json?.string("delta_24h")?.stonkify()}\n" +
-                                "`7d` - ${json?.string("delta_7d")?.stonkify()}\n" +
-                                "`30d` - ${json?.string("delta_30d")?.stonkify()}",
-                        false
-                    )
-                    setFooter("Powered by coinlib.io")
-                }.build()
-            )
         }
     }
 
-    private fun String.stonkify(): String {
-        val price = Integer.parseInt(this.toDouble().toInt().toString(), 10)
-        return when {
-            price >= 25 -> "$relax $this%"
-            price >= 5 -> "$vmerchant $this%"
-            price >= 0 -> "$stonks $this%"
-            price <= -5 -> "$feels $this%"
-            price <= -25 -> "$sadness $this%"
+    private fun Double.stonkify(): String =
+        when {
+            this >= 25 -> "$relax $this%"
+            this >= 5 -> "$vmerchant $this%"
+            this >= 0 -> "$stonks $this%"
+            this <= -5 -> "$feels $this%"
+            this <= -25 -> "$sadness $this%"
             else -> "$stinks $this%"
         }
-    }
 
 }

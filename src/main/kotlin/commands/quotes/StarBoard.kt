@@ -1,14 +1,14 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commands.BaseMultipageCommand
-import commands.CommandType.Quotes
+import commands.base.BaseMultipageCommand
 import database.collections.Quote
 import database.quotesCollection
 import ext.addQuoteFields
 import ext.getQuote
 import net.dv8tion.jda.api.entities.MessageEmbed
 import org.litote.kmongo.eq
+import type.CommandType.Quotes
 
 class StarBoard : BaseMultipageCommand<Quote>(
     commandName = "starboard",

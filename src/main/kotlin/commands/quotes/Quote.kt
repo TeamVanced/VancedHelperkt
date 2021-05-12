@@ -1,16 +1,13 @@
 package commands.quotes
 
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
 import ext.optional
 import ext.useArguments
 import ext.useCommandProperly
+import type.CommandType.Quotes
 
-class Quote(
-    private val commandManager: CommandManager
-) : BaseCommand(
+class Quote  : BaseCommand(
     commandName = "quote",
     commandDescription = "Quote manager",
     commandType = Quotes,
@@ -23,7 +20,7 @@ class Quote(
         val event = ctx.event
         if (args.isNotEmpty()) {
             with(commandManager) {
-                val command = when (val cmd = args[0].toLowerCase()) {
+                val command = when (val cmd = args[0].lowercase()) {
                     "get" -> getCommand("getquote")
                     "add" -> getCommand("addquote")
                     "remove" -> getCommand("removequote")
@@ -36,11 +33,11 @@ class Quote(
                         args.no0
                     )
                 } else {
-                    ctx.channel.useCommandProperly()
+                    ctx.message.useCommandProperly()
                 }
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
 
     }

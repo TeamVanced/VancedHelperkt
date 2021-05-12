@@ -2,16 +2,13 @@ package commands.quotes
 
 import com.mongodb.BasicDBObject
 import commandhandler.CommandContext
-import commandhandler.CommandManager
-import commands.BaseCommand
-import commands.CommandType.Quotes
+import commands.base.BaseCommand
 import database.quotesCollection
 import ext.getQuote
 import org.litote.kmongo.findOne
+import type.CommandType.Quotes
 
-class GetQuote(
-    private val commandManager: CommandManager
-) : BaseCommand(
+class GetQuote : BaseCommand(
     commandName = "getquote",
     commandDescription = "Get a quote",
     commandType = Quotes,
@@ -26,7 +23,7 @@ class GetQuote(
         if (args.isNotEmpty()) {
             val message = args[0]
             when {
-                message.matches(contentIDRegex) -> getQuote(quotesCollection.findOne(guildFilter.append("messageID", message)), ctx.channel)
+                message.matches(contentIDRegex) -> getQuote(quotesCollection.findOne(guildFilter.append("messageID", message)), ctx.message)
                 message.toLongOrNull() != null -> getQuote(
                     quotesCollection.findOne(
                         guildFilter.append(
@@ -34,7 +31,7 @@ class GetQuote(
                             message.toLong()
                         )
                     ),
-                    ctx.channel
+                    ctx.message
                 )
                 else -> commandManager.getCommand("searchquote")?.execute(ctx)
             }

@@ -1,10 +1,10 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
 import ext.required
 import ext.useArguments
+import type.CommandType.Fun
 
 class EightBall : BaseCommand(
     commandName = "8ball",
@@ -40,9 +40,9 @@ class EightBall : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.args.isNotEmpty()) {
-            ctx.event.channel.sendMsg(responses.random())
+            ctx.message.replyMsg(responses.random())
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
 
     }

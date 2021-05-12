@@ -1,11 +1,11 @@
 package commands.`fun`
 
 import commandhandler.CommandContext
-import commands.BaseCommand
-import commands.CommandType.Fun
+import commands.base.BaseCommand
 import ext.optional
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.Message
 import org.apache.commons.math3.distribution.NormalDistribution
+import type.CommandType.Fun
 
 class PPSize : BaseCommand(
     commandName = "ppsize",
@@ -19,19 +19,19 @@ class PPSize : BaseCommand(
         super.execute(ctx)
         val args = ctx.args
         val event = ctx.event
-        val channel = ctx.channel
+        val message = ctx.message
         if (args.isNotEmpty()) {
-            channel.calculatePPSize(args.joinToString(" "))
+            message.calculatePPSize(args.joinToString(" "))
         } else {
-            channel.calculatePPSize(event.author.asMention)
+            message.calculatePPSize(event.author.asMention)
         }
 
     }
 
-    private fun TextChannel.calculatePPSize(thing: String) {
+    private fun Message.calculatePPSize(thing: String) {
         val ppsize = calcPP()
         val bar = "8" + "=".repeat(ppsize) + "D"
-        sendMsg(
+        replyMsg(
             embedBuilder.apply {
                 setTitle("PP Size Calculator")
                 setDescription("$thing has a PP size of $ppsize inches\n$bar")
