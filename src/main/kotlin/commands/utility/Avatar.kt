@@ -28,16 +28,16 @@ class Avatar : BaseCommand(
 
     private fun sendAvatar(userId: String, ctx: CommandContext) {
         if (userId.isEmpty()) {
-            ctx.event.channel.sendMsg("Provided user does not exist!")
+            ctx.message.replyMsg("Provided user does not exist!")
             return
         }
         ctx.guild.retrieveMemberById(userId).queue({
             val userUrl = it.user.avatarUrl
             if (userUrl == null) {
-                ctx.event.channel.sendMsg("Could not get Avatar URL for you")
+                ctx.message.replyMsg("Could not get Avatar URL for you")
                 return@queue
             }
-            ctx.event.channel.sendMsg(
+            ctx.message.replyMsg(
                 embedBuilder.apply {
                     val url = "$userUrl?size=256"
                     setTitle("${it.user.name}'s avatar")
@@ -46,7 +46,7 @@ class Avatar : BaseCommand(
                 }.build()
             )
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-            ctx.event.channel.sendMsg("Provided user does not exist!")
+            ctx.message.replyMsg("Provided user does not exist!")
         })
 
     }

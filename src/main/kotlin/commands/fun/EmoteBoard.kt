@@ -25,10 +25,10 @@ class EmoteBoard : BaseCommand(
         if (args.isEmpty()) {
             val ebemotes: List<Emote> = emotesCollection.find(Emote::guildId eq guildId).filter { it.usedCount > 0 }.sortedByDescending { it.usedCount }.take(10)
             if (ebemotes.isEmpty()) {
-                ctx.event.channel.sendMsg("Frequently used emotes not found")
+                ctx.message.replyMsg("Frequently used emotes not found")
                 return
             }
-            ctx.event.channel.sendMsg(
+            ctx.message.replyMsg(
                 embedBuilder.apply {
                     setTitle("Emoteboard")
                     val description = mutableListOf<String>()
@@ -49,7 +49,7 @@ class EmoteBoard : BaseCommand(
                         notUsedCounter += it.emote.length + 1 // + 1 is for " "
                         notUsedCounter < 1021
                     }
-                    ctx.event.channel.sendMsg(
+                    ctx.message.replyMsg(
                         embedBuilder.apply {
                             setTitle("Emoteboard")
                             ebemotes.forEach {
@@ -65,10 +65,10 @@ class EmoteBoard : BaseCommand(
                 }
                 "clean" -> {
                     emotesCollection.deleteMany(Emote::usedCount eq 0)
-                    ctx.event.channel.sendMsg("Successfully removed unused emotes from database")
+                    ctx.message.replyMsg("Successfully removed unused emotes from database")
                 }
                 else -> {
-                    ctx.channel.useCommandProperly()
+                    ctx.message.useCommandProperly()
                 }
             }
         }

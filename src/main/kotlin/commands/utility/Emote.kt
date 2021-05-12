@@ -33,9 +33,9 @@ class Emote : BaseCommand(
                     emotelinks.add("Not an emote")
                 }
             }
-            ctx.event.channel.sendMsg(emotelinks.distinct().joinToString("\n"))
+            ctx.message.replyMsg(emotelinks.distinct().joinToString("\n"))
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 

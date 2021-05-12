@@ -23,7 +23,7 @@ class GetQuote : BaseCommand(
         if (args.isNotEmpty()) {
             val message = args[0]
             when {
-                message.matches(contentIDRegex) -> getQuote(quotesCollection.findOne(guildFilter.append("messageID", message)), ctx.channel)
+                message.matches(contentIDRegex) -> getQuote(quotesCollection.findOne(guildFilter.append("messageID", message)), ctx.message)
                 message.toLongOrNull() != null -> getQuote(
                     quotesCollection.findOne(
                         guildFilter.append(
@@ -31,7 +31,7 @@ class GetQuote : BaseCommand(
                             message.toLong()
                         )
                     ),
-                    ctx.channel
+                    ctx.message
                 )
                 else -> commandManager.getCommand("searchquote")?.execute(ctx)
             }

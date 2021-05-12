@@ -29,6 +29,6 @@ class SearchQuote : BaseMultipageCommand<Quote>(
 
     override fun getItems(args: MutableList<String>): List<Quote> = quotesCollection.find().filter { it.messageContent.contains(args.joinToString(" "), true) }.sortedByDescending { it.stars.size }.take(10)
 
-    override fun handleEmptylist(ctx: CommandContext) = ctx.channel.sendIncorrectQuote()
+    override fun handleEmptylist(ctx: CommandContext) = ctx.message.sendIncorrectQuote()
 
 }

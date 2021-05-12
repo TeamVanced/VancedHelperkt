@@ -22,24 +22,24 @@ class Warn : BaseCommand(
             val reason = if (args.size > 1) args.apply { remove(user) }.joinToString(" ") else "no reason provided"
             val id = user.filter { it.isDigit() }
             if (id.isEmpty()) {
-                ctx.channel.useCommandProperly()
+                ctx.message.useCommandProperly()
                 return
             }
             ctx.guild.retrieveMemberById(id).queue({ member ->
                 if (!ctx.authorAsMember?.canInteract(member)!!) {
-                    ctx.event.channel.sendMsg("You can't warn this member!")
+                    ctx.message.replyMsg("You can't warn this member!")
                     return@queue
                 }
                 member.warn(ctx.author, guildId, reason, ctx.channel)
-                ctx.event.channel.sendMsg("Successfully warned ${member.user.asMention}")
+                ctx.message.replyMsg("Successfully warned ${member.user.asMention}")
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                ctx.event.channel.sendMsg("Provided user does not exist!")
+                ctx.message.replyMsg("Provided user does not exist!")
             }.handle(ErrorResponse.UNKNOWN_MEMBER) {
-                ctx.event.channel.sendMsg("Provided member does not exist!")
+                ctx.message.replyMsg("Provided member does not exist!")
             })
 
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 

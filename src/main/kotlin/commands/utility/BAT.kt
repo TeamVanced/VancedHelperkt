@@ -31,20 +31,20 @@ class BAT : BaseCommand(
             )
 
             val args = ctx.args
-            val channel = ctx.event.channel
+            val message = ctx.message
 
             val price = response.price
             if (args.isNotEmpty()) {
                 val amount = args[0].toIntOrNull()
                 if (amount != null) {
-                    channel.sendMsg(
+                    message.replyMsg(
                         "${amount * price} EUR"
                     )
                 } else {
-                    channel.sendMsg("Provided argument is not a number!")
+                    message.replyMsg("Provided argument is not a number!")
                 }
             } else {
-                channel.sendMsg(
+                message.replyMsg(
                     embedBuilder.apply {
                         setTitle("${response.name} (${response.symbol})")
                         addField(

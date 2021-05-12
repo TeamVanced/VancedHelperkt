@@ -44,16 +44,16 @@ class EmoteRole : BaseCommand(
                             }
                         }
                     }
-                    ctx.event.channel.sendMsg("Successfully configured emote role!")
+                    ctx.message.replyMsg("Successfully configured emote role!")
                 } else {
                     guildId.updateEmoteRoles(messageId, emote, roleId)
-                    ctx.event.channel.sendMsg("Successfully reconfigured emote role!")
+                    ctx.message.replyMsg("Successfully reconfigured emote role!")
                 }
             } else {
-                ctx.channel.useCommandProperly()
+                ctx.message.useCommandProperly()
             }
         } else {
-            ctx.channel.useArguments(3)
+            ctx.message.useArguments(3)
         }
     }
 

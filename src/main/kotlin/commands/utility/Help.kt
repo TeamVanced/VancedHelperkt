@@ -21,9 +21,9 @@ class Help : BaseCommand(
         if (args.isNotEmpty()) {
             val command = commandManager.getCommand(args[0])
             if (command != null) {
-                ctx.event.channel.sendMsg((command).getHelpEmbed())
+                ctx.message.replyMsg((command).getHelpEmbed())
             } else {
-                ctx.event.channel.sendMsg("Command not found!")
+                ctx.message.replyMsg("Command not found!")
             }
         } else {
             val commands = mutableMapOf<String, List<String>>()
@@ -42,7 +42,7 @@ class Help : BaseCommand(
                     false
                 )
             }
-            ctx.event.channel.sendMsg(embed.build())
+            ctx.message.replyMsg(embed.build())
         }
     }
 

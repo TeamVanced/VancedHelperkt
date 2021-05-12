@@ -4,7 +4,7 @@ import commandhandler.CommandContext
 import commandhandler.CommandManager
 import commandhandler.IMessageReactionListener
 import database.prefix
-import ext.sendMessageWithChecks
+import ext.replyWithChecks
 import ext.transformToArg
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
@@ -51,7 +51,7 @@ open class BaseCommand(
 
     @OverridingMethodsMustInvokeSuper
     open fun execute(ctx: CommandContext) {
-        userMessage[ctx.channel] = ctx.event.message
+        userMessage[ctx.channel] = ctx.message
         guildId = ctx.guild.id
     }
 
@@ -71,15 +71,15 @@ open class BaseCommand(
 
     override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
 
-    inline fun TextChannel.sendMsg(message: String, crossinline onSend: (message: Message) -> Unit = {}) {
-        sendMessageWithChecks(message) {
+    inline fun Message.replyMsg(message: String, crossinline onSend: (message: Message) -> Unit = {}) {
+        replyWithChecks(message) {
             it.addReaction()
             onSend(it)
         }
     }
 
-    inline fun TextChannel.sendMsg(embed: MessageEmbed, crossinline onSend: (message: Message) -> Unit = {}) {
-        sendMessageWithChecks(embed) {
+    inline fun Message.replyMsg(embed: MessageEmbed, crossinline onSend: (message: Message) -> Unit = {}) {
+        replyWithChecks(embed) {
             it.addReaction()
             onSend(it)
         }

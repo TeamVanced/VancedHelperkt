@@ -28,17 +28,17 @@ class Unmute : BaseCommand(
             if (role != null) {
                 removeRole(user, role, ctx)
             } else {
-                ctx.event.channel.sendMsg("Mute role does not exist, how the fuck can user be muted???")
+                ctx.message.replyMsg("Mute role does not exist, how the fuck can user be muted???")
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 
     private fun removeRole(user: String, role: Role, ctx: CommandContext) {
         val id = user.filter { it.isDigit() }
         if (id.isEmpty()) {
-            ctx.channel.useCommandProperly()
+            ctx.message.useCommandProperly()
             return
         }
         if (contentIDRegex.matchEntire(id)?.value?.matches(contentIDRegex) == true) {
@@ -46,16 +46,16 @@ class Unmute : BaseCommand(
                 if (member.roles.contains(role)) {
                     ctx.guild.removeRoleFromMember(member, role).queue {
                         ctx.authorAsMember?.let { it1 -> sendUnmuteLog(member.user, it1.user, guildId) }
-                        ctx.event.channel.sendMsg("Successfully unmuted ${member.asMention}")
+                        ctx.message.replyMsg("Successfully unmuted ${member.asMention}")
                     }
                 } else {
-                    ctx.event.channel.sendMsg("Provided user is not muted!")
+                    ctx.message.replyMsg("Provided user is not muted!")
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
-                ctx.event.channel.sendMsg("Provided user does not exist!")
+                ctx.message.replyMsg("Provided user does not exist!")
             })
         } else {
-            ctx.channel.useCommandProperly()
+            ctx.message.useCommandProperly()
         }
     }
 

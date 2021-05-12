@@ -2,8 +2,8 @@ package commands.base
 
 import commandhandler.CommandContext
 import ext.useArguments
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import type.ArgumentType
 import type.CommandType
@@ -32,7 +32,7 @@ abstract class BaseMultipageCommand <T> (
 
         val requiredArgs = commandArguments.filter { it.value == ArgumentType.Required }.size
         if (ctx.args.size < requiredArgs) {
-            ctx.channel.useArguments(requiredArgs)
+            ctx.message.useArguments(requiredArgs)
             return
         }
 
@@ -40,7 +40,7 @@ abstract class BaseMultipageCommand <T> (
             handleEmptylist(ctx)
             return
         }
-        sendPager(ctx.channel)
+        sendPager(ctx.message)
     }
 
     override fun onReactionAdd(event: MessageReactionAddEvent) {
@@ -68,15 +68,15 @@ abstract class BaseMultipageCommand <T> (
 
     abstract fun handleEmptylist(ctx: CommandContext)
 
-    private fun sendPager(channel: TextChannel) {
-        channel.sendMsg(
+    private fun sendPager(message: Message) {
+        message.replyMsg(
             getMainPage()
-        ) { message ->
-            commandMessage[channel] = message
+        ) { msg ->
+            commandMessage[message.channel] = msg
             (0..itemsList.size).forEach {
-                message.addReaction(emotes[it]).queue()
+                msg.addReaction(emotes[it]).queue()
             }
-            channel.addReactionById(message.id, trashEmote).queue()
+            msg.addReaction(trashEmote).queue()
         }
 
     }

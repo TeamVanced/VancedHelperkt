@@ -33,11 +33,11 @@ class Quote  : BaseCommand(
                         args.no0
                     )
                 } else {
-                    ctx.channel.useCommandProperly()
+                    ctx.message.useCommandProperly()
                 }
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
 
     }

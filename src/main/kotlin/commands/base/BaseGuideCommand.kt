@@ -2,6 +2,7 @@ package commands.base
 
 import commandhandler.CommandContext
 import ext.optional
+import ext.takeMax
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,9 +43,9 @@ abstract class BaseGuideCommand(
             try {
                 embedPagerAdapter[ctx.channel]?.newInstance(args[0].toInt())
             } catch (e: NumberFormatException) {
-                ctx.event.channel.sendMsg("Provided argument is not a number!")
+                ctx.message.replyMsg("Provided argument is not a number!")
             } catch (e: IndexOutOfBoundsException) {
-                ctx.event.channel.sendMsg("Provided page does not exist!")
+                ctx.message.replyMsg("Provided page does not exist!")
             }
         } else {
             embedPagerAdapter[ctx.channel]?.newInstance()

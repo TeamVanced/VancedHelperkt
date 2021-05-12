@@ -13,8 +13,8 @@ class Ping : BaseCommand(
 
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
-        ctx.channel.sendMsg("Pinging...") { message ->
-            message.editMessage("Pong! Took ${message.idLong.timeCreatedMillis() - ctx.event.message.idLong.timeCreatedMillis()}ms").queue {
+        ctx.message.replyMsg("Pinging...") { message ->
+            message.editMessage("Pong! Took ${message.idLong.timeCreatedMillis() - ctx.message.idLong.timeCreatedMillis()}ms").queue {
                 it.addReaction()
             }
         }

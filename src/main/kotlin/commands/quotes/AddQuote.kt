@@ -26,7 +26,7 @@ class AddQuote : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         if (ctx.authorAsMember?.hasQuotePerms(guildId) == false) {
-            ctx.event.channel.sendMsg("You are not allowed to use this command")
+            ctx.message.replyMsg("You are not allowed to use this command")
             return
         }
         val args = ctx.args
@@ -52,7 +52,7 @@ class AddQuote : BaseCommand(
                             )
                         }
                         else -> {
-                            ctx.event.channel.sendMsg("Use the command properly bruh")
+                            ctx.message.replyMsg("Use the command properly bruh")
                         }
                     }
                 }
@@ -64,18 +64,18 @@ class AddQuote : BaseCommand(
                     )
                 }
                 else -> {
-                    ctx.channel.useCommandProperly()
+                    ctx.message.useCommandProperly()
                 }
             }
         } else {
-            ctx.channel.useArguments(1)
+            ctx.message.useArguments(1)
         }
     }
 
     private fun createQuote(ctx: CommandContext, channelID: String, messageID: String) {
         ctx.event.jda.getTextChannelById(channelID)?.retrieveMessageById(messageID)?.queue({ it ->
             if (quotesCollection.findOne(Quote::messageID eq messageID) != null) {
-                ctx.event.channel.sendMsg("Pog, that quote is already added :stonks:")
+                ctx.message.replyMsg("Pog, that quote is already added :stonks:")
                 return@queue
             }
 
@@ -103,15 +103,15 @@ class AddQuote : BaseCommand(
                 )
             )
 
-            ctx.event.channel.sendMsg("Quote #$quoteid successfully created!")
+            ctx.message.replyMsg("Quote #$quoteid successfully created!")
         }, ErrorHandler().handle(ErrorResponse.MISSING_ACCESS) {
-            ctx.event.channel.sendMsg("I don't have permissions to view that message")
+            ctx.message.replyMsg("I don't have permissions to view that message")
         }.handle(ErrorResponse.UNKNOWN_MESSAGE) {
-            ctx.event.channel.sendMsg("Pretty sure that's not a valid message lul")
+            ctx.message.replyMsg("Pretty sure that's not a valid message lul")
         }.handle(ErrorResponse.UNKNOWN_CHANNEL) {
-            ctx.event.channel.sendMsg("Pretty sure that's not a valid channel lul")
+            ctx.message.replyMsg("Pretty sure that's not a valid channel lul")
         }.handle(ErrorResponse.EMPTY_MESSAGE) {
-            ctx.event.channel.sendMsg("That's an empty message pal")
+            ctx.message.replyMsg("That's an empty message pal")
         })
     }
 

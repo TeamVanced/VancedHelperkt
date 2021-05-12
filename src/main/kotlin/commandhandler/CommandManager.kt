@@ -4,7 +4,7 @@ import commands.base.BaseCommand
 import database.modRoles
 import database.owners
 import database.prefix
-import ext.sendMessageWithChecks
+import ext.replyWithChecks
 import ext.sendStacktrace
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
@@ -60,14 +60,14 @@ class CommandManager {
                 (command.devOnly && !owners.contains(member.id))
                 || (command.commandType == CommandType.Moderation && !(member.roles.any { modRoles.contains(it.id) } && owners.contains(member.id)))
             ) {
-                event.channel.sendMessageWithChecks("You are not allowed to use this command!")
+                event.message.replyWithChecks("You are not allowed to use this command!")
                 return@queue
             }
 
             try {
                 command.execute(commandContext)
             } catch (e: Exception) {
-                event.channel.sendMessageWithChecks("Sorry, something went wrong")
+                event.message.replyWithChecks("Sorry, something went wrong")
                 guild.sendStacktrace(e.cause?.message, e.stackTraceToString())
             }
         }
