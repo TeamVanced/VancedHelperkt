@@ -46,6 +46,11 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "15"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 tasks.withType<Jar> {
     archiveFileName.set("bot.jar")
 
