@@ -7,6 +7,7 @@ import database.emotesCollection
 import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
+import org.litote.kmongo.nin
 import type.CommandType.Fun
 
 class EmoteBoard : BaseCommand(
@@ -66,6 +67,10 @@ class EmoteBoard : BaseCommand(
                 "clean" -> {
                     emotesCollection.deleteMany(Emote::usedCount eq 0)
                     ctx.message.replyMsg("Successfully removed unused emotes from database")
+                }
+                "cleanserver" -> {
+                    emotesCollection.deleteMany(Emote::emote nin ctx.guild.emotes.map { "<:${it.name}:${it.id}>" })
+                    ctx.message.replyMsg("Successfully removed emotes that are not from this server from database")
                 }
                 else -> {
                     ctx.message.useCommandProperly()
