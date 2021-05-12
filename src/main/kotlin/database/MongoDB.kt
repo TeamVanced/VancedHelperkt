@@ -20,6 +20,8 @@ val warnsCollection = helperDB.getCollection<Warn>("warns")
 val emotesCollection = helperDB.getCollection<Emote>("emotes")
 val emoteRolesCollection = helperDB.getCollection<EmoteRole>("emoteRoles")
 
+var prefix = ""
+
 fun String.getEmoteRoles(messageId: String, emote: String): EmoteRole? {
     return try {
         emoteRolesCollection.findOne(BasicDBObject("guildId", this).append("messageId", messageId).append("emote", emote))
@@ -45,8 +47,15 @@ val String.settings: Settings?
     }
 
 var String.prefix: String
-    get() = settings?.prefix ?: defaultPrefix
+    get() {
+        if (database.prefix == "") {
+            database.prefix = settings?.prefix ?: defaultPrefix
+        }
+
+        return database.prefix
+    }
     set(value) {
+        database.prefix = value
         if (settingsCollection.findOneAndUpdate(Settings::guildId eq this, Updates.set("prefix", value)) == null) {
             settingsCollection.insertOne(
                 Settings(
