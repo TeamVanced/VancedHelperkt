@@ -10,14 +10,14 @@ version = "1.0"
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
-    jcenter()
+    maven("https://m2.dv8tion.net/releases")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    implementation("net.dv8tion:JDA:4.2.0_247") {
+    implementation("net.dv8tion:JDA:4.2.1_262") {
         exclude(
             module = "opus-java"
         )
