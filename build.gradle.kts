@@ -58,6 +58,10 @@ tasks.withType<Jar> {
         from(zipTree(file.absoluteFile))
     }
 
+    configurations["runtimeClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+
     manifest {
         attributes["Main-Class"] = "Main"
     }
