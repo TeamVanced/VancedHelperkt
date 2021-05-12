@@ -15,7 +15,7 @@ class EmoteBoard : BaseCommand(
     commandDescription = "Get most frequently used emotes",
     commandType = Fun,
     commandAliases = listOf("eb"),
-    commandArguments = mapOf("least | clean".optional())
+    commandArguments = mapOf("least | clean | clearserver".optional())
 ) {
 
     private val Emote.description: String get() = "$emote (Used $usedCount times)\n"
@@ -68,7 +68,7 @@ class EmoteBoard : BaseCommand(
                     emotesCollection.deleteMany(Emote::usedCount eq 0)
                     ctx.message.replyMsg("Successfully removed unused emotes from database")
                 }
-                "cleanserver" -> {
+                "clearserver" -> {
                     emotesCollection.deleteMany(Emote::emote nin ctx.guild.emotes.map { "<:${it.name}:${it.id}>" })
                     ctx.message.replyMsg("Successfully removed emotes that are not from this server from database")
                 }
