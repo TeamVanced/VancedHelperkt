@@ -58,7 +58,7 @@ class CommandManager {
         guild.retrieveMemberById(event.author.id).queue { member ->
             if (
                 (command.devOnly && !owners.contains(member.id))
-                || (command.commandType == CommandType.Moderation && !(member.roles.any { modRoles.contains(it.id) } && owners.contains(member.id)))
+                || (command.commandType == CommandType.Moderation && !member.roles.any { modRoles.contains(it.id) })
             ) {
                 event.message.replyWithChecks("You are not allowed to use this command!")
                 return@queue
