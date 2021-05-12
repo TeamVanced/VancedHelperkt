@@ -24,45 +24,49 @@ class BAT : BaseCommand(
     override fun execute(ctx: CommandContext) {
         super.execute(ctx)
         CoroutineScope(Dispatchers.IO).launch {
-            val response = repository.get(
-                token = config.coinlibToken,
-                pref = "EUR",
-                symbol = "BAT"
-            )
-
-            val args = ctx.args
-            val message = ctx.message
-
-            val price = response.price
-            if (args.isNotEmpty()) {
-                val amount = args[0].toIntOrNull()
-                if (amount != null) {
-                    message.replyMsg(
-                        "${amount * price} EUR"
-                    )
-                } else {
-                    message.replyMsg("Provided argument is not a number!")
-                }
-            } else {
-                message.replyMsg(
-                    embedBuilder.apply {
-                        setTitle("${response.name} (${response.symbol})")
-                        addField(
-                            "EUR",
-                            price.toString(),
-                            false
-                        )
-                        addField(
-                            "Price Change",
-                            "`1h` - ${response.delta1H.stonkify()}\n" +
-                            "`24h` - ${response.delta24H.stonkify()}\n" +
-                            "`7d` - ${response.delta7D.stonkify()}\n" +
-                            "`30d` - ${response.delta30D.stonkify()}",
-                            false
-                        )
-                        setFooter("Powered by coinlib.io")
-                    }.build()
+            try {
+                val response = repository.get(
+                    token = config.coinlibToken,
+                    pref = "EUR",
+                    symbol = "BAT"
                 )
+
+                val args = ctx.args
+                val message = ctx.message
+
+                val price = response.price
+                if (args.isNotEmpty()) {
+                    val amount = args[0].toIntOrNull()
+                    if (amount != null) {
+                        message.replyMsg(
+                            "${amount * price} EUR"
+                        )
+                    } else {
+                        message.replyMsg("Provided argument is not a number!")
+                    }
+                } else {
+                    message.replyMsg(
+                        embedBuilder.apply {
+                            setTitle("${response.name} (${response.symbol})")
+                            addField(
+                                "EUR",
+                                price.toString(),
+                                false
+                            )
+                            addField(
+                                "Price Change",
+                                "`1h` - ${response.delta1H.stonkify()}\n" +
+                                        "`24h` - ${response.delta24H.stonkify()}\n" +
+                                        "`7d` - ${response.delta7D.stonkify()}\n" +
+                                        "`30d` - ${response.delta30D.stonkify()}",
+                                false
+                            )
+                            setFooter("Powered by coinlib.io")
+                        }.build()
+                    )
+                }
+            } catch (e: Exception) {
+                ctx.message.replyMsg("An error occurred while trying to fetch data")
             }
         }
     }
