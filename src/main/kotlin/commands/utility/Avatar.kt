@@ -47,6 +47,8 @@ class Avatar : BaseCommand(
             )
         }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
             ctx.message.replyMsg("Provided user does not exist!")
+        }.handle(ErrorResponse.UNKNOWN_MEMBER) {
+            ctx.message.replyMsg("Provided member does not exist!")
         })
 
     }
