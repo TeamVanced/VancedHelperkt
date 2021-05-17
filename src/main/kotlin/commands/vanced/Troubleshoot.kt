@@ -7,10 +7,6 @@ class Troubleshoot : BaseGuideCommand(
     commandName = "troubleshoot",
     commandDescription = "Troubleshoot Vanced issues. For your own issues, consult your therapist ;)",
     commandType = Vanced,
-    commandAliases = listOf("ts")
-) {
-
-    override val jsonName: String
-        get() = "troubleshooting"
-
-}
+    commandAliases = listOf("ts"),
+    jsonName = "troubleshooting"
+)

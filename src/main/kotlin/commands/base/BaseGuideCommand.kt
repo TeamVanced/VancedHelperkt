@@ -13,11 +13,12 @@ import repository.guide.GuideRepositoryImpl
 import type.CommandType
 import utils.EmbedPagerAdapter
 
-abstract class BaseGuideCommand(
+open class BaseGuideCommand(
     override val commandName: String,
     override val commandDescription: String,
     override val commandType: CommandType,
-    override val commandAliases: List<String> = listOf(commandName)
+    override val commandAliases: List<String> = listOf(commandName),
+    private val jsonName: String,
 ) : BaseCommand(
     commandName = commandName,
     commandDescription = commandDescription,
@@ -28,7 +29,6 @@ abstract class BaseGuideCommand(
 ) {
     private val repository by inject<GuideRepositoryImpl>()
 
-    abstract val jsonName: String
     private val emotes = listOf("⏪", "⬅️", trashEmote, "➡️", "⏩")
     private var embedPagerAdapter = mutableMapOf<MessageChannel, EmbedPagerAdapter>()
     private var pagesWithTableOfContent: List<MessageEmbed> = getTableOfContents()

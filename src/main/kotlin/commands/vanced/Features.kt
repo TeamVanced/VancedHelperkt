@@ -6,10 +6,6 @@ import type.CommandType.Vanced
 class Features : BaseGuideCommand(
     commandName = "features",
     commandDescription = "Get more info about vanced features",
-    commandType = Vanced
-) {
-
-    override val jsonName: String
-        get() = "features"
-
-}
+    commandType = Vanced,
+    jsonName = "features"
+)

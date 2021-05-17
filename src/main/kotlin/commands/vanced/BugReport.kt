@@ -7,10 +7,6 @@ class BugReport : BaseGuideCommand(
     commandName = "bugreport",
     commandDescription = "Report Vanced bugs. For broken toasters and such, consult your local Indian tech guru ;P",
     commandType = Vanced,
-    commandAliases = listOf("bug", "br")
-) {
-
-    override val jsonName: String
-        get() = "bugreport"
-
-}
+    commandAliases = listOf("bug", "br"),
+    jsonName = "bugreport"
+)

@@ -7,10 +7,6 @@ class Info : BaseGuideCommand(
     commandName = "info",
     commandDescription = "Vanced FAQ",
     commandType = Vanced,
-    commandAliases = listOf("faq")
-) {
-
-    override val jsonName: String
-        get() = "faq"
-
-}
+    commandAliases = listOf("faq"),
+    jsonName = "faq"
+)
