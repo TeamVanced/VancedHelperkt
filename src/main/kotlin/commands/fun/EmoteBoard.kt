@@ -8,6 +8,7 @@ import ext.optional
 import ext.useCommandProperly
 import org.litote.kmongo.eq
 import org.litote.kmongo.nin
+import org.litote.kmongo.regex
 import type.CommandType.Fun
 
 class EmoteBoard : BaseCommand(
@@ -15,7 +16,7 @@ class EmoteBoard : BaseCommand(
     commandDescription = "Get most frequently used emotes",
     commandType = Fun,
     commandAliases = listOf("eb"),
-    commandArguments = mapOf("least | clean | clearserver".optional())
+    commandArguments = mapOf("least | clean | clearserver | clearanimated".optional())
 ) {
 
     private val Emote.description: String get() = "$emote (Used $usedCount times)\n"
@@ -71,6 +72,10 @@ class EmoteBoard : BaseCommand(
                 "clearserver" -> {
                     emotesCollection.deleteMany(Emote::emote nin ctx.guild.emotes.map { "<:${it.name}:${it.id}>" })
                     ctx.message.replyMsg("Successfully removed emotes that are not from this server from database")
+                }
+                "clearanimated" -> {
+                    emotesCollection.deleteMany(Emote::emote regex "^<a:".toRegex())
+                    ctx.message.replyMsg("Successfully removed animated emotes from database")
                 }
                 else -> {
                     ctx.message.useCommandProperly()
