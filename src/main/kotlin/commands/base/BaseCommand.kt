@@ -70,14 +70,20 @@ open class BaseCommand(
 
     override fun onReactionRemove(event: MessageReactionRemoveEvent) {}
 
-    inline fun Message.replyMsg(message: String, crossinline onSend: (message: Message) -> Unit = {}) {
+    inline fun Message.replyMsg(
+        message: String,
+        crossinline onSend: (message: Message) -> Unit = {}
+    ) {
         replyWithChecks(message) {
             it.addReaction()
             onSend(it)
         }
     }
 
-    inline fun Message.replyMsg(embed: MessageEmbed, crossinline onSend: (message: Message) -> Unit = {}) {
+    inline fun Message.replyMsg(
+        embed: MessageEmbed,
+        crossinline onSend: (message: Message) -> Unit = {}
+    ) {
         replyWithChecks(embed) {
             it.addReaction()
             onSend(it)

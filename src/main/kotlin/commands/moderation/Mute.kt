@@ -70,6 +70,8 @@ class Mute : BaseCommand(
                 }
             }, ErrorHandler().handle(ErrorResponse.UNKNOWN_USER) {
                 ctx.message.replyMsg("Provided user does not exist!")
+            }.handle(ErrorResponse.UNKNOWN_MEMBER) {
+                ctx.message.replyMsg("Provided user does not exist!")
             })
         } else {
             ctx.message.useCommandProperly()
