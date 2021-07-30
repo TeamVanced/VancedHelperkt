@@ -1,8 +1,7 @@
 package commands.`fun`
 
-import core.command.CommandContext
 import config
-
+import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.common.annotation.KordPreview

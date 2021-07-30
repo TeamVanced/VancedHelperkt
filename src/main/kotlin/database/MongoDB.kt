@@ -5,7 +5,10 @@ import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Updates
 import config
-import database.collections.*
+import database.collections.Emote
+import database.collections.EmoteRole
+import database.collections.Settings
+import database.collections.Warn
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection

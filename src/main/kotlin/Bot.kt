@@ -3,9 +3,7 @@ import core.command.base.BaseCommand
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.Kord
 import dev.kord.core.event.interaction.InteractionCreateEvent
-import dev.kord.core.kordLogger
 import dev.kord.core.on
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.reflections.Reflections

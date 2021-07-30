@@ -1,9 +1,8 @@
 package core.command.base
 
+import config
 import core.command.CommandContext
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import config
-
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord

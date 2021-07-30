@@ -1,9 +1,9 @@
 package commands.`fun`
 
+import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import config
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.user
 import org.koin.core.component.inject
