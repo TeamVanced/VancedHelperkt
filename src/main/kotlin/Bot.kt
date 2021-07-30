@@ -1,6 +1,7 @@
 import core.command.CommandManager
 import core.command.base.BaseCommand
 import dev.kord.common.annotation.KordPreview
+import dev.kord.common.entity.AuditLogEvent.MemberBanRemove
 import dev.kord.core.Kord
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.on

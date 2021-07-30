@@ -9,9 +9,6 @@ import org.litote.kmongo.getCollection
 
 val quotesCollection = helperDB.getCollection<Quote>("quotes")
 
-val guildDBObject = BasicDBObject("guildID", config.guildId)
-
-
 val allQuotes get() = quotesCollection.find().toList()
 val randomQuote: Quote? get() = allQuotes.random()
 val lastQuote get() = allQuotes.lastOrNull()

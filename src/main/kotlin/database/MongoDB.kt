@@ -16,8 +16,9 @@ import org.litote.kmongo.getCollection
 val client: MongoClient = KMongo.createClient(config.mongoString)
 val helperDB: MongoDatabase = client.getDatabase("VancedHelper")
 
+val guildDBObject = BasicDBObject("guildID", config.guildId)
+
 val settingsCollection = helperDB.getCollection<Settings>()
-val warnsCollection = helperDB.getCollection<Warn>("warns")
 val emotesCollection = helperDB.getCollection<Emote>("emotes")
 val emoteRolesCollection = helperDB.getCollection<EmoteRole>("emoteRoles")
 
