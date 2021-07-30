@@ -258,7 +258,14 @@ class Quotes : BaseCommand(
 
         val quote = getQuote(quoteId)
 
-        if (quote != null && quote.stars.contains(authorId)) {
+        if (quote == null) {
+            ctx.respond {
+                content = "Quote #$quoteId does not exist"
+            }
+            return
+        }
+
+        if (quote.stars.contains(authorId)) {
             ctx.respond {
                 content = "Bruh you already starred this"
             }
@@ -281,7 +288,14 @@ class Quotes : BaseCommand(
 
         val quote = getQuote(quoteId)
 
-        if (quote != null && !quote.stars.contains(authorId)) {
+        if (quote == null) {
+            ctx.respond {
+                content = "Quote #$quoteId does not exist"
+            }
+            return
+        }
+
+        if (!quote.stars.contains(authorId)) {
             ctx.respond {
                 content = "You don't have this quote starred!"
             }
