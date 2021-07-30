@@ -1,6 +1,6 @@
 package di
 
-import commandhandler.CommandManager
+import core.command.CommandManager
 import org.koin.dsl.module
 
 val commandManagerModule = module {

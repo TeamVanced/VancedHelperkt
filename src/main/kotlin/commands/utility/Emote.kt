@@ -1,42 +1,63 @@
 package commands.utility
 
-import commandhandler.CommandContext
-import commands.base.BaseCommand
-import ext.required
-import ext.useArguments
-import type.CommandType.Utility
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import dev.kord.common.annotation.KordPreview
+import dev.kord.core.entity.interaction.string
 
 class Emote : BaseCommand(
-    commandName = "emote",
-    commandDescription = "Get a corresponding emote link",
-    commandType = Utility,
-    commandArguments = mapOf("emotes".required()),
-    commandAliases = listOf("emoji", "e")
+    name = "emote",
+    description = "Get a corresponding emote link"
 ) {
 
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        val emotes = ctx.args
-        val regex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
-        val emotelinks = mutableListOf<String>()
-        if (emotes.isNotEmpty()) {
-            emotes.forEach { emote ->
-                val suffix = if (emote.startsWith("<a")) "gif" else "png"
-                if (emote.matches(regex)) {
-                    val link = "<https://cdn.discordapp.com/emojis/${emote.substringAfterLast(":").dropLast(1)}.$suffix>"
-                    if (emotes.size == 1) {
-                        emotelinks.add(link.removePrefix("<").removeSuffix(">"))
-                    } else {
-                        emotelinks.add(link)
-                    }
-                } else {
-                    emotelinks.add("Not an emote")
-                }
+    @OptIn(KordPreview::class)
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val emoteRegex = "<?(a)?:?(\\w{2,32}):(\\d{17,19})>?".toRegex()
+
+        val emotes = ctx.args["emotes"]!!.string()
+
+        val parsedEmoteIds = emoteRegex.findAll(emotes).map {
+            it.groupValues[3]
+        }.toList()
+        val emoteLinks = mutableListOf<String>()
+
+        if (parsedEmoteIds.isEmpty()) {
+            ctx.respond {
+                content = "No emotes were provided"
             }
-            ctx.message.replyMsg(emotelinks.distinct().joinToString("\n"))
-        } else {
-            ctx.message.useArguments(1)
+            return
+        }
+
+        parsedEmoteIds.forEach { emoteId ->
+            val suffix = if (emoteId.startsWith("<a")) "gif" else "png"
+            val link = "https://cdn.discordapp.com/emojis/$emoteId.$suffix"
+            emoteLinks.add(link)
+        }
+
+        val filteredEmoteLinks = emoteLinks.distinct()
+        ctx.respond {
+            content = filteredEmoteLinks.joinToString("\n") {
+                if (filteredEmoteLinks.size > 1) {
+                    "<$it>"
+                } else it
+            }
         }
     }
+
+    @OptIn(KordPreview::class)
+    override suspend fun commandOptions() = CustomApplicationCommandCreateBuilder(
+        arguments = {
+            string(
+                name = "emotes",
+                description = "Emotes to parse",
+                builder = {
+                    required = true
+                }
+            )
+        }
+    )
 
 }

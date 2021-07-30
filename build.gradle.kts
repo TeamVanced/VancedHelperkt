@@ -1,35 +1,28 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.5.20"
     application
 }
-
-version = "1.0"
 
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
-    maven("https://m2.dv8tion.net/releases")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    implementation("net.dv8tion:JDA:4.2.1_262") {
-        exclude(
-            module = "opus-java"
-        )
-    }
-
-    val logbackVersion = "1.2.3"
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("ch.qos.logback:logback-core:$logbackVersion")
+    implementation("dev.kord:kord-core:0.7.4")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
     implementation("org.litote.kmongo:kmongo:4.2.3")
+
+    val logbackVersion = "1.2.3"
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
 
     val retrofitVersion = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
@@ -37,18 +30,19 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.0.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC")
-
     implementation("org.reflections:reflections:0.9.12")
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "15"
+    kotlinOptions {
+        jvmTarget = "16"
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 tasks.withType<Jar> {
@@ -63,10 +57,10 @@ tasks.withType<Jar> {
     }
 
     manifest {
-        attributes["Main-Class"] = "Main"
+        attributes["Main-Class"] = "MainKt"
     }
 }
 
 application {
-    mainClassName = "Main"
+    mainClass.set("MainKt")
 }

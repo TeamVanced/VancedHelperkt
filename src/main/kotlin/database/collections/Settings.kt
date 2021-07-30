@@ -1,9 +1,6 @@
 package database.collections
 
-import defaultPrefix
-
 data class Settings(
-    val prefix: String = defaultPrefix,
     val guildId: String,
     val logChannel: String = "",
     val modlogChannel: String = "",

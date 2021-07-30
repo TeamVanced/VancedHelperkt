@@ -8,9 +8,9 @@ import dev.kord.core.entity.interaction.user
 import org.apache.commons.math3.distribution.NormalDistribution
 
 @OptIn(KordPreview::class)
-class IQ : BaseCommand(
-    name = "iq",
-    description = "Calculate user's IQ"
+class PP : BaseCommand(
+    name = "pp",
+    description = "Calculate user's PP size"
 ) {
 
     override suspend fun execute(
@@ -18,10 +18,12 @@ class IQ : BaseCommand(
     ) {
         val user = ctx.args["user"]!!.user()
 
+        val ppSize = randomPP()
+        val bar = "8" + "=".repeat(ppSize) + "D"
         ctx.respond {
             embed {
-                title = "IQ Calculator"
-                description = "${user.mention} has an IQ of ${randomIQ()}"
+                title = "PP size Calculator"
+                description = "${user.mention} has a PP size of $ppSize inches\n$bar"
             }
         }
     }
@@ -31,7 +33,7 @@ class IQ : BaseCommand(
             arguments = {
                 user(
                     name = "user",
-                    description = "Whose IQ to calculate",
+                    description = "Whose PP size to calculate",
                     builder = {
                         required = true
                     }
@@ -39,16 +41,16 @@ class IQ : BaseCommand(
             }
         )
 
-    private fun randomIQ(): Int {
-        val iqDist = NormalDistribution(100.0, 15.0)
-        val randomIq = (50..150).random()
+    private fun randomPP(): Int {
+        val ppDist = NormalDistribution(6.0, 1.0)
+        val randomPp = (2..14).random()
         val luck = Math.random()
-        val cumulative = iqDist.cumulativeProbability(randomIq.toDouble())
+        val cumulative = ppDist.cumulativeProbability(randomPp.toDouble())
         val smallo = cumulative < 0.5
         return if (smallo && cumulative > luck || !smallo && cumulative < luck) {
-            randomIq
+            randomPp
         } else {
-            randomIQ()
+            randomPP()
         }
     }
 
