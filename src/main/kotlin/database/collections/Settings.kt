@@ -1,16 +1,15 @@
 package database.collections
 
 data class Settings(
-    val guildId: String,
-    val logChannel: String = "",
-    val modlogChannel: String = "",
-    val boosterChannel: String = "",
-    val boosterRole: String = "",
-    val errorChannel: String = "",
-    val muteRole: String = "",
-    val boosterChat: String = "",
-    val owners: List<String> = listOf("202115709231300617", "256143257472335872", "423915768191647755"),
-    val modRoles: List<String> = emptyList(),
-    val allowedQuoteRoles: List<String> = emptyList(),
-    val allowedColourmeRoles: List<String> = emptyList()
+    val guildID: String,
+    val logChannelId: Long = 0,
+    val modlogChannelId: Long = 0,
+    val boosterChannelId: Long = 0,
+    val boosterRoleId: Long = 0,
+    val errorChannelId: Long = 0,
+    val muteRoleId: Long = 0,
+    val ownerIds: List<Long> = listOf(202115709231300617, 256143257472335872, 423915768191647755),
+    val modRoleIds: List<Long> = emptyList(),
+    val allowedQuoteRoleIds: List<Long> = emptyList(),
+    val allowedColourmeRoleIds: List<Long> = emptyList()
 )
