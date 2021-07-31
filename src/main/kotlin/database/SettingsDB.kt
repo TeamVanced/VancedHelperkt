@@ -1,8 +1,7 @@
 package database
 
-import config
-
 import com.mongodb.client.model.Updates
+import config
 import database.collections.Settings
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
