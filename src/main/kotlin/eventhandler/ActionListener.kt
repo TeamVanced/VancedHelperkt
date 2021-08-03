@@ -139,7 +139,7 @@ class ActionListener : ListenerAdapter() {
             }
 
             for (i in 1 until words.size) {
-                if (words[i].equals(words[i - 1], ignoreCase = true)) {
+                if (words[i].equals(words[i - 1], ignoreCase = true) && words[i] !null) {
                     duplicateCount++
                 } else {
                     duplicateCount = 0
