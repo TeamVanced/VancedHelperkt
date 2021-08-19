@@ -8,32 +8,28 @@ import org.litote.kmongo.getCollection
 
 val settingsCollection = helperDB.getCollection<Settings>("settings")
 
-private var _muteRoleId: Long = 0
-
 val settings: Settings
     get() {
         val foundCollection = settingsCollection.findOne(guildDBObject)
         if (foundCollection != null) {
-            println("got")
             return foundCollection
         }
 
-        println("inited")
         settingsCollection.insertOne(Settings(config.guildId))
         return settingsCollection.findOne(guildDBObject)!!
     }
 
-var muteRoleId: Long
+var muteRoleId: Long = 0L
     get() {
-        if (_muteRoleId != 0L) {
-            return _muteRoleId
+        if (field != 0L) {
+            return field
         }
 
-        _muteRoleId = settings.muteRoleId
-        return _muteRoleId
+        field = settings.muteRoleId
+        return field
     }
     set(value) {
-        _muteRoleId = value
+        field = value
         settingsCollection
             .findOneAndUpdate(
                 guildDBObject,
