@@ -46,9 +46,8 @@ class BAT : BaseCommand(
                     name = "EUR"
                     value = price.toString()
                 }
-                field {
-                    name = "Price Change"
-                    value = """
+                field("Price Change") {
+                    """
                         `1h`  - ${response.delta1H.stonkify()}
                         `24h` - ${response.delta24H.stonkify()}
                         `7d`  - ${response.delta7D.stonkify()}
