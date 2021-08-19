@@ -178,13 +178,13 @@ class Quotes : BaseCommand(
 
         addQuote(
             Quote(
-                guildID = config.guildId,
-                messageID = messageId,
-                channelID = channelId,
+                guildId = config.guildId,
+                messageId = messageId,
+                channelId = channelId,
                 messageUrl = link.replace("""(?:\w+.)?discord(?:app)?.com""".toRegex(), "discord.com"),
                 messageContent = message.content,
                 messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.epochSeconds)),
-                authorID = message.author!!.id.asString,
+                authorId = message.author!!.id.asString,
                 authorAvatar = message.author!!.avatar.url,
                 authorName = message.author!!.tag,
                 attachment = message.attachments.firstOrNull()?.url,

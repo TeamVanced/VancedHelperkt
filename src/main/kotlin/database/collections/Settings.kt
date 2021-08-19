@@ -1,7 +1,7 @@
 package database.collections
 
 data class Settings(
-    val guildID: String,
+    val guildId: String,
     val logChannelId: Long = 0,
     val modlogChannelId: Long = 0,
     val boosterChannelId: Long = 0,

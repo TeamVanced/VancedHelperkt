@@ -20,7 +20,7 @@ fun getQuote(
 fun quoteExists(
     messageId: String
 ) = quotesCollection.findOne(
-    guildDBObject.append("messageID", messageId)
+    guildDBObject.append("messageId", messageId)
 ) != null
 
 fun searchQuotes(
