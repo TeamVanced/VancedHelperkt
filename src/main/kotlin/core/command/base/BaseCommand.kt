@@ -28,16 +28,7 @@ abstract class BaseCommand(
             name = name,
             description = description
         ) {
-            with (commandOptions()) {
-                arguments()
-
-                boolean(
-                    name = "send",
-                    description = "Whether to make the output visible to others"
-                ) {
-                    required = false
-                }
-            }
+            commandOptions().arguments(this)
         }
     }
 }
