@@ -39,12 +39,12 @@ class EightBall : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val question = ctx.args["question"]
-            ?.string()
-            ?.replace("(?i)are you(?-i)".toRegex(), "am I")
-            ?.replace("(?i)will you(?-i)".toRegex(), "will I")
-            ?.replaceFirstChar { it.titlecase(Locale.getDefault()) }
-            ?.let {
+        val question = ctx.args["question"]!!
+            .string()
+            .replace("(?i)are you(?-i)".toRegex(), "am I")
+            .replace("(?i)will you(?-i)".toRegex(), "will I")
+            .replaceFirstChar { it.titlecase(Locale.getDefault()) }
+            .let {
                 if (!it.endsWith("?")) {
                     return@let "$it?"
                 }
