@@ -52,9 +52,9 @@ class Bot : KoinComponent {
                 val guild = channel.guild.asGuild()
                 title = "I just started!"
                 description = """
-                **Channels**: ${guild.channelIds.size}
-                **Members**:  ${guild.memberCount}
-            """.trimIndent()
+                    **Channels**: ${guild.channelIds.size}
+                    **Members**:  ${guild.memberCount}
+                """.trimIndent()
             }
         }
     }
