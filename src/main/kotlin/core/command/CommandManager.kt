@@ -4,9 +4,11 @@ import config
 import core.command.base.BaseCommand
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.annotation.KordPreview
+import dev.kord.common.entity.CommandGroup
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.interaction.CommandInteraction
+import dev.kord.core.entity.interaction.GroupCommand
 import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.entity.interaction.SubCommand
 
@@ -37,6 +39,7 @@ class CommandManager {
                     author = commandInteraction.user.asMember(Snowflake(config.guildId)),
                     channel = commandInteraction.getChannel(),
                     subCommand = command as? SubCommand,
+                    subCommandGroup = command as? GroupCommand,
                     interactionResponseCreateBuilder = CustomInteractionResponseCreateBuilder(
                         baseInteractionResponseCreateBuilder = this
                     )
