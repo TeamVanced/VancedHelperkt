@@ -1,15 +1,16 @@
 import core.command.CommandManager
 import core.command.base.BaseCommand
+import core.message.MessageListener
 import database.settings
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
-import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.CommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
+import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -20,6 +21,7 @@ import java.lang.reflect.Modifier
 class Bot : KoinComponent {
 
     private val commandManager: CommandManager by inject()
+    private val messageListener: MessageListener by inject()
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
@@ -31,6 +33,7 @@ class Bot : KoinComponent {
             .getSubTypesOf(BaseCommand::class.java)
             .filter { !Modifier.isAbstract(it.modifiers) }
             .map { it.getConstructor().newInstance() }
+            .sortedBy { it.commandName }
 
         commands.forEach { command ->
             commandManager.addCommand(command)
@@ -46,6 +49,13 @@ class Bot : KoinComponent {
                 is SelectMenuInteraction -> commandManager.respondSelectMenuInteraction(interaction as SelectMenuInteraction)
                 is ButtonInteraction -> commandManager.respondButtonInteraction(interaction as ButtonInteraction)
                 else -> return@on
+            }
+        }
+
+        kord.on<MessageCreateEvent> {
+            with (messageListener) {
+                filterMessageSpam(message)
+                filterSingleMessageEmoteSpam(message)
             }
         }
 

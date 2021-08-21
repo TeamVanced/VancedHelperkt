@@ -7,6 +7,7 @@ data class Settings(
     val errorChannelId: Long = 0,
     val muteRoleId: Long = 0,
     val boosterRoleId: Long = 0,
+    val whitelistedSpamChannelIds: List<Long> = emptyList(),
     val ownerIds: List<Long> = listOf(202115709231300617, 256143257472335872, 423915768191647755),
     val modRoleIds: List<Long> = emptyList(),
     val allowedQuoteRoleIds: List<Long> = emptyList(),

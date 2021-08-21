@@ -10,6 +10,7 @@ import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
 import dev.kord.core.entity.interaction.user
+import ext.checkWarnForTooManyInfractions
 import ext.takeMax
 
 @OptIn(KordPreview::class)
@@ -103,15 +104,7 @@ class Warns : BaseCommand(
         ctx.respond {
             content = "Successfully warned ${user.mention} for $reason"
         }
-
-        val warns = getUserWarns(userId)
-
-        if (warns != null && warns.reasons.size >= 3) {
-            user.asMember(config.guildSnowflake).kick(
-                reason = "Too many infractions"
-            )
-            deleteUserWarns(userId)
-        }
+        user.asMember(config.guildSnowflake).checkWarnForTooManyInfractions()
     }
 
     private fun unwarnUser(ctx: CommandContext) {

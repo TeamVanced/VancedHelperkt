@@ -8,6 +8,11 @@ import org.litote.kmongo.getCollection
 
 val settingsCollection = helperDB.getCollection<Settings>("settings")
 
+var cachedWhitelistedSpamChannelIds= settings.whitelistedSpamChannelIds
+var cachedModeratorRoleIds = settings.modRoleIds
+var cachedAllowedQuoteRoleIds = settings.allowedQuoteRoleIds
+var cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
+
 val settings: Settings
     get() {
         val foundCollection = settingsCollection.findOne(guildDBObject)
@@ -104,6 +109,26 @@ var errorChannelId: Long = 0L
             )
     }
 
+fun addWhitelistedSpamChannelId(
+    channelId: Long
+) {
+    settingsCollection.findOneAndUpdate(
+        guildDBObject,
+        Updates.push("spamChannelIds", channelId)
+    )
+    cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
+}
+
+fun removeWhitelistedSpamChannelId(
+    channelId: Long
+) {
+    settingsCollection.findOneAndUpdate(
+        guildDBObject,
+        Updates.pull("spamChannelIds", channelId)
+    )
+    cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
+}
+
 fun addModeratorRoleId(
     roleId: Long
 ) {
@@ -111,6 +136,7 @@ fun addModeratorRoleId(
         guildDBObject,
         Updates.push("modRoleIds", roleId)
     )
+    cachedModeratorRoleIds = settings.modRoleIds
 }
 
 fun removeModeratorRoleId(
@@ -120,6 +146,7 @@ fun removeModeratorRoleId(
         guildDBObject,
         Updates.pull("modRoleIds", roleId)
     )
+    cachedModeratorRoleIds = settings.modRoleIds
 }
 
 fun addAllowedQuoteRoleId(
@@ -129,6 +156,7 @@ fun addAllowedQuoteRoleId(
         guildDBObject,
         Updates.push("allowedQuoteRoleIds", roleId)
     )
+    cachedAllowedQuoteRoleIds = settings.allowedQuoteRoleIds
 }
 
 fun removeAllowedQuoteRoleId(
@@ -138,6 +166,7 @@ fun removeAllowedQuoteRoleId(
         guildDBObject,
         Updates.pull("allowedQuoteRoleIds", roleId)
     )
+    cachedAllowedColourMeRoleIds = settings.allowedQuoteRoleIds
 }
 
 fun addAllowedColourMeRoleId(
@@ -147,6 +176,7 @@ fun addAllowedColourMeRoleId(
         guildDBObject,
         Updates.push("allowedColourMeRoleIds", roleId)
     )
+    cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
 }
 
 fun removeAllowedColourMeRoleId(
@@ -156,4 +186,5 @@ fun removeAllowedColourMeRoleId(
         guildDBObject,
         Updates.pull("allowedColourMeRoleIds", roleId)
     )
+    cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
 }

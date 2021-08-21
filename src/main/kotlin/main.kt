@@ -1,7 +1,4 @@
-import di.commandManagerModule
-import di.mapperModule
-import di.repositoryModule
-import di.serviceModule
+import di.*
 import org.koin.core.context.startKoin
 
 suspend fun main() {
@@ -9,6 +6,7 @@ suspend fun main() {
         modules(
             commandManagerModule,
             mapperModule,
+            messageListenerModule,
             repositoryModule,
             serviceModule,
         )
