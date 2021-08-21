@@ -7,8 +7,8 @@ import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.string
 
 class Emote : BaseCommand(
-    name = "emote",
-    description = "Get a corresponding emote link"
+    commandName = "emote",
+    commandDescription = "Get a corresponding emote link"
 ) {
 
     @OptIn(KordPreview::class)

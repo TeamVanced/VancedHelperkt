@@ -10,8 +10,8 @@ import dev.kord.core.entity.interaction.string
 
 @OptIn(KordPreview::class)
 class Embed : BaseCommand(
-    name = "embed",
-    description = "Create an embed"
+    commandName = "embed",
+    commandDescription = "Create an embed"
 ) {
 
     override suspend fun execute(

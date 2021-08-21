@@ -9,8 +9,8 @@ import org.apache.commons.math3.distribution.NormalDistribution
 
 @OptIn(KordPreview::class)
 class IQ : BaseCommand(
-    name = "iq",
-    description = "Calculate user's IQ"
+    commandName = "iq",
+    commandDescription = "Calculate user's IQ"
 ) {
 
     override suspend fun execute(

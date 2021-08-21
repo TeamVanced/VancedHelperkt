@@ -14,8 +14,8 @@ import ext.takeMax
 
 @OptIn(KordPreview::class)
 class Warns : BaseCommand(
-    name = "warn",
-    description = "Warn actions"
+    commandName = "warn",
+    commandDescription = "Warn actions"
 ) {
 
     override suspend fun execute(

@@ -9,8 +9,8 @@ import dev.kord.core.entity.interaction.string
 
 @OptIn(KordPreview::class)
 class F : BaseCommand(
-    name = "f",
-    description = "Pay respects"
+    commandName = "f",
+    commandDescription = "Pay respects"
 ) {
 
     override suspend fun execute(

@@ -8,8 +8,8 @@ import dev.kord.core.entity.interaction.string
 
 @OptIn(KordPreview::class)
 class How : BaseCommand(
-    name = "how",
-    description = "See how [predicate] is [the thing]"
+    commandName = "how",
+    commandDescription = "See how [predicate] is [the thing]"
 ) {
 
     override suspend fun execute(

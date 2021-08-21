@@ -9,8 +9,8 @@ import java.util.*
 
 @OptIn(KordPreview::class)
 class EightBall : BaseCommand(
-    name = "8ball",
-    description = "Let a magical 8ball decide your fate"
+    commandName = "8ball",
+    commandDescription = "Let a magical 8ball decide your fate"
 ) {
 
     private val responses = arrayOf(

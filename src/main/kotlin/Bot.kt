@@ -6,12 +6,15 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.channel.MessageChannel
+import dev.kord.core.entity.interaction.CommandInteraction
+import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.on
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.reflections.Reflections
 import org.slf4j.LoggerFactory
+import java.lang.reflect.Modifier
 
 class Bot : KoinComponent {
 
@@ -25,18 +28,23 @@ class Bot : KoinComponent {
 
         val commands = Reflections("commands")
             .getSubTypesOf(BaseCommand::class.java)
+            .filter { !Modifier.isAbstract(it.modifiers) }
             .map { it.getConstructor().newInstance() }
 
         commands.forEach { command ->
             commandManager.addCommand(command)
             with(command) {
-                logger.info("Registering command: ${command.name}")
+                logger.info("Registering command: ${command.commandName}")
                 kord.registerCommand()
             }
         }
 
         kord.on<InteractionCreateEvent> {
-            commandManager.respond(interaction)
+            when (interaction) {
+                is CommandInteraction -> commandManager.respond(interaction as CommandInteraction)
+                is SelectMenuInteraction -> commandManager.respondSelectMenu(interaction as SelectMenuInteraction)
+                else -> return@on
+            }
         }
 
         kord.login {

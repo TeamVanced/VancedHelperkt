@@ -10,8 +10,8 @@ import org.koin.core.component.inject
 import repository.country.CountryRepositoryImpl
 
 class Country : BaseCommand(
-    name = "country",
-    description = "Get the country of a user"
+    commandName = "country",
+    commandDescription = "Get the country of a user"
 ) {
 
     private val repository by inject<CountryRepositoryImpl>()

@@ -4,14 +4,14 @@ import config
 import core.command.base.BaseCommand
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.annotation.KordPreview
-import dev.kord.common.entity.CommandGroup
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.interaction.CommandInteraction
 import dev.kord.core.entity.interaction.GroupCommand
-import dev.kord.core.entity.interaction.Interaction
+import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.entity.interaction.SubCommand
 
+@OptIn(KordPreview::class)
 class CommandManager {
 
     private val commands = mutableListOf<BaseCommand>()
@@ -23,12 +23,10 @@ class CommandManager {
         }
     }
 
-    fun getCommand(name: String) = commands.find { it.name == name }
+    fun getCommand(name: String) = commands.find { it.commandName == name }
 
-    @OptIn(KordPreview::class)
-    suspend fun respond(interaction: Interaction) {
-        val commandInteraction = interaction as? CommandInteraction ?: return
-        val command = commandInteraction.command
+    suspend fun respond(interaction: CommandInteraction) {
+        val command = interaction.command
 
         val commandObject = getCommand(command.rootName)!!
 
@@ -36,16 +34,25 @@ class CommandManager {
             commandObject.execute(
                 ctx = CommandContext(
                     args = command.options,
-                    author = commandInteraction.user.asMember(Snowflake(config.guildId)),
-                    channel = commandInteraction.getChannel(),
+                    author = interaction.user.asMember(Snowflake(config.guildId)),
+                    channel = interaction.getChannel(),
                     subCommand = command as? SubCommand,
                     subCommandGroup = command as? GroupCommand,
                     interactionResponseCreateBuilder = CustomInteractionResponseCreateBuilder(
                         baseInteractionResponseCreateBuilder = this
-                    )
+                    ),
+                    commandInteraction = interaction
                 )
             )
         }
+    }
+
+    suspend fun respondSelectMenu(interaction: SelectMenuInteraction) {
+        val commandName = interaction.componentId.substringBefore("-")
+        val commandObject = getCommand(commandName)!!
+
+        commandObject.onSelectMenu(interaction)
+
     }
 
 }

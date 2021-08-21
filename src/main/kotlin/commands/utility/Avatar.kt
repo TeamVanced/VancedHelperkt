@@ -8,8 +8,8 @@ import dev.kord.core.entity.interaction.user
 
 @OptIn(KordPreview::class)
 class Avatar : BaseCommand(
-    name = "avatar",
-    description = "Get user's avatar"
+    commandName = "avatar",
+    commandDescription = "Get user's avatar"
 ){
 
     override suspend fun execute(

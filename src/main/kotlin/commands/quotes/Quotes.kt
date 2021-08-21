@@ -19,8 +19,8 @@ import java.util.*
 
 @OptIn(KordPreview::class)
 class Quotes : BaseCommand(
-    name = "quote",
-    description = "Quote actions"
+    commandName = "quote",
+    commandDescription = "Quote actions"
 ) {
 
     override suspend fun execute(

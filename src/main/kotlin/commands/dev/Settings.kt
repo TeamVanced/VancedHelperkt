@@ -10,8 +10,8 @@ import dev.kord.core.entity.interaction.role
 
 @OptIn(KordPreview::class)
 class Settings : BaseCommand(
-    name = "settings",
-    description = "Configure settings"
+    commandName = "settings",
+    commandDescription = "Configure settings"
 ) {
 
     override suspend fun execute(

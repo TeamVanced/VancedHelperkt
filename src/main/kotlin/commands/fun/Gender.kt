@@ -11,8 +11,8 @@ import repository.gender.GenderRepositoryImpl
 
 @OptIn(KordPreview::class)
 class Gender : BaseCommand(
-    name = "gender",
-    description = "Get the gender of a user"
+    commandName = "gender",
+    commandDescription = "Get the gender of a user"
 ) {
 
     private val repository by inject<GenderRepositoryImpl>()

@@ -13,8 +13,8 @@ import repository.coin.CoinRepositoryImpl
 
 @OptIn(KordPreview::class)
 class BAT : BaseCommand(
-    name = "bat",
-    description = "Check how many stonks we made today"
+    commandName = "bat",
+    commandDescription = "Check how many stonks we made today"
 ) {
 
     private val repository by inject<CoinRepositoryImpl>()

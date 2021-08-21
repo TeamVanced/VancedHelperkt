@@ -12,8 +12,8 @@ import dev.kord.core.entity.interaction.user
 
 @OptIn(KordPreview::class)
 class Mutes : BaseCommand(
-    name = "mute",
-    description = "Mute actions"
+    commandName = "mute",
+    commandDescription = "Mute actions"
 ) {
 
     override suspend fun execute(

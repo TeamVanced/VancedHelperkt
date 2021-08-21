@@ -9,8 +9,8 @@ import org.apache.commons.math3.distribution.NormalDistribution
 
 @OptIn(KordPreview::class)
 class PP : BaseCommand(
-    name = "pp",
-    description = "Calculate user's PP size"
+    commandName = "pp",
+    commandDescription = "Calculate user's PP size"
 ) {
 
     override suspend fun execute(

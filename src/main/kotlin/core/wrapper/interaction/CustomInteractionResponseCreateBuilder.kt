@@ -2,13 +2,15 @@ package core.wrapper.interaction
 
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
-import dev.kord.rest.builder.interaction.BaseInteractionResponseCreateBuilder
-import dev.kord.rest.builder.interaction.embed
+import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kord.rest.builder.message.create.PersistentMessageCreateBuilder
+import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.rest.builder.message.create.embed
 
 @OptIn(KordPreview::class)
 data class CustomInteractionResponseCreateBuilder(
-    val baseInteractionResponseCreateBuilder: BaseInteractionResponseCreateBuilder
+    val baseInteractionResponseCreateBuilder: PersistentMessageCreateBuilder
 ) {
     fun embed(
         block: EmbedBuilder.() -> Unit
@@ -17,6 +19,12 @@ data class CustomInteractionResponseCreateBuilder(
             color = Color((Math.random() * 0x1000000).toInt())
             block()
         }
+    }
+
+    fun actionRow(
+        block: ActionRowBuilder.() -> Unit
+    ) {
+        baseInteractionResponseCreateBuilder.actionRow(block)
     }
 
     var content

@@ -14,7 +14,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    implementation("dev.kord:kord-core:0.7.4")
+    implementation("dev.kord:kord-core:0.8.0-M4")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
