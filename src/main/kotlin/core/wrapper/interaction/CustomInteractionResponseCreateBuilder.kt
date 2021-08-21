@@ -1,5 +1,6 @@
 package core.wrapper.interaction
 
+import core.util.randomColor
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.rest.builder.component.ActionRowBuilder
@@ -16,7 +17,7 @@ data class CustomInteractionResponseCreateBuilder(
         block: EmbedBuilder.() -> Unit
     ) {
         baseInteractionResponseCreateBuilder.embed {
-            color = Color((Math.random() * 0x1000000).toInt())
+            color = randomColor
             block()
         }
     }

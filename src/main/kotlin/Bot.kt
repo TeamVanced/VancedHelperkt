@@ -6,6 +6,7 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.channel.MessageChannel
+import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.CommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
@@ -41,8 +42,9 @@ class Bot : KoinComponent {
 
         kord.on<InteractionCreateEvent> {
             when (interaction) {
-                is CommandInteraction -> commandManager.respond(interaction as CommandInteraction)
-                is SelectMenuInteraction -> commandManager.respondSelectMenu(interaction as SelectMenuInteraction)
+                is CommandInteraction -> commandManager.respondCommandInteraction(interaction as CommandInteraction)
+                is SelectMenuInteraction -> commandManager.respondSelectMenuInteraction(interaction as SelectMenuInteraction)
+                is ButtonInteraction -> commandManager.respondButtonInteraction(interaction as ButtonInteraction)
                 else -> return@on
             }
         }
@@ -53,17 +55,9 @@ class Bot : KoinComponent {
             }
 
             val channel = kord.getGuild(config.guildSnowflake)?.getChannel(Snowflake(settings.logChannelId))
-
             val messageChannel = channel as? MessageChannel ?: return
 
-            messageChannel.createEmbed {
-                val guild = channel.guild.asGuild()
-                title = "I just started!"
-                description = """
-                    **Channels**: ${guild.channelIds.size}
-                    **Members**:  ${guild.memberCount}
-                """.trimIndent()
-            }
+            messageChannel.createMessage("I just started!")
         }
     }
 

@@ -6,10 +6,7 @@ import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.respondPublic
-import dev.kord.core.entity.interaction.CommandInteraction
-import dev.kord.core.entity.interaction.GroupCommand
-import dev.kord.core.entity.interaction.SelectMenuInteraction
-import dev.kord.core.entity.interaction.SubCommand
+import dev.kord.core.entity.interaction.*
 
 @OptIn(KordPreview::class)
 class CommandManager {
@@ -25,7 +22,7 @@ class CommandManager {
 
     fun getCommand(name: String) = commands.find { it.commandName == name }
 
-    suspend fun respond(interaction: CommandInteraction) {
+    suspend fun respondCommandInteraction(interaction: CommandInteraction) {
         val command = interaction.command
 
         val commandObject = getCommand(command.rootName)!!
@@ -41,18 +38,25 @@ class CommandManager {
                     interactionResponseCreateBuilder = CustomInteractionResponseCreateBuilder(
                         baseInteractionResponseCreateBuilder = this
                     ),
-                    commandInteraction = interaction
+                    commandInteraction = interaction,
+                    commandName = commandObject.commandName
                 )
             )
         }
     }
 
-    suspend fun respondSelectMenu(interaction: SelectMenuInteraction) {
+    suspend fun respondSelectMenuInteraction(interaction: SelectMenuInteraction) {
         val commandName = interaction.componentId.substringBefore("-")
         val commandObject = getCommand(commandName)!!
 
-        commandObject.onSelectMenu(interaction)
+        commandObject.onSelectMenuInteraction(interaction)
+    }
 
+    suspend fun respondButtonInteraction(interaction: ButtonInteraction) {
+        val commandName = interaction.componentId.substringBefore("-")
+        val commandObject = getCommand(commandName)!!
+
+        commandObject.onButtonInteraction(interaction)
     }
 
 }

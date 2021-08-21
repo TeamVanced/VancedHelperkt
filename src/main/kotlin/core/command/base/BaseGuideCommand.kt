@@ -1,6 +1,7 @@
 package core.command.base
 
 import core.command.CommandContext
+import core.util.randomColor
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.interaction.SelectMenuInteraction
@@ -38,30 +39,33 @@ abstract class BaseGuideCommand(
                 buildGuideEmbed(0)
             }
 
-            actionRow {
-                selectMenu(
-                    customId = "${commandName}-selectmenu",
-                    builder = {
-                        placeholder = "Select page"
-                        jsonData.forEachIndexed { index, jsonData ->
-                            option(
-                                label = "${index + 1}. ${jsonData.title}".takeMax(25),
-                                value = index.toString(),
-                            )
+            if (jsonData.size > 1) {
+                actionRow {
+                    selectMenu(
+                        customId = "${commandName}-selectmenu",
+                        builder = {
+                            placeholder = "Select page"
+                            jsonData.forEachIndexed { index, jsonData ->
+                                option(
+                                    label = "${index + 1}. ${jsonData.title}".takeMax(25),
+                                    value = index.toString(),
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
 
-    override suspend fun onSelectMenu(
+    override suspend fun onSelectMenuInteraction(
         interaction: SelectMenuInteraction
     ) {
         val index = interaction.values.first().toInt()
-        interaction.acknowledgePublic().edit {
+        interaction.acknowledgePublicDeferredMessageUpdate().edit {
             embed {
                 buildGuideEmbed(index)
+                color = randomColor
             }
         }
     }
@@ -74,6 +78,11 @@ abstract class BaseGuideCommand(
             field {
                 name = field.title
                 value = field.content
+            }
+        }
+        if (jsonData.size > 1) {
+            footer {
+                text = "Page ${index + 1}/${jsonData.size}"
             }
         }
     }

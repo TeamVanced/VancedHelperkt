@@ -22,9 +22,13 @@ abstract class BaseCommand(
         ctx: CommandContext
     )
 
-    open suspend fun onSelectMenu(interaction: SelectMenuInteraction) = Unit
+    open suspend fun onSelectMenuInteraction(interaction: SelectMenuInteraction) = Unit
 
-    open suspend fun onSelectButton(interaction: ButtonInteraction) = Unit
+    open suspend fun onButtonInteraction(interaction: ButtonInteraction) {
+        if (interaction.componentId == "${commandName}-delete") {
+            interaction.acknowledgePublicDeferredMessageUpdate().delete()
+        }
+    }
 
     open suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder()
