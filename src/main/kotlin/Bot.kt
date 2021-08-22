@@ -1,16 +1,20 @@
 import core.command.CommandManager
 import core.command.base.BaseCommand
-import core.message.MessageListener
+import core.listener.MessageListener
+import core.listener.ReactionListener
 import database.settings
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.CommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.core.event.message.ReactionAddEvent
+import dev.kord.core.event.message.ReactionRemoveEvent
 import dev.kord.core.on
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -22,6 +26,7 @@ class Bot : KoinComponent {
 
     private val commandManager: CommandManager by inject()
     private val messageListener: MessageListener by inject()
+    private val reactionListener: ReactionListener by inject()
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
@@ -56,6 +61,24 @@ class Bot : KoinComponent {
             with (messageListener) {
                 filterMessageSpam(message)
                 filterSingleMessageEmoteSpam(message)
+            }
+        }
+
+        kord.on<ReactionAddEvent> {
+            if (emoji is ReactionEmoji.Custom) {
+                reactionListener.grantEmoteRole(
+                    emoji = emoji as ReactionEmoji.Custom,
+                    message = getMessage()
+                )
+            }
+        }
+
+        kord.on<ReactionRemoveEvent> {
+            if (emoji is ReactionEmoji.Custom) {
+                reactionListener.removeEmoteRole(
+                    emoji = emoji as ReactionEmoji.Custom,
+                    message = getMessage()
+                )
             }
         }
 

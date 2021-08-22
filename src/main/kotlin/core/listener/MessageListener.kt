@@ -1,4 +1,4 @@
-package core.message
+package core.listener
 
 import core.util.emoteRegex
 import database.warnUser

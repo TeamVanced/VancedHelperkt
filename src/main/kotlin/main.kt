@@ -6,7 +6,7 @@ suspend fun main() {
         modules(
             commandManagerModule,
             mapperModule,
-            messageListenerModule,
+            eventListenerModule,
             repositoryModule,
             serviceModule,
         )
