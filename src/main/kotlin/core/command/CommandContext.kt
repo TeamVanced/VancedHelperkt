@@ -3,7 +3,6 @@ package core.command
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
-import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.core.entity.Member
 import dev.kord.core.entity.channel.Channel
 import dev.kord.core.entity.interaction.CommandInteraction

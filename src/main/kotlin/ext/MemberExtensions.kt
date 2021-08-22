@@ -4,7 +4,6 @@ import database.cachedModeratorRoleIds
 import database.deleteUserWarns
 import database.getUserWarns
 import dev.kord.core.entity.Member
-import kotlinx.coroutines.flow.map
 
 suspend fun Member.checkWarnForTooManyInfractions() {
     val userId = id.asString

@@ -1,7 +1,6 @@
 package core.wrapper.interaction
 
 import core.util.randomColor
-import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder

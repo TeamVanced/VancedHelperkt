@@ -4,7 +4,6 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import database.deleteUserWarns
 import database.getUserWarns
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.int
