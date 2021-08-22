@@ -12,7 +12,7 @@ class Source : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        ctx.respond {
+        ctx.respondPublic {
             content = "<https://github.com/YTVanced/VancedHelperkt>"
         }
     }

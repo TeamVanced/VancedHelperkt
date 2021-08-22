@@ -133,7 +133,7 @@ class Quotes : BaseCommand(
         val link = ctx.args["link"]!!.string()
 
         if (!linkRegex.matches(link)) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Link was not provided"
             }
             return
@@ -145,7 +145,7 @@ class Quotes : BaseCommand(
         val channelId = groups["channelId"]!!.value
 
         if (quoteExists(messageId)) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Pog, that quote is already added $stonks"
             }
             return
@@ -154,21 +154,21 @@ class Quotes : BaseCommand(
         val message = ctx.channel.supplier.getMessageOrNull(Snowflake(channelId), Snowflake(messageId))
 
         if (message == null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Message not found"
             }
             return
         }
 
         if (message.author?.isBot == true) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Beep Boop. Do not bully robots"
             }
             return
         }
 
         if (message.author == null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "That's not a message from a guild member!"
             }
             return
@@ -193,7 +193,7 @@ class Quotes : BaseCommand(
             )
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Quote #$quoteId successfully created!"
         }
     }
@@ -204,13 +204,13 @@ class Quotes : BaseCommand(
         val quote = getQuote(quoteId)
 
         if (quote == null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Quote #$quoteId not found"
             }
             return
         }
 
-        ctx.respond {
+        ctx.respondPublic {
             parseQuote(quote)
         }
     }
@@ -220,10 +220,10 @@ class Quotes : BaseCommand(
 
         val quotes = searchQuotes(keyword)
 
-        ctx.respond {
+        ctx.respondPublic {
             if (quotes.isEmpty()) {
                 content = "No quotes matched that filter"
-                return@respond
+                return@respondPublic
             }
 
             parseQuote(quotes[0])
@@ -231,11 +231,11 @@ class Quotes : BaseCommand(
     }
 
     private fun getRandomQuote(ctx: CommandContext) {
-        ctx.respond {
+        ctx.respondPublic {
             val randomQuote = randomQuote
             if (randomQuote != null) {
                 parseQuote(randomQuote)
-                return@respond
+                return@respondPublic
             }
 
             content = "There are no quotes in this server! Try adding some"
@@ -247,7 +247,7 @@ class Quotes : BaseCommand(
 
         deleteQuote(quoteId)
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully deleted quote #$quoteId"
         }
     }
@@ -259,14 +259,14 @@ class Quotes : BaseCommand(
         val quote = getQuote(quoteId)
 
         if (quote == null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Quote #$quoteId does not exist"
             }
             return
         }
 
         if (quote.stars.contains(authorId)) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Bruh you already starred this"
             }
             return
@@ -277,7 +277,7 @@ class Quotes : BaseCommand(
             authorId = authorId
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully starred quote #$quoteId"
         }
     }
@@ -289,14 +289,14 @@ class Quotes : BaseCommand(
         val quote = getQuote(quoteId)
 
         if (quote == null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "Quote #$quoteId does not exist"
             }
             return
         }
 
         if (!quote.stars.contains(authorId)) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "You don't have this quote starred!"
             }
             return
@@ -307,7 +307,7 @@ class Quotes : BaseCommand(
             authorId = authorId
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully unstarred quote #$quoteId"
         }
     }

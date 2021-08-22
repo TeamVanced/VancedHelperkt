@@ -34,7 +34,7 @@ abstract class BaseGuideCommand(
     }
 
     override suspend fun execute(ctx: CommandContext) {
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 buildGuideEmbed(0)
             }

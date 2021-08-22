@@ -11,7 +11,7 @@ class SupportUs : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "How to support us"
                 description = "Vanced does not take donations! This means, that any donation links you might find are fake!\\n\\nAs mentioned above, Vanced does not take donations, but there's other way to support us, that you can find below."

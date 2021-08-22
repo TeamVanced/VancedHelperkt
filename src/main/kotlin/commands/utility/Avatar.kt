@@ -17,7 +17,7 @@ class Avatar : BaseCommand(
     ) {
         val user = ctx.args["user"]!!.user()
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "${user.username}'s avatar"
                 description = "[Avatar URL](${user.avatar.url})"

@@ -20,7 +20,7 @@ class PP : BaseCommand(
 
         val ppSize = randomPP()
         val bar = "8" + "=".repeat(ppSize) + "D"
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "PP size Calculator"
                 description = "${user.mention} has a PP size of $ppSize inches\n$bar"

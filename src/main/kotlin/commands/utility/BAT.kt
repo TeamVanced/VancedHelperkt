@@ -33,13 +33,13 @@ class BAT : BaseCommand(
         val price = response.price
 
         if (amount != null) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "${amount * price} EUR"
             }
             return
         }
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "${response.name} (${response.symbol})"
                 field {

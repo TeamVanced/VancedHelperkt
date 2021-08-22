@@ -18,7 +18,7 @@ class F : BaseCommand(
     ) {
         val thing = ctx.args["thing"]?.string()
 
-        ctx.respond {
+        ctx.respondPublic {
             content = if (thing != null) {
                 "$pressF ${ctx.author.mention} pays respects for $thing"
             } else {

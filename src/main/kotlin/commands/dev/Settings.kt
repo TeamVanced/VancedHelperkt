@@ -213,7 +213,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         logChannelId = channel.id.value
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully updated the log channel"
         }
     }
@@ -222,7 +222,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         modLogChannelId = channel.id.value
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully updated the moderator action log channel"
         }
     }
@@ -231,7 +231,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         errorChannelId = channel.id.value
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully updated the error log channel"
         }
     }
@@ -240,7 +240,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         muteRoleId = role.id.value
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully updated the mute role"
         }
     }
@@ -249,7 +249,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         boosterRoleId = role.id.value
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully updated the booster role"
         }
     }
@@ -258,7 +258,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         addModeratorRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully added ${role.mention} to moderators"
         }
     }
@@ -267,7 +267,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         removeModeratorRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully removed ${role.mention} from moderators"
         }
     }
@@ -276,7 +276,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         addAllowedQuoteRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully added ${role.mention} to allowed quote roles"
         }
     }
@@ -285,7 +285,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         removeAllowedQuoteRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully removed ${role.mention} from allowed quote roles"
         }
     }
@@ -294,7 +294,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         addAllowedColourMeRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully added ${role.mention} to allowed colourme roles"
         }
     }
@@ -303,7 +303,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         removeAllowedColourMeRoleId(role.id.value)
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully removed ${role.mention} from allowed colourme roles"
         }
     }

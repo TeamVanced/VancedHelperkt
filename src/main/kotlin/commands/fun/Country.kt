@@ -28,7 +28,7 @@ class Country : BaseCommand(
             name = userName
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "Country Detector"
 

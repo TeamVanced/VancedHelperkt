@@ -25,7 +25,7 @@ class Emote : BaseCommand(
         val emoteLinks = mutableListOf<String>()
 
         if (parsedEmoteIds.isEmpty()) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "No emotes were provided"
             }
             return
@@ -38,7 +38,7 @@ class Emote : BaseCommand(
         }
 
         val filteredEmoteLinks = emoteLinks.distinct()
-        ctx.respond {
+        ctx.respondPublic {
             content = filteredEmoteLinks.joinToString("\n") {
                 if (filteredEmoteLinks.size > 1) {
                     "<$it>"

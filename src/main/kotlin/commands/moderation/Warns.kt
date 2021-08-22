@@ -100,7 +100,7 @@ class Warns : BaseCommand(
             reason = reason
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully warned ${user.mention} for $reason"
         }
         user.asMember(config.guildSnowflake).checkWarnForTooManyInfractions()
@@ -115,7 +115,7 @@ class Warns : BaseCommand(
         if (warnId != null) {
             val warns = getUserWarns(userId)
             if (warnId == 0 || (warns != null && warnId > warns.reasons.size)) {
-                ctx.respond {
+                ctx.respondPublic {
                     content = "$warnId is an incorrect warn ID"
                 }
                 return
@@ -127,7 +127,7 @@ class Warns : BaseCommand(
             warnId = warnId
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             content = "Successfully unwarned ${user.mention}"
         }
     }
@@ -138,13 +138,13 @@ class Warns : BaseCommand(
         val warns = getUserWarns(user.id.asString)
 
         if (warns == null || warns.reasons.isEmpty()) {
-            ctx.respond {
+            ctx.respondPublic {
                 content = "${user.mention} has no warns"
             }
             return
         }
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "Warns for ${user.mention}"
                 warns.reasons.forEachIndexed { index, reason ->

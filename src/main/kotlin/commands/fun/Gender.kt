@@ -28,7 +28,7 @@ class Gender : BaseCommand(
             name = userName
         )
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "Gender Detector"
                 description = "$userName is ${response.gender}\nAccuracy: ${response.accuracy}%"

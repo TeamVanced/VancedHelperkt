@@ -22,7 +22,7 @@ class Embed : BaseCommand(
         val image = ctx.args["image"]?.string()
         val color = ctx.args["color"]?.int()
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 this.title = title
                 this.description = description

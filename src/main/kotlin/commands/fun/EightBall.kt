@@ -51,7 +51,7 @@ class EightBall : BaseCommand(
                 return@let it
             }
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = question
                 description = responses.random()

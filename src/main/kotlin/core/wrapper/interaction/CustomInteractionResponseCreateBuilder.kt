@@ -10,12 +10,12 @@ import dev.kord.rest.builder.message.create.embed
 
 @OptIn(KordPreview::class)
 data class CustomInteractionResponseCreateBuilder(
-    val baseInteractionResponseCreateBuilder: PersistentMessageCreateBuilder
+    val persistentMessageCreateBuilder: PersistentMessageCreateBuilder
 ) {
     fun embed(
         block: EmbedBuilder.() -> Unit
     ) {
-        baseInteractionResponseCreateBuilder.embed {
+        persistentMessageCreateBuilder.embed {
             color = randomColor
             block()
         }
@@ -24,13 +24,13 @@ data class CustomInteractionResponseCreateBuilder(
     fun actionRow(
         block: ActionRowBuilder.() -> Unit
     ) {
-        baseInteractionResponseCreateBuilder.actionRow(block)
+        persistentMessageCreateBuilder.actionRow(block)
     }
 
     var content
-        get() = baseInteractionResponseCreateBuilder.content
+        get() = persistentMessageCreateBuilder.content
         set(value) {
-            baseInteractionResponseCreateBuilder.content = value
+            persistentMessageCreateBuilder.content = value
         }
 
 }

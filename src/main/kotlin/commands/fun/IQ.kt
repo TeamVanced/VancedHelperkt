@@ -18,7 +18,7 @@ class IQ : BaseCommand(
     ) {
         val user = ctx.args["user"]!!.user()
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "IQ Calculator"
                 description = "${user.mention} has an IQ of ${randomIQ()}"

@@ -28,7 +28,7 @@ class How : BaseCommand(
             .replace("(?i)you is(?-i)".toRegex(), "You are")
             .replace("(?i)I is(?-i)".toRegex(), "I am")
 
-        ctx.respond {
+        ctx.respondPublic {
             embed {
                 title = "$predicate meter"
                 description = "$convertedDescription\n$bar"
