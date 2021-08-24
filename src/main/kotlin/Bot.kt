@@ -1,5 +1,4 @@
 import core.command.CommandManager
-import core.command.base.BaseCommand
 import core.listener.MessageListener
 import core.listener.ReactionListener
 import database.settings
@@ -18,9 +17,7 @@ import dev.kord.core.event.message.ReactionRemoveEvent
 import dev.kord.core.on
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.reflections.Reflections
 import org.slf4j.LoggerFactory
-import java.lang.reflect.Modifier
 
 class Bot : KoinComponent {
 
@@ -34,18 +31,9 @@ class Bot : KoinComponent {
     suspend fun start() {
         val kord = Kord(config.token)
 
-        val commands = Reflections("commands")
-            .getSubTypesOf(BaseCommand::class.java)
-            .filter { !Modifier.isAbstract(it.modifiers) }
-            .map { it.getConstructor().newInstance() }
-            .sortedBy { it.commandName }
-
-        commands.forEach { command ->
-            commandManager.addCommand(command)
-            with(command) {
-                logger.info("Registering command: ${command.commandName}")
-                kord.registerCommand()
-            }
+        with (commandManager) {
+            addCommands()
+            runPreInit()
         }
 
         kord.on<InteractionCreateEvent> {
@@ -61,6 +49,7 @@ class Bot : KoinComponent {
             with (messageListener) {
                 filterMessageSpam(message)
                 filterSingleMessageEmoteSpam(message)
+                runDevCommands(message, commandManager, kord, logger)
             }
         }
 

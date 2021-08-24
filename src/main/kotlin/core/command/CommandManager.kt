@@ -4,21 +4,68 @@ import config
 import core.command.base.BaseCommand
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
+import dev.kord.core.Kord
 import dev.kord.core.entity.interaction.*
+import kotlinx.coroutines.flow.collect
+import org.reflections.Reflections
+import org.slf4j.Logger
+import java.lang.reflect.Modifier
 
 @OptIn(KordPreview::class)
 class CommandManager {
 
     private val commands = mutableListOf<BaseCommand>()
 
-    suspend fun addCommand(command: BaseCommand) {
+    private fun addCommand(command: BaseCommand) {
         if (!commands.contains(command)){
-            command.preInit()
             commands.add(command)
         }
     }
 
-    fun getCommand(name: String) = commands.find { it.commandName == name }
+    suspend fun runPreInit() {
+        commands.forEach {
+            it.preInit()
+        }
+    }
+
+    fun addCommands() {
+        val commands = Reflections("commands")
+            .getSubTypesOf(BaseCommand::class.java)
+            .filter { !Modifier.isAbstract(it.modifiers) }
+            .map { it.getConstructor().newInstance() }
+            .sortedBy { it.commandName }
+
+        commands.forEach {
+            addCommand(it)
+        }
+    }
+
+    suspend fun registerCommands(kord: Kord, logger: Logger) {
+        commands.forEach { command ->
+            with (command) {
+                logger.info("Registering a slash command: $commandName")
+                kord.slashCommands.createGuildApplicationCommand(
+                    guildId = Snowflake(config.guildId),
+                    name = commandName,
+                    description = commandDescription,
+                    builder = {
+                        commandOptions().arguments(this)
+                    }
+                )
+            }
+        }
+    }
+
+    suspend fun unregisterCommands(kord: Kord, logger: Logger) {
+        logger.info("Unregistering all slash commands...")
+        kord.slashCommands
+            .getGuildApplicationCommands(config.guildSnowflake)
+            .collect {
+                it.delete()
+            }
+    }
+
+    private fun getCommand(name: String) = commands.find { it.commandName == name }
 
     suspend fun respondCommandInteraction(interaction: CommandInteraction) {
         val command = interaction.command

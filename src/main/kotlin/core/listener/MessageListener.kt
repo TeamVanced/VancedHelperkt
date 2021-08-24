@@ -1,11 +1,14 @@
 package core.listener
 
+import core.command.CommandManager
 import core.util.emoteRegex
 import database.warnUser
+import dev.kord.core.Kord
 import dev.kord.core.entity.Message
 import ext.checkWarnForTooManyInfractions
 import ext.isMod
 import ext.isWhitelistedSpamChannel
+import org.slf4j.Logger
 
 class MessageListener {
 
@@ -68,6 +71,33 @@ class MessageListener {
         )
         channel.createMessage("${messageAuthor.mention} has been warned for spamming")
         messageAuthor.checkWarnForTooManyInfractions()
+    }
+
+    suspend fun runDevCommands(
+        message: Message,
+        commandManager: CommandManager,
+        kord: Kord,
+        logger: Logger,
+    ) {
+        val commandPrefix = "vh!"
+
+        val messageContent = message.content
+        val messageChannel = message.getChannel()
+
+        if (!messageContent.startsWith(commandPrefix)) return
+
+        when (messageContent.substringAfter(commandPrefix)) {
+            "registercommands" -> {
+                messageChannel.createMessage("Registering all slash commands...")
+                commandManager.registerCommands(kord, logger)
+                messageChannel.createMessage("Done! Registered slash commands")
+            }
+            "unregistercommands" ->  {
+                messageChannel.createMessage("Unregistering all slash commands...")
+                commandManager.unregisterCommands(kord, logger)
+                messageChannel.createMessage("Done! Unregistered slash commands")
+            }
+        }
     }
 
 }

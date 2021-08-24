@@ -209,7 +209,7 @@ class Settings : BaseCommand(
             }
         )
 
-    private fun configureLogChannel(ctx: CommandContext) {
+    private suspend fun configureLogChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
         logChannelId = channel.id.value
@@ -218,7 +218,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun configureModLogChannel(ctx: CommandContext) {
+    private suspend fun configureModLogChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
         modLogChannelId = channel.id.value
@@ -227,7 +227,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun configureErrorChannel(ctx: CommandContext) {
+    private suspend fun configureErrorChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
         errorChannelId = channel.id.value
@@ -236,7 +236,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun configureMuteRole(ctx: CommandContext) {
+    private suspend fun configureMuteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         muteRoleId = role.id.value
@@ -245,7 +245,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun configureBoosterRole(ctx: CommandContext) {
+    private suspend fun configureBoosterRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         boosterRoleId = role.id.value
@@ -254,7 +254,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun addModerator(ctx: CommandContext) {
+    private suspend fun addModerator(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         addModeratorRoleId(role.id.value)
@@ -263,7 +263,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun removeModerator(ctx: CommandContext) {
+    private suspend fun removeModerator(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         removeModeratorRoleId(role.id.value)
@@ -272,7 +272,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun addQuoteRole(ctx: CommandContext) {
+    private suspend fun addQuoteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         addAllowedQuoteRoleId(role.id.value)
@@ -281,7 +281,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun removeQuoteRole(ctx: CommandContext) {
+    private suspend fun removeQuoteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         removeAllowedQuoteRoleId(role.id.value)
@@ -290,7 +290,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun addColourMeRole(ctx: CommandContext) {
+    private suspend fun addColourMeRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         addAllowedColourMeRoleId(role.id.value)
@@ -299,7 +299,7 @@ class Settings : BaseCommand(
         }
     }
 
-    private fun removeColourMeRole(ctx: CommandContext) {
+    private suspend fun removeColourMeRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
         removeAllowedColourMeRoleId(role.id.value)

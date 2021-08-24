@@ -198,7 +198,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun getQuote(ctx: CommandContext) {
+    private suspend fun getQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int()
 
         val quote = getQuote(quoteId)
@@ -215,7 +215,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun searchQuote(ctx: CommandContext) {
+    private suspend fun searchQuote(ctx: CommandContext) {
         val keyword = ctx.args["keyword"]!!.string()
 
         val quotes = searchQuotes(keyword)
@@ -230,7 +230,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun getRandomQuote(ctx: CommandContext) {
+    private suspend fun getRandomQuote(ctx: CommandContext) {
         ctx.respondPublic {
             val randomQuote = randomQuote
             if (randomQuote != null) {
@@ -242,7 +242,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun removeQuote(ctx: CommandContext) {
+    private suspend fun removeQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int()
 
         deleteQuote(quoteId)
@@ -252,7 +252,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun starQuote(ctx: CommandContext) {
+    private suspend fun starQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int()
         val authorId = ctx.author.id.asString
 
@@ -282,7 +282,7 @@ class Quotes : BaseCommand(
         }
     }
 
-    private fun unstarQuote(ctx: CommandContext) {
+    private suspend fun unstarQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int()
         val authorId = ctx.author.id.asString
 

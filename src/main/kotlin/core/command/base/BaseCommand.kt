@@ -1,11 +1,8 @@
 package core.command.base
 
-import config
 import core.command.CommandContext
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.common.annotation.KordPreview
-import dev.kord.common.entity.Snowflake
-import dev.kord.core.Kord
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import org.koin.core.component.KoinComponent
@@ -22,9 +19,13 @@ abstract class BaseCommand(
         ctx: CommandContext
     )
 
-    open suspend fun onSelectMenuInteraction(interaction: SelectMenuInteraction) = Unit
+    open suspend fun onSelectMenuInteraction(
+        interaction: SelectMenuInteraction
+    ) = Unit
 
-    open suspend fun onButtonInteraction(interaction: ButtonInteraction) {
+    open suspend fun onButtonInteraction(
+        interaction: ButtonInteraction
+    ) {
         if (interaction.componentId == "${commandName}-delete") {
             interaction.acknowledgePublicDeferredMessageUpdate().delete()
         }
@@ -32,14 +33,4 @@ abstract class BaseCommand(
 
     open suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder()
-
-    suspend fun Kord.registerCommand() {
-        slashCommands.createGuildApplicationCommand(
-            guildId = Snowflake(config.guildId),
-            name = commandName,
-            description = commandDescription
-        ) {
-            commandOptions().arguments(this)
-        }
-    }
 }

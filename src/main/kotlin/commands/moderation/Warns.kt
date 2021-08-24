@@ -106,7 +106,7 @@ class Warns : BaseCommand(
         user.asMember(config.guildSnowflake).checkWarnForTooManyInfractions()
     }
 
-    private fun unwarnUser(ctx: CommandContext) {
+    private suspend fun unwarnUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
         val warnId = ctx.args["warnid"]?.int()
 
@@ -132,7 +132,7 @@ class Warns : BaseCommand(
         }
     }
 
-    private fun listWarns(ctx: CommandContext) {
+    private suspend fun listWarns(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
 
         val warns = getUserWarns(user.id.asString)
