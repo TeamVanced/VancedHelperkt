@@ -2,7 +2,6 @@ import core.command.CommandManager
 import core.listener.MessageListener
 import core.listener.ReactionListener
 import database.settings
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.entity.ReactionEmoji
@@ -27,7 +26,7 @@ class Bot : KoinComponent {
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
-    @OptIn(KordPreview::class)
+    
     suspend fun start() {
         val kord = Kord(config.token)
 

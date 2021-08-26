@@ -4,11 +4,13 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import database.*
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.channel
 import dev.kord.core.entity.interaction.role
+import dev.kord.rest.builder.interaction.channel
+import dev.kord.rest.builder.interaction.group
+import dev.kord.rest.builder.interaction.role
+import dev.kord.rest.builder.interaction.subCommand
 
-@OptIn(KordPreview::class)
 class Settings : BaseCommand(
     commandName = "settings",
     commandDescription = "Configure settings"

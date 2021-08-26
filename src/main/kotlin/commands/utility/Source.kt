@@ -3,7 +3,6 @@ package commands.utility
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-
 class Source : BaseCommand(
     commandName = "source",
     commandDescription = "Get a link to my github source"

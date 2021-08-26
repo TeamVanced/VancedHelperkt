@@ -1,9 +1,8 @@
 package core.wrapper.applicationcommand
 
-import dev.kord.common.annotation.KordPreview
-import dev.kord.rest.builder.interaction.ApplicationCommandCreateBuilder
+import dev.kord.rest.builder.interaction.ChatInputCreateBuilder
 
-@OptIn(KordPreview::class)
+
 data class CustomApplicationCommandCreateBuilder(
-    val arguments: ApplicationCommandCreateBuilder.() -> Unit = {},
+    val arguments: ChatInputCreateBuilder.() -> Unit = {},
 )

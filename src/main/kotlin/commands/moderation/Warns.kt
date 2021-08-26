@@ -5,14 +5,16 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import database.getUserWarns
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.string
+import dev.kord.rest.builder.interaction.subCommand
+import dev.kord.rest.builder.interaction.user
 import ext.checkWarnForTooManyInfractions
 import ext.takeMax
 
-@OptIn(KordPreview::class)
 class Warns : BaseCommand(
     commandName = "warn",
     commandDescription = "Warn actions"

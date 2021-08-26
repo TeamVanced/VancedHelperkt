@@ -3,7 +3,6 @@ package repository.gender
 import domain.model.gender.GenderModel
 import network.model.gender.GenderDtoMapper
 import network.service.GenderService
-
 class GenderRepositoryImpl(
     private val service: GenderService,
     private val mapper: GenderDtoMapper

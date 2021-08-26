@@ -3,11 +3,10 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.user
 import org.apache.commons.math3.distribution.NormalDistribution
 
-@OptIn(KordPreview::class)
 class PP : BaseCommand(
     commandName = "pp",
     commandDescription = "Calculate user's PP size"

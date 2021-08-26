@@ -2,12 +2,11 @@ package core.command.base
 
 import core.command.CommandContext
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import org.koin.core.component.KoinComponent
 
-@OptIn(KordPreview::class)
+
 abstract class BaseCommand(
     val commandName: String,
     val commandDescription: String,

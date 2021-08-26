@@ -9,7 +9,6 @@ import ext.checkWarnForTooManyInfractions
 import ext.isMod
 import ext.isWhitelistedSpamChannel
 import org.slf4j.Logger
-
 class MessageListener {
 
     suspend fun filterMessageSpam(

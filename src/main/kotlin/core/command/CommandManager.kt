@@ -2,7 +2,6 @@ package core.command
 
 import config
 import core.command.base.BaseCommand
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.entity.interaction.*
@@ -11,7 +10,6 @@ import org.reflections.Reflections
 import org.slf4j.Logger
 import java.lang.reflect.Modifier
 
-@OptIn(KordPreview::class)
 class CommandManager {
 
     private val commands = mutableListOf<BaseCommand>()
@@ -44,7 +42,7 @@ class CommandManager {
         commands.forEach { command ->
             with (command) {
                 logger.info("Registering a slash command: $commandName")
-                kord.slashCommands.createGuildApplicationCommand(
+                kord.createGuildChatInputCommand(
                     guildId = Snowflake(config.guildId),
                     name = commandName,
                     description = commandDescription,
@@ -58,8 +56,7 @@ class CommandManager {
 
     suspend fun unregisterCommands(kord: Kord, logger: Logger) {
         logger.info("Unregistering all slash commands...")
-        kord.slashCommands
-            .getGuildApplicationCommands(config.guildSnowflake)
+        kord.getGuildApplicationCommands(config.guildSnowflake)
             .collect {
                 it.delete()
             }

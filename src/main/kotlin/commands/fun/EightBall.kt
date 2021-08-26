@@ -3,11 +3,10 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.string
 import java.util.*
 
-@OptIn(KordPreview::class)
 class EightBall : BaseCommand(
     commandName = "8ball",
     commandDescription = "Let a magical 8ball decide your fate"

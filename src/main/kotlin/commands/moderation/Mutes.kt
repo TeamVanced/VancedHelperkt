@@ -5,12 +5,12 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import database.muteRoleId
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.subCommand
+import dev.kord.rest.builder.interaction.user
 
-@OptIn(KordPreview::class)
 class Mutes : BaseCommand(
     commandName = "mute",
     commandDescription = "Mute actions"

@@ -3,10 +3,9 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.string
 
-@OptIn(KordPreview::class)
 class How : BaseCommand(
     commandName = "how",
     commandDescription = "See how [predicate] is [the thing]"

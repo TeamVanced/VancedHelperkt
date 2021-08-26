@@ -4,12 +4,11 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
 import repository.gender.GenderRepositoryImpl
 
-@OptIn(KordPreview::class)
 class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Get the gender of a user"

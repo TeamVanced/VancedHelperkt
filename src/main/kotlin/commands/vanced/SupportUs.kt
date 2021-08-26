@@ -2,7 +2,6 @@ package commands.vanced
 
 import core.command.CommandContext
 import core.command.base.BaseCommand
-
 class SupportUs : BaseCommand(
     commandName = "supportus",
     commandDescription = "Learn how to support us",

@@ -1,14 +1,13 @@
 package core.wrapper.interaction
 
 import core.util.randomColor
-import dev.kord.common.annotation.KordPreview
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.PersistentMessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 
-@OptIn(KordPreview::class)
+
 data class CustomInteractionResponseCreateBuilder(
     val persistentMessageCreateBuilder: PersistentMessageCreateBuilder
 ) {

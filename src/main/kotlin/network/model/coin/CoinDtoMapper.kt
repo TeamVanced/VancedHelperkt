@@ -3,7 +3,6 @@ package network.model.coin
 import domain.model.coin.CoinModel
 import domain.util.EntityMapper
 import java.text.DecimalFormat
-
 class CoinDtoMapper : EntityMapper<CoinDto, CoinModel> {
 
     override suspend fun mapToModel(entity: CoinDto): CoinModel {

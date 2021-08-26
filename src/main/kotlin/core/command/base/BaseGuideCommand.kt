@@ -2,7 +2,6 @@ package core.command.base
 
 import core.command.CommandContext
 import core.util.randomColor
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.rest.builder.message.EmbedBuilder
@@ -12,7 +11,7 @@ import ext.takeMax
 import org.koin.core.component.inject
 import repository.guide.GuideRepository
 
-@OptIn(KordPreview::class)
+
 abstract class BaseGuideCommand(
     commandName: String,
     commandDescription: String,

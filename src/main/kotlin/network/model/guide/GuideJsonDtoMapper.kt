@@ -4,7 +4,6 @@ import domain.model.guide.GuideFieldModel
 import domain.model.guide.GuideJsonModel
 import domain.model.guide.GuideSingleJsonModel
 import domain.util.EntityMapper
-
 class GuideJsonDtoMapper : EntityMapper<GuideJsonDto, GuideJsonModel> {
 
     override suspend fun mapToModel(entity: GuideJsonDto): GuideJsonModel {

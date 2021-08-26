@@ -1,17 +1,15 @@
 package commands.utility
 
 import config
-
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.const.*
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.int
+import dev.kord.rest.builder.interaction.int
 import org.koin.core.component.inject
 import repository.coin.CoinRepositoryImpl
 
-@OptIn(KordPreview::class)
 class BAT : BaseCommand(
     commandName = "bat",
     commandDescription = "Check how many stonks we made today"
@@ -61,17 +59,18 @@ class BAT : BaseCommand(
         }
     }
 
-    override suspend fun commandOptions() = CustomApplicationCommandCreateBuilder(
-        arguments = {
-            int(
-                name = "amount",
-                description = "Amount of BATs to convert to EUR",
-                builder = {
-                    required = false
-                }
-            )
-        }
-    )
+    override suspend fun commandOptions() =
+        CustomApplicationCommandCreateBuilder(
+            arguments = {
+                int(
+                    name = "amount",
+                    description = "Amount of BATs to convert to EUR",
+                    builder = {
+                        required = false
+                    }
+                )
+            }
+        )
 
     private fun Double.stonkify(): String =
         when {

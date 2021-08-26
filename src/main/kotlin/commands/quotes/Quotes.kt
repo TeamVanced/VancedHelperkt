@@ -1,7 +1,6 @@
 package commands.quotes
 
 import config
-
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.const.stonks
@@ -9,15 +8,16 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import database.*
 import database.collections.Quote
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.string
+import dev.kord.rest.builder.interaction.subCommand
 import ext.takeMax
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(KordPreview::class)
 class Quotes : BaseCommand(
     commandName = "quote",
     commandDescription = "Quote actions"

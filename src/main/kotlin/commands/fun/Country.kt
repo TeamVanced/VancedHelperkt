@@ -4,8 +4,8 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
 import repository.country.CountryRepositoryImpl
 
@@ -16,7 +16,7 @@ class Country : BaseCommand(
 
     private val repository by inject<CountryRepositoryImpl>()
 
-    @OptIn(KordPreview::class)
+    
     override suspend fun execute(
         ctx: CommandContext
     ) {
@@ -52,7 +52,7 @@ class Country : BaseCommand(
         }
     }
 
-    @OptIn(KordPreview::class)
+    
     override suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder(
             arguments = {

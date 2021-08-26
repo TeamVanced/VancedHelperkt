@@ -4,11 +4,12 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.common.Color
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.string
 
-@OptIn(KordPreview::class)
+//TODO this sucks
 class Embed : BaseCommand(
     commandName = "embed",
     commandDescription = "Create an embed"
@@ -17,17 +18,14 @@ class Embed : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val title = ctx.args["title"]?.string()
-        val description = ctx.args["description"]?.string()
-        val image = ctx.args["image"]?.string()
-        val color = ctx.args["color"]?.int()
+        val embedColor = ctx.args["color"]?.int()
 
         ctx.respondPublic {
             embed {
-                this.title = title
-                this.description = description
-                this.image = image
-                this.color = if (color != null) Color(color) else null
+                title = ctx.args["title"]?.string()
+                description = ctx.args["description"]?.string()
+                image = ctx.args["image"]?.string()
+                color = if (embedColor != null) Color(embedColor) else null
             }
         }
     }

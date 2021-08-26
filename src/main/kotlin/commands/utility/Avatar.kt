@@ -3,10 +3,9 @@ package commands.utility
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.annotation.KordPreview
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.user
 
-@OptIn(KordPreview::class)
 class Avatar : BaseCommand(
     commandName = "avatar",
     commandDescription = "Get user's avatar"
@@ -26,16 +25,17 @@ class Avatar : BaseCommand(
         }
     }
 
-    override suspend fun commandOptions() = CustomApplicationCommandCreateBuilder(
-        arguments = {
-            user(
-                name = "user",
-                description = "Whose avatar to get",
-                builder = {
-                    required = true
-                }
-            )
-        }
-    )
+    override suspend fun commandOptions() =
+        CustomApplicationCommandCreateBuilder(
+            arguments = {
+                user(
+                    name = "user",
+                    description = "Whose avatar to get",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
+        )
 
 }

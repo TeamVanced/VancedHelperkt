@@ -3,7 +3,6 @@ package repository.guide
 import domain.model.guide.GuideJsonModel
 import network.model.guide.GuideJsonDtoMapper
 import network.service.GuideService
-
 class GuideRepositoryImpl(
     private val service: GuideService,
     private val mapper: GuideJsonDtoMapper
