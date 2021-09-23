@@ -7,7 +7,6 @@ import dev.kord.rest.builder.message.create.PersistentMessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 
-
 data class CustomInteractionResponseCreateBuilder(
     val persistentMessageCreateBuilder: PersistentMessageCreateBuilder
 ) {
