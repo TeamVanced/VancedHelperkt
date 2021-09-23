@@ -28,7 +28,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
-    implementation("io.insert-koin:koin-core:3.0.1")
+    implementation("io.insert-koin:koin-core:3.1.2")
 
     implementation("org.reflections:reflections:0.9.12")
 }
