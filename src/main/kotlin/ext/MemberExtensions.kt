@@ -15,8 +15,9 @@ suspend fun Member.checkWarnForTooManyInfractions() {
     }
 }
 
-val Member.isMod get() = cachedModeratorRoleIds.any { modRoleId ->
-    roleIds.map { roleId ->
-        roleId.value
-    }.contains(modRoleId)
-}
+val Member.isMod
+    get() = cachedModeratorRoleIds.any { modRoleId ->
+        roleIds.map { roleId ->
+            roleId.value
+        }.contains(modRoleId)
+    }

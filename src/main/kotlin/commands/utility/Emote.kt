@@ -11,7 +11,7 @@ class Emote : BaseCommand(
     commandDescription = "Get a corresponding emote link"
 ) {
 
-    
+
     override suspend fun execute(
         ctx: CommandContext
     ) {

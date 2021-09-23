@@ -16,7 +16,7 @@ class Country : BaseCommand(
 
     private val repository by inject<CountryRepositoryImpl>()
 
-    
+
     override suspend fun execute(
         ctx: CommandContext
     ) {
@@ -52,7 +52,7 @@ class Country : BaseCommand(
         }
     }
 
-    
+
     override suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder(
             arguments = {

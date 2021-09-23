@@ -3,6 +3,7 @@ package repository.coin
 import domain.model.coin.CoinModel
 import network.model.coin.CoinDtoMapper
 import network.service.CoinService
+
 class CoinRepositoryImpl(
     private val service: CoinService,
     private val mapper: CoinDtoMapper

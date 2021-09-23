@@ -9,7 +9,7 @@ import dev.kord.rest.builder.interaction.user
 class Avatar : BaseCommand(
     commandName = "avatar",
     commandDescription = "Get user's avatar"
-){
+) {
 
     override suspend fun execute(
         ctx: CommandContext

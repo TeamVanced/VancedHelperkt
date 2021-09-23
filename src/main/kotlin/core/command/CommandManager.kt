@@ -15,7 +15,7 @@ class CommandManager {
     private val commands = mutableListOf<BaseCommand>()
 
     private fun addCommand(command: BaseCommand) {
-        if (!commands.contains(command)){
+        if (!commands.contains(command)) {
             commands.add(command)
         }
     }
@@ -40,7 +40,7 @@ class CommandManager {
 
     suspend fun registerCommands(kord: Kord, logger: Logger) {
         commands.forEach { command ->
-            with (command) {
+            with(command) {
                 logger.info("Registering a slash command: $commandName")
                 kord.createGuildChatInputCommand(
                     guildId = Snowflake(config.guildId),

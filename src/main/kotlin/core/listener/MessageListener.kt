@@ -9,6 +9,7 @@ import ext.checkWarnForTooManyInfractions
 import ext.isMod
 import ext.isWhitelistedSpamChannel
 import org.slf4j.Logger
+
 class MessageListener {
 
     suspend fun filterMessageSpam(
@@ -91,7 +92,7 @@ class MessageListener {
                 commandManager.registerCommands(kord, logger)
                 messageChannel.createMessage("Done! Registered slash commands")
             }
-            "unregistercommands" ->  {
+            "unregistercommands" -> {
                 messageChannel.createMessage("Unregistering all slash commands...")
                 commandManager.unregisterCommands(kord, logger)
                 messageChannel.createMessage("Done! Unregistered slash commands")

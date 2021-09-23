@@ -27,6 +27,7 @@ fun getEmoteRoles(
         .append("messageId", messageId)
         .append("emote", emote)
 )
+
 fun updateEmoteRoles(
     messageId: String,
     emote: String,

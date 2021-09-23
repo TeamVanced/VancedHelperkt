@@ -8,7 +8,7 @@ import org.litote.kmongo.getCollection
 
 val settingsCollection = helperDB.getCollection<Settings>("settings")
 
-var cachedWhitelistedSpamChannelIds= settings.whitelistedSpamChannelIds
+var cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
 var cachedModeratorRoleIds = settings.modRoleIds
 var cachedAllowedQuoteRoleIds = settings.allowedQuoteRoleIds
 var cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds

@@ -128,7 +128,8 @@ class Quotes : BaseCommand(
         )
 
     private suspend fun addQuote(ctx: CommandContext) {
-        val linkRegex = """https://(?:\w+.)?discord(?:app)?.com/channels/\d+/(?<channelId>\d+)/(?<messageId>\d+)""".toRegex()
+        val linkRegex =
+            """https://(?:\w+.)?discord(?:app)?.com/channels/\d+/(?<channelId>\d+)/(?<messageId>\d+)""".toRegex()
 
         val link = ctx.args["link"]!!.string()
 

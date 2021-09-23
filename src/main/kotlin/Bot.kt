@@ -26,11 +26,11 @@ class Bot : KoinComponent {
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
-    
+
     suspend fun start() {
         val kord = Kord(config.token)
 
-        with (commandManager) {
+        with(commandManager) {
             addCommands()
             runPreInit()
         }
@@ -45,7 +45,7 @@ class Bot : KoinComponent {
         }
 
         kord.on<MessageCreateEvent> {
-            with (messageListener) {
+            with(messageListener) {
                 filterMessageSpam(message)
                 filterSingleMessageEmoteSpam(message)
                 runDevCommands(message, commandManager, kord, logger)
