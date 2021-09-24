@@ -5,9 +5,9 @@ import core.util.emoteRegex
 import database.warnUser
 import dev.kord.core.Kord
 import dev.kord.core.entity.Message
-import ext.checkWarnForTooManyInfractions
-import ext.isMod
-import ext.isWhitelistedSpamChannel
+import core.ext.checkWarnForTooManyInfractions
+import core.ext.isMod
+import core.ext.isWhitelistedSpamChannel
 import org.slf4j.Logger
 
 class MessageListener {

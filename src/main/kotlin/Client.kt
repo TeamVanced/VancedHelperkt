@@ -1,4 +1,4 @@
-import configuration.Config
+import core.configuration.Config
 
 val config = Config(
     token = System.getenv("BOT_TOKEN"),

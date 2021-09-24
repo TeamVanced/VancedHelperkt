@@ -7,7 +7,7 @@ import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.embed
 import domain.model.guide.GuideSingleJsonModel
-import ext.takeMax
+import core.ext.takeMax
 import org.koin.core.component.inject
 import repository.guide.GuideRepository
 

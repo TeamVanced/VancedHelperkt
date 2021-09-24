@@ -14,7 +14,7 @@ import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
-import ext.takeMax
+import core.ext.takeMax
 import java.text.SimpleDateFormat
 import java.util.*
 

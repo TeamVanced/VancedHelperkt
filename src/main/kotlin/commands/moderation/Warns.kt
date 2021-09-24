@@ -12,8 +12,8 @@ import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
 import dev.kord.rest.builder.interaction.user
-import ext.checkWarnForTooManyInfractions
-import ext.takeMax
+import core.ext.checkWarnForTooManyInfractions
+import core.ext.takeMax
 
 class Warns : BaseCommand(
     commandName = "warn",
