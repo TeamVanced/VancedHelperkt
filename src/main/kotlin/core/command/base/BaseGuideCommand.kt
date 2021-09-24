@@ -11,7 +11,6 @@ import core.ext.takeMax
 import org.koin.core.component.inject
 import repository.guide.GuideRepository
 
-
 abstract class BaseGuideCommand(
     commandName: String,
     commandDescription: String,

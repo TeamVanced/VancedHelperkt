@@ -6,7 +6,6 @@ import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import org.koin.core.component.KoinComponent
 
-
 abstract class BaseCommand(
     val commandName: String,
     val commandDescription: String,
