@@ -2,16 +2,13 @@ package core.command
 
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.entity.ButtonStyle
+import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.Member
 import dev.kord.core.entity.channel.Channel
-import dev.kord.core.entity.interaction.CommandInteraction
-import dev.kord.core.entity.interaction.GroupCommand
-import dev.kord.core.entity.interaction.OptionValue
-import dev.kord.core.entity.interaction.SubCommand
-import dev.kord.rest.builder.message.create.PersistentMessageCreateBuilder
+import dev.kord.core.entity.interaction.*
+import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
-
 
 data class CommandContext(
     val author: Member,
@@ -19,7 +16,7 @@ data class CommandContext(
     val args: Map<String, OptionValue<*>>,
     val subCommand: SubCommand?,
     val subCommandGroup: GroupCommand?,
-    private val commandInteraction: CommandInteraction,
+    private val commandInteraction: GuildChatInputCommandInteraction,
     private val commandName: String,
 ) {
     suspend fun respondPublic(
@@ -32,15 +29,14 @@ data class CommandContext(
     }
 
     suspend fun respondEphemeral(
-        deleteButton: Boolean = true,
         block: CustomInteractionResponseCreateBuilder.() -> Unit
     ) {
-        commandInteraction.respondPublic {
-            respond(deleteButton, block)
+        commandInteraction.respondEphemeral {
+            respond(deleteButton = false, block)
         }
     }
 
-    private fun PersistentMessageCreateBuilder.respond(
+    private fun MessageCreateBuilder.respond(
         deleteButton: Boolean,
         block: CustomInteractionResponseCreateBuilder.() -> Unit
     ) {

@@ -3,12 +3,12 @@ package core.wrapper.interaction
 import core.util.randomColor
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.builder.message.create.PersistentMessageCreateBuilder
+import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 
 data class CustomInteractionResponseCreateBuilder(
-    val persistentMessageCreateBuilder: PersistentMessageCreateBuilder
+    val persistentMessageCreateBuilder: MessageCreateBuilder
 ) {
     fun embed(
         block: EmbedBuilder.() -> Unit

@@ -7,7 +7,7 @@ import dev.kord.core.Kord
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
-import dev.kord.core.entity.interaction.CommandInteraction
+import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -37,7 +37,7 @@ class Bot : KoinComponent {
 
         kord.on<InteractionCreateEvent> {
             when (interaction) {
-                is CommandInteraction -> commandManager.respondCommandInteraction(interaction as CommandInteraction)
+                is GuildChatInputCommandInteraction -> commandManager.respondCommandInteraction(interaction as GuildChatInputCommandInteraction)
                 is SelectMenuInteraction -> commandManager.respondSelectMenuInteraction(interaction as SelectMenuInteraction)
                 is ButtonInteraction -> commandManager.respondButtonInteraction(interaction as ButtonInteraction)
                 else -> return@on

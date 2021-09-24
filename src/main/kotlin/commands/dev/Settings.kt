@@ -1,5 +1,6 @@
 package commands.dev
 
+import core.collection.MongoMutableList
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
@@ -259,54 +260,101 @@ class Settings : BaseCommand(
     private suspend fun addModerator(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        addModeratorRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully added ${role.mention} to moderators"
-        }
+        moderatorRoleIds.addWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
     }
 
     private suspend fun removeModerator(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        removeModeratorRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully removed ${role.mention} from moderators"
-        }
+        moderatorRoleIds.removeWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
     }
 
     private suspend fun addQuoteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        addAllowedQuoteRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully added ${role.mention} to allowed quote roles"
-        }
+        allowedQuoteRoleIds.addWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
     }
 
     private suspend fun removeQuoteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        removeAllowedQuoteRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully removed ${role.mention} from allowed quote roles"
-        }
+        allowedQuoteRoleIds.removeWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
     }
 
     private suspend fun addColourMeRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        addAllowedColourMeRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully added ${role.mention} to allowed colourme roles"
-        }
+        allowedColourMeRoleIds.addWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
     }
 
     private suspend fun removeColourMeRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        removeAllowedColourMeRoleId(role.id.value)
-        ctx.respondPublic {
-            content = "Successfully removed ${role.mention} from allowed colourme roles"
+        allowedColourMeRoleIds.removeWithChecks(
+            ctx = ctx,
+            element = role.id.value,
+            itemName = "moderators",
+            mention = role.mention
+        )
+    }
+
+    private suspend fun <E, TDocument> MongoMutableList<E, TDocument>.addWithChecks(
+        ctx: CommandContext,
+        element: E,
+        itemName: String,
+        mention: String
+    ) {
+        if (!contains(element)) {
+            add(element)
+            ctx.respondEphemeral {
+                content = "Successfully added $mention to $itemName"
+            }
+        } else {
+            ctx.respondEphemeral {
+                content = "$mention already exists in $itemName"
+            }
+        }
+    }
+
+    private suspend fun <E, TDocument> MongoMutableList<E, TDocument>.removeWithChecks(
+        ctx: CommandContext,
+        element: E,
+        itemName: String,
+        mention: String
+    ) {
+        if (remove(element)) {
+            ctx.respondEphemeral {
+                content = "Successfully removed $mention from $itemName"
+            }
+        } else {
+            ctx.respondEphemeral {
+                content = "$mention doesn't exist in $itemName"
+            }
         }
     }
 

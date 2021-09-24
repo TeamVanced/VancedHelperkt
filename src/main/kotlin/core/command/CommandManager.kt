@@ -64,7 +64,7 @@ class CommandManager {
 
     private fun getCommand(name: String) = commands.find { it.commandName == name }
 
-    suspend fun respondCommandInteraction(interaction: CommandInteraction) {
+    suspend fun respondCommandInteraction(interaction: GuildChatInputCommandInteraction) {
         val command = interaction.command
 
         val commandObject = getCommand(command.rootName)!!

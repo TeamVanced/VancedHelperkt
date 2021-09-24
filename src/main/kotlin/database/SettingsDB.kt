@@ -1,17 +1,15 @@
 package database
 
-import com.mongodb.client.model.Updates
 import config
+import core.collection.MongoItemParameter
+import core.collection.MongoListParameter
+import core.collection.mongoItem
+import core.collection.mongoMutableListOf
 import database.collections.Settings
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 
 val settingsCollection = helperDB.getCollection<Settings>("settings")
-
-var cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
-var cachedModeratorRoleIds = settings.modRoleIds
-var cachedAllowedQuoteRoleIds = settings.allowedQuoteRoleIds
-var cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
 
 val settings: Settings
     get() {
@@ -24,167 +22,74 @@ val settings: Settings
         return settingsCollection.findOne(guildDBObject)!!
     }
 
-var muteRoleId: Long = 0L
-    get() {
-        if (field == 0L) {
-            field = settings.muteRoleId
-        }
-
-        return field
-    }
-    set(value) {
-        field = value
-        settingsCollection
-            .findOneAndUpdate(
-                guildDBObject,
-                Updates.set("muteRoleId", value)
-            )
-    }
-
-var boosterRoleId: Long = 0L
-    get() {
-        if (field == 0L) {
-            field = settings.boosterRoleId
-        }
-
-        return field
-    }
-    set(value) {
-        field = value
-        settingsCollection
-            .findOneAndUpdate(
-                guildDBObject,
-                Updates.set("boosterRoleId", value)
-            )
-    }
-
-var logChannelId: Long = 0L
-    get() {
-        if (field == 0L) {
-            field = settings.logChannelId
-        }
-
-        return field
-    }
-    set(value) {
-        field = value
-        settingsCollection
-            .findOneAndUpdate(
-                guildDBObject,
-                Updates.set("logChannelId", value)
-            )
-    }
-
-var modLogChannelId: Long = 0L
-    get() {
-        if (field == 0L) {
-            field = settings.modLogChannelId
-        }
-
-        return field
-    }
-    set(value) {
-        field = value
-        settingsCollection
-            .findOneAndUpdate(
-                guildDBObject,
-                Updates.set("modLogChannelId", value)
-            )
-    }
-
-var errorChannelId: Long = 0L
-    get() {
-        if (field == 0L) {
-            field = settings.errorChannelId
-        }
-
-        return field
-    }
-    set(value) {
-        field = value
-        settingsCollection
-            .findOneAndUpdate(
-                guildDBObject,
-                Updates.set("errorChannelId", value)
-            )
-    }
-
-fun addWhitelistedSpamChannelId(
-    channelId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.push("spamChannelIds", channelId)
+val whitelistedSpamChannelIds = mongoMutableListOf(
+    MongoListParameter(
+        name = "whitelistedSpamChannelIds",
+        list = settings.whitelistedSpamChannelIds,
+        collection = settingsCollection,
     )
-    cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
-}
+)
 
-fun removeWhitelistedSpamChannelId(
-    channelId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.pull("spamChannelIds", channelId)
+val moderatorRoleIds = mongoMutableListOf(
+    MongoListParameter(
+        name = "modRoleIds",
+        list = settings.modRoleIds,
+        collection = settingsCollection,
     )
-    cachedWhitelistedSpamChannelIds = settings.whitelistedSpamChannelIds
-}
+)
 
-fun addModeratorRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.push("modRoleIds", roleId)
+val allowedQuoteRoleIds = mongoMutableListOf(
+    MongoListParameter(
+        name = "allowedQuoteRoleIds",
+        list = settings.allowedQuoteRoleIds,
+        collection = settingsCollection,
     )
-    cachedModeratorRoleIds = settings.modRoleIds
-}
+)
 
-fun removeModeratorRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.pull("modRoleIds", roleId)
+val allowedColourMeRoleIds = mongoMutableListOf(
+    MongoListParameter(
+        name = "allowedColourMeRoleIds",
+        list = settings.allowedColourMeRoleIds,
+        collection = settingsCollection,
     )
-    cachedModeratorRoleIds = settings.modRoleIds
-}
+)
 
-fun addAllowedQuoteRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.push("allowedQuoteRoleIds", roleId)
+var muteRoleId by mongoItem(
+    MongoItemParameter(
+        name = "muteRoleId",
+        item = settings.muteRoleId,
+        collection = settingsCollection
     )
-    cachedAllowedQuoteRoleIds = settings.allowedQuoteRoleIds
-}
+)
 
-fun removeAllowedQuoteRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.pull("allowedQuoteRoleIds", roleId)
+var boosterRoleId by mongoItem(
+    MongoItemParameter(
+        name = "boosterRoleId",
+        item = settings.boosterRoleId,
+        collection = settingsCollection
     )
-    cachedAllowedColourMeRoleIds = settings.allowedQuoteRoleIds
-}
+)
 
-fun addAllowedColourMeRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.push("allowedColourMeRoleIds", roleId)
+var logChannelId by mongoItem(
+    MongoItemParameter(
+        name = "logChannelId",
+        item = settings.logChannelId,
+        collection = settingsCollection
     )
-    cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
-}
+)
 
-fun removeAllowedColourMeRoleId(
-    roleId: Long
-) {
-    settingsCollection.findOneAndUpdate(
-        guildDBObject,
-        Updates.pull("allowedColourMeRoleIds", roleId)
+var modLogChannelId by mongoItem(
+    MongoItemParameter(
+        name = "modLogChannelId",
+        item = settings.modLogChannelId,
+        collection = settingsCollection
     )
-    cachedAllowedColourMeRoleIds = settings.allowedColourMeRoleIds
-}
+)
+
+var errorChannelId by mongoItem(
+    MongoItemParameter(
+        name = "errorChannelId",
+        item = settings.errorChannelId,
+        collection = settingsCollection
+    )
+)

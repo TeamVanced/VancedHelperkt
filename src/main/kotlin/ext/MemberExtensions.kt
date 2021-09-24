@@ -1,8 +1,8 @@
 package ext
 
-import database.cachedModeratorRoleIds
 import database.deleteUserWarns
 import database.getUserWarns
+import database.moderatorRoleIds
 import dev.kord.core.entity.Member
 
 suspend fun Member.checkWarnForTooManyInfractions() {
@@ -16,7 +16,7 @@ suspend fun Member.checkWarnForTooManyInfractions() {
 }
 
 val Member.isMod
-    get() = cachedModeratorRoleIds.any { modRoleId ->
+    get() = moderatorRoleIds.any { modRoleId ->
         roleIds.map { roleId ->
             roleId.value
         }.contains(modRoleId)
