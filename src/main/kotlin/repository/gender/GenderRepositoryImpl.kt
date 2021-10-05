@@ -9,7 +9,10 @@ class GenderRepositoryImpl(
     private val mapper: GenderDtoMapper
 ) : GenderRepository {
 
-    override suspend fun get(token: String, name: String): GenderModel {
+    override suspend fun get(
+        token: String,
+        name: String
+    ): GenderModel {
         return mapper.mapToModel(
             service.get(
                 token = token,

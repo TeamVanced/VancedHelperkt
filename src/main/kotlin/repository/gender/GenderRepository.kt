@@ -4,6 +4,9 @@ import domain.model.gender.GenderModel
 
 interface GenderRepository {
 
-    suspend fun get(token: String, email: String): GenderModel
+    suspend fun get(
+        token: String,
+        name: String
+    ): GenderModel
 
 }
