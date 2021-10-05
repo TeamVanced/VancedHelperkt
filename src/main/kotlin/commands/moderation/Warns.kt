@@ -3,6 +3,8 @@ package commands.moderation
 import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
+import core.ext.checkWarnForTooManyInfractions
+import core.ext.takeMax
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import database.getUserWarns
 import dev.kord.core.entity.interaction.int
@@ -12,8 +14,6 @@ import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
 import dev.kord.rest.builder.interaction.user
-import core.ext.checkWarnForTooManyInfractions
-import core.ext.takeMax
 
 class Warns : BaseCommand(
     commandName = "warn",

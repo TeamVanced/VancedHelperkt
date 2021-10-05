@@ -4,6 +4,7 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.const.stonks
+import core.ext.takeMax
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import database.*
@@ -14,7 +15,6 @@ import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
-import core.ext.takeMax
 import java.text.SimpleDateFormat
 import java.util.*
 
