@@ -292,7 +292,7 @@ class Settings : BaseCommand(
         allowedQuoteRoleIds.addWithChecks(
             ctx = ctx,
             element = role.id.value,
-            itemName = "moderators",
+            itemName = "quoters",
             mention = role.mention
         )
     }
@@ -303,7 +303,7 @@ class Settings : BaseCommand(
         allowedQuoteRoleIds.removeWithChecks(
             ctx = ctx,
             element = role.id.value,
-            itemName = "moderators",
+            itemName = "quoters",
             mention = role.mention
         )
     }
@@ -314,7 +314,7 @@ class Settings : BaseCommand(
         allowedColourMeRoleIds.addWithChecks(
             ctx = ctx,
             element = role.id.value,
-            itemName = "moderators",
+            itemName = "fruities",
             mention = role.mention
         )
     }
@@ -325,7 +325,7 @@ class Settings : BaseCommand(
         allowedColourMeRoleIds.removeWithChecks(
             ctx = ctx,
             element = role.id.value,
-            itemName = "moderators",
+            itemName = "fruities",
             mention = role.mention
         )
     }
