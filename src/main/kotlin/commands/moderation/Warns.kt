@@ -6,7 +6,8 @@ import core.command.base.BaseCommand
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.takeMax
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import database.getUserWarns
+import core.database.getUserWarns
+import core.ext.isMod
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
 import dev.kord.core.entity.interaction.user
@@ -23,6 +24,12 @@ class Warns : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
+        if (!ctx.author.isMod) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val subCommand = ctx.subCommand ?: return
 
         when (subCommand.name) {
@@ -94,10 +101,8 @@ class Warns : BaseCommand(
         val user = ctx.args["user"]!!.user()
         val reason = ctx.args["reason"]!!.string()
 
-        val userId = user.id.asString
-
-        database.warnUser(
-            userId = userId,
+        core.database.warnUser(
+            userId = user.id.asString,
             userTag = user.tag,
             reason = reason
         )
@@ -124,7 +129,7 @@ class Warns : BaseCommand(
             }
         }
 
-        database.unwarnUser(
+        core.database.unwarnUser(
             userId = userId,
             warnId = warnId
         )

@@ -7,8 +7,9 @@ import core.util.EMOTE_STONKS
 import core.ext.takeMax
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
-import database.*
-import database.collections.Quote
+import core.database.*
+import core.database.collections.Quote
+import core.ext.isQuoter
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.interaction.int
 import dev.kord.core.entity.interaction.string
@@ -128,6 +129,12 @@ class Quotes : BaseCommand(
         )
 
     private suspend fun addQuote(ctx: CommandContext) {
+        if (!ctx.author.isQuoter) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val linkRegex =
             """https://(?:\w+.)?discord(?:app)?.com/channels/\d+/(?<channelId>\d+)/(?<messageId>\d+)""".toRegex()
 
@@ -162,14 +169,14 @@ class Quotes : BaseCommand(
         }
 
         if (message.author?.isBot == true) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "Beep Boop. Do not bully robots"
             }
             return
         }
 
         if (message.author == null) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "That's not a message from a guild member!"
             }
             return
@@ -203,13 +210,9 @@ class Quotes : BaseCommand(
         val quoteId = ctx.args["quoteid"]!!.int()
 
         val quote = getQuote(quoteId)
-
-        if (quote == null) {
-            ctx.respondPublic {
+            ?: return ctx.respondEphemeral {
                 content = "Quote #$quoteId not found"
             }
-            return
-        }
 
         ctx.respondPublic {
             parseQuote(quote)
@@ -221,29 +224,35 @@ class Quotes : BaseCommand(
 
         val quotes = searchQuotes(keyword)
 
-        ctx.respondPublic {
-            if (quotes.isEmpty()) {
+        if (quotes.isEmpty()) {
+            return ctx.respondEphemeral {
                 content = "No quotes matched that filter"
-                return@respondPublic
             }
+        }
 
+        ctx.respondPublic {
             parseQuote(quotes[0])
         }
     }
 
     private suspend fun getRandomQuote(ctx: CommandContext) {
-        ctx.respondPublic {
-            val randomQuote = randomQuote
-            if (randomQuote != null) {
-                parseQuote(randomQuote)
-                return@respondPublic
+        val randomQuote = randomQuote
+            ?: return ctx.respondEphemeral {
+                content = "There are no quotes in this server! Try adding some"
             }
 
-            content = "There are no quotes in this server! Try adding some"
+        ctx.respondPublic {
+            parseQuote(randomQuote)
         }
     }
 
     private suspend fun removeQuote(ctx: CommandContext) {
+        if (!ctx.author.isQuoter) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val quoteId = ctx.args["quoteid"]!!.int()
 
         deleteQuote(quoteId)
@@ -260,14 +269,14 @@ class Quotes : BaseCommand(
         val quote = getQuote(quoteId)
 
         if (quote == null) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "Quote #$quoteId does not exist"
             }
             return
         }
 
         if (quote.stars.contains(authorId)) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "Bruh you already starred this"
             }
             return
@@ -290,14 +299,14 @@ class Quotes : BaseCommand(
         val quote = getQuote(quoteId)
 
         if (quote == null) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "Quote #$quoteId does not exist"
             }
             return
         }
 
         if (!quote.stars.contains(authorId)) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "You don't have this quote starred!"
             }
             return

@@ -1,10 +1,11 @@
 package commands.dev
 
-import core.collection.MongoMutableList
+import core.database.data.MongoMutableList
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import database.*
+import core.database.*
+import core.ext.isDev
 import dev.kord.core.entity.interaction.channel
 import dev.kord.core.entity.interaction.role
 import dev.kord.rest.builder.interaction.channel
@@ -20,6 +21,12 @@ class Settings : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
+        if (!ctx.author.isDev) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val subCommand = ctx.subCommand
         val subCommandGroup = ctx.subCommandGroup
 

@@ -2,7 +2,7 @@ package core.listener
 
 import core.command.CommandManager
 import core.util.emoteRegex
-import database.warnUser
+import core.database.warnUser
 import dev.kord.core.Kord
 import dev.kord.core.entity.Message
 import core.ext.checkWarnForTooManyInfractions

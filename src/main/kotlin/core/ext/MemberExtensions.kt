@@ -1,8 +1,11 @@
 package core.ext
 
-import database.deleteUserWarns
-import database.getUserWarns
-import database.moderatorRoleIds
+import core.database.allowedQuoteRoleIds
+import core.database.deleteUserWarns
+import core.database.getUserWarns
+import core.database.moderatorRoleIds
+import core.util.botOwners
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.Member
 
 suspend fun Member.checkWarnForTooManyInfractions() {
@@ -21,3 +24,13 @@ val Member.isMod
             roleId.value
         }.contains(modRoleId)
     }
+
+val Member.isQuoter
+    get() = allowedQuoteRoleIds.any { modRoleId ->
+        roleIds.map { roleId ->
+            roleId.value
+        }.contains(modRoleId)
+    }
+
+val Member.isDev
+    get() = botOwners.contains(id.value)

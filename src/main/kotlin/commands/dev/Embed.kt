@@ -2,6 +2,7 @@ package commands.dev
 
 import core.command.CommandContext
 import core.command.base.BaseCommand
+import core.ext.isDev
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.common.Color
 import dev.kord.core.entity.interaction.int
@@ -18,6 +19,12 @@ class Embed : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
+        if (!ctx.author.isDev) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val embedColor = ctx.args["color"]?.int()
 
         ctx.respondPublic {

@@ -7,6 +7,7 @@ import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.Member
 import dev.kord.core.entity.channel.Channel
 import dev.kord.core.entity.interaction.*
+import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 
@@ -20,7 +21,7 @@ data class CommandContext(
     private val commandName: String,
 ) {
     suspend fun respondPublic(
-        deleteButton: Boolean = true,
+        deleteButton: Boolean = false,
         block: CustomInteractionResponseCreateBuilder.() -> Unit
     ) {
         commandInteraction.respondPublic {

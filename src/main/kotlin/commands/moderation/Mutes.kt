@@ -4,7 +4,8 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import database.muteRoleId
+import core.database.muteRoleId
+import core.ext.isMod
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.user
@@ -19,6 +20,12 @@ class Mutes : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
+        if (!ctx.author.isMod) {
+            return ctx.respondEphemeral {
+                content = "You're not allowed to execute this command"
+            }
+        }
+
         val subCommand = ctx.subCommand ?: return
 
         when (subCommand.name) {
