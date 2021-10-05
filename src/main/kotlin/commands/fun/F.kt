@@ -2,7 +2,7 @@ package commands.`fun`
 
 import core.command.CommandContext
 import core.command.base.BaseCommand
-import core.const.pressF
+import core.util.EMOTE_PRESS_F
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
@@ -19,9 +19,9 @@ class F : BaseCommand(
 
         ctx.respondPublic {
             content = if (thing != null) {
-                "$pressF ${ctx.author.mention} pays respects for $thing"
+                "$EMOTE_PRESS_F ${ctx.author.mention} pays respects for $thing"
             } else {
-                pressF
+                EMOTE_PRESS_F
             }
         }
     }

@@ -3,7 +3,7 @@ package commands.utility
 import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
-import core.const.*
+import core.util.*
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.int
 import dev.kord.rest.builder.interaction.int
@@ -74,12 +74,12 @@ class BAT : BaseCommand(
 
     private fun Double.stonkify(): String =
         when {
-            this >= 25 -> "$relax $this%"
-            this >= 5 -> "$vmerchant $this%"
-            this >= 0 -> "$stonks $this%"
-            this <= -5 -> "$feels $this%"
-            this <= -25 -> "$sadness $this%"
-            else -> "$stinks $this%"
+            this >= 25 -> "$EMOTE_RELAX $this%"
+            this >= 5 -> "$EMOTE_V_MERCHANT $this%"
+            this >= 0 -> "$EMOTE_STONKS $this%"
+            this <= -5 -> "$EMOTE_FEELS $this%"
+            this <= -25 -> "$EMOTE_SADNESS $this%"
+            else -> "$EMOTE_STINKS $this%"
         }
 
 }

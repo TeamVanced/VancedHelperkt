@@ -3,7 +3,7 @@ package commands.quotes
 import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
-import core.const.stonks
+import core.util.EMOTE_STONKS
 import core.ext.takeMax
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
@@ -147,7 +147,7 @@ class Quotes : BaseCommand(
 
         if (quoteExists(messageId)) {
             ctx.respondPublic {
-                content = "Pog, that quote is already added $stonks"
+                content = "Pog, that quote is already added $EMOTE_STONKS"
             }
             return
         }
