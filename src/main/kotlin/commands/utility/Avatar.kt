@@ -19,8 +19,8 @@ class Avatar : BaseCommand(
         ctx.respondPublic {
             embed {
                 title = "${user.username}'s avatar"
-                description = "[Avatar URL](${user.avatar.url})"
-                image = "${user.avatar.url}?size=256"
+                description = "[Avatar URL](${user.avatar!!.url})"
+                image = "${user.avatar!!.url}?size=256"
             }
         }
     }

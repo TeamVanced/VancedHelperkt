@@ -115,7 +115,7 @@ class Warns : BaseCommand(
 
     private suspend fun unwarnUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
-        val warnId = ctx.args["warnid"]?.int()
+        val warnId = ctx.args["warnid"]?.int()?.toInt()
 
         val userId = user.id.asString
 

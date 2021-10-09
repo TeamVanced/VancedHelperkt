@@ -2,13 +2,13 @@ package core.database.collections
 
 data class Settings(
     val guildId: String,
-    val logChannelId: Long = 0L,
-    val modLogChannelId: Long = 0L,
-    val errorChannelId: Long = 0L,
-    val muteRoleId: Long = 0L,
-    val boosterRoleId: Long = 0L,
-    val modRoleIds: List<Long> = emptyList(),
-    val whitelistedSpamChannelIds: List<Long> = emptyList(),
-    val allowedQuoteRoleIds: List<Long> = emptyList(),
-    val allowedColourMeRoleIds: List<Long> = emptyList(),
+    val logChannelId: ULong = 0UL,
+    val modLogChannelId: ULong = 0UL,
+    val errorChannelId: ULong = 0UL,
+    val muteRoleId: ULong = 0UL,
+    val boosterRoleId: ULong = 0UL,
+    val modRoleIds: List<ULong> = emptyList(),
+    val whitelistedSpamChannelIds: List<ULong> = emptyList(),
+    val allowedQuoteRoleIds: List<ULong> = emptyList(),
+    val allowedColourMeRoleIds: List<ULong> = emptyList(),
 )

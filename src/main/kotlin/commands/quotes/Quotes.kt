@@ -193,7 +193,7 @@ class Quotes : BaseCommand(
                 messageContent = message.content,
                 messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.epochSeconds)),
                 authorId = message.author!!.id.asString,
-                authorAvatar = message.author!!.avatar.url,
+                authorAvatar = message.author!!.avatar!!.url,
                 authorName = message.author!!.tag,
                 attachment = message.attachments.firstOrNull()?.url,
                 quoteId = quoteId,
@@ -207,7 +207,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun getQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int()
+        val quoteId = ctx.args["quoteid"]!!.int().toInt()
 
         val quote = getQuote(quoteId)
             ?: return ctx.respondEphemeral {
@@ -253,7 +253,7 @@ class Quotes : BaseCommand(
             }
         }
 
-        val quoteId = ctx.args["quoteid"]!!.int()
+        val quoteId = ctx.args["quoteid"]!!.int().toInt()
 
         deleteQuote(quoteId)
 
@@ -263,7 +263,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun starQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int()
+        val quoteId = ctx.args["quoteid"]!!.int().toInt()
         val authorId = ctx.author.id.asString
 
         val quote = getQuote(quoteId)
@@ -293,7 +293,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun unstarQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int()
+        val quoteId = ctx.args["quoteid"]!!.int().toInt()
         val authorId = ctx.author.id.asString
 
         val quote = getQuote(quoteId)
