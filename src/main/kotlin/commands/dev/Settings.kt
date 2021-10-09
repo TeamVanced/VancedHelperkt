@@ -5,7 +5,9 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.database.*
-import core.ext.isDev
+import core.util.botOwners
+import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.interaction.channel
 import dev.kord.core.entity.interaction.role
 import dev.kord.rest.builder.interaction.channel
@@ -15,18 +17,13 @@ import dev.kord.rest.builder.interaction.subCommand
 
 class Settings : BaseCommand(
     commandName = "settings",
-    commandDescription = "Configure settings"
+    commandDescription = "Configure settings",
+    requiresPermissions = true
 ) {
 
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        if (!ctx.author.isDev) {
-            return ctx.respondEphemeral {
-                content = "You're not allowed to execute this command"
-            }
-        }
-
         val subCommand = ctx.subCommand
         val subCommandGroup = ctx.subCommandGroup
 
@@ -219,10 +216,22 @@ class Settings : BaseCommand(
             }
         )
 
+    override suspend fun commandPermissions() =
+        CustomApplicationCommandPermissionBuilder(
+            permissions = {
+                for (owner in botOwners) {
+                    user(
+                        id = Snowflake(owner),
+                        allow = true
+                    )
+                }
+            }
+        )
+
     private suspend fun configureLogChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
-        logChannelId = channel.id.value
+        logChannelId = channel.id.value.toLong()
         ctx.respondPublic {
             content = "Successfully updated the log channel"
         }
@@ -231,7 +240,7 @@ class Settings : BaseCommand(
     private suspend fun configureModLogChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
-        modLogChannelId = channel.id.value
+        modLogChannelId = channel.id.value.toLong()
         ctx.respondPublic {
             content = "Successfully updated the moderator action log channel"
         }
@@ -240,7 +249,7 @@ class Settings : BaseCommand(
     private suspend fun configureErrorChannel(ctx: CommandContext) {
         val channel = ctx.args["channel"]!!.channel()
 
-        errorChannelId = channel.id.value
+        errorChannelId = channel.id.value.toLong()
         ctx.respondPublic {
             content = "Successfully updated the error log channel"
         }
@@ -249,7 +258,7 @@ class Settings : BaseCommand(
     private suspend fun configureMuteRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        muteRoleId = role.id.value
+        muteRoleId = role.id.value.toLong()
         ctx.respondPublic {
             content = "Successfully updated the mute role"
         }
@@ -258,7 +267,7 @@ class Settings : BaseCommand(
     private suspend fun configureBoosterRole(ctx: CommandContext) {
         val role = ctx.args["role"]!!.role()
 
-        boosterRoleId = role.id.value
+        boosterRoleId = role.id.value.toLong()
         ctx.respondPublic {
             content = "Successfully updated the booster role"
         }
@@ -269,7 +278,7 @@ class Settings : BaseCommand(
 
         moderatorRoleIds.addWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "moderators",
             mention = role.mention
         )
@@ -280,7 +289,7 @@ class Settings : BaseCommand(
 
         moderatorRoleIds.removeWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "moderators",
             mention = role.mention
         )
@@ -291,7 +300,7 @@ class Settings : BaseCommand(
 
         allowedQuoteRoleIds.addWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "quoters",
             mention = role.mention
         )
@@ -302,7 +311,7 @@ class Settings : BaseCommand(
 
         allowedQuoteRoleIds.removeWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "quoters",
             mention = role.mention
         )
@@ -313,7 +322,7 @@ class Settings : BaseCommand(
 
         allowedColourMeRoleIds.addWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "fruities",
             mention = role.mention
         )
@@ -324,7 +333,7 @@ class Settings : BaseCommand(
 
         allowedColourMeRoleIds.removeWithChecks(
             ctx = ctx,
-            element = role.id.value,
+            element = role.id.value.toLong(),
             itemName = "fruities",
             mention = role.mention
         )

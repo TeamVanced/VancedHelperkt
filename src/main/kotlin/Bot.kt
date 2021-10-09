@@ -71,7 +71,7 @@ class Bot : KoinComponent {
         }
 
         kord.login {
-            if (settings.logChannelId == 0UL) {
+            if (settings.logChannelId == 0L) {
                 return@login
             }
 

@@ -5,7 +5,6 @@ import core.database.deleteUserWarns
 import core.database.getUserWarns
 import core.database.moderatorRoleIds
 import core.util.botOwners
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.Member
 
 suspend fun Member.checkWarnForTooManyInfractions() {
@@ -21,14 +20,14 @@ suspend fun Member.checkWarnForTooManyInfractions() {
 val Member.isMod
     get() = moderatorRoleIds.any { modRoleId ->
         roleIds.map { roleId ->
-            roleId.value
+            roleId.value.toLong()
         }.contains(modRoleId)
     }
 
 val Member.isQuoter
     get() = allowedQuoteRoleIds.any { modRoleId ->
         roleIds.map { roleId ->
-            roleId.value
+            roleId.value.toLong()
         }.contains(modRoleId)
     }
 

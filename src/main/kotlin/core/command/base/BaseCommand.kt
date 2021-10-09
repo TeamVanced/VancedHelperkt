@@ -2,6 +2,8 @@ package core.command.base
 
 import core.command.CommandContext
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import org.koin.core.component.KoinComponent
@@ -9,7 +11,10 @@ import org.koin.core.component.KoinComponent
 abstract class BaseCommand(
     val commandName: String,
     val commandDescription: String,
+    val requiresPermissions: Boolean = false
 ) : KoinComponent {
+
+    var commandId: Snowflake? = null
 
     open suspend fun preInit() = Unit
 
@@ -31,4 +36,8 @@ abstract class BaseCommand(
 
     open suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder()
+
+    open suspend fun commandPermissions() =
+        CustomApplicationCommandPermissionBuilder()
+
 }

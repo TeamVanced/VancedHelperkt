@@ -90,12 +90,15 @@ class MessageListener {
             "registercommands" -> {
                 messageChannel.createMessage("Registering all slash commands...")
                 commandManager.registerCommands(kord, logger)
-                messageChannel.createMessage("Done! Registered slash commands")
+                messageChannel.createMessage("Done! Registered slash commands.")
+                messageChannel.createMessage("Configuring command permissions...")
+                commandManager.configureCommandPermissions(kord, logger)
+                messageChannel.createMessage("Done! Configured command permissions.")
             }
             "unregistercommands" -> {
                 messageChannel.createMessage("Unregistering all slash commands...")
                 commandManager.unregisterCommands(kord, logger)
-                messageChannel.createMessage("Done! Unregistered slash commands")
+                messageChannel.createMessage("Done! Unregistered slash commands.")
             }
         }
     }

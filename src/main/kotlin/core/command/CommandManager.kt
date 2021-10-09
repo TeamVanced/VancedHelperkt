@@ -42,14 +42,17 @@ class CommandManager {
         commands.forEach { command ->
             with(command) {
                 logger.info("Registering a slash command: $commandName")
-                kord.createGuildChatInputCommand(
+
+                val registeredCommand = kord.createGuildChatInputCommand(
                     guildId = Snowflake(config.guildId),
                     name = commandName,
                     description = commandDescription,
                     builder = {
+                        defaultPermission = !requiresPermissions
                         commandOptions().arguments(this)
                     }
                 )
+                command.commandId = registeredCommand.id
             }
         }
     }
@@ -60,6 +63,22 @@ class CommandManager {
             .collect {
                 it.delete()
             }
+    }
+
+    suspend fun configureCommandPermissions(
+        kord: Kord,
+        logger: Logger,
+    ) {
+        logger.info("Configuring command permissions...")
+        kord.bulkEditApplicationCommandPermissions(config.guildSnowflake) {
+            for (command in commands.filter { it.requiresPermissions }) {
+                command.commandId?.let { commandId ->
+                    command(commandId) {
+                        command.commandPermissions().permissions(this)
+                    }
+                }
+            }
+        }
     }
 
     private fun getCommand(name: String) = commands.find { it.commandName == name }
