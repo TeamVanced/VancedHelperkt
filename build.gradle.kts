@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version "1.5.31"
     application
 }
 
@@ -14,13 +14,13 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    implementation("dev.kord:kord-core:0.8.0-M5")
+    implementation("dev.kord:kord-core:0.8.0-M6")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
-    implementation("org.litote.kmongo:kmongo:4.2.3")
+    implementation("org.litote.kmongo:kmongo:4.3.0")
 
-    val logbackVersion = "1.2.3"
+    val logbackVersion = "1.2.6"
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
 
@@ -30,7 +30,7 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.1.2")
 
-    implementation("org.reflections:reflections:0.9.12")
+    implementation("org.reflections:reflections:0.10")
 }
 
 tasks.withType<KotlinCompile> {
