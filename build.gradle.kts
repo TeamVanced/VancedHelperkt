@@ -8,13 +8,14 @@ plugins {
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    implementation("dev.kord:kord-core:0.8.0-M6")
+    implementation("dev.kord:kord-core:type-fixes-SNAPSHOT")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
