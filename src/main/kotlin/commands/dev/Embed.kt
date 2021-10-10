@@ -1,15 +1,5 @@
 package commands.dev
 
-import core.command.CommandContext
-import core.command.base.BaseCommand
-import core.ext.isDev
-import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.common.Color
-import dev.kord.core.entity.interaction.int
-import dev.kord.core.entity.interaction.string
-import dev.kord.rest.builder.interaction.int
-import dev.kord.rest.builder.interaction.string
-
 //TODO this sucks
 //class Embed : BaseCommand(
 //    commandName = "embed",

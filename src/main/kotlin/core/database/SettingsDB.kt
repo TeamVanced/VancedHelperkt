@@ -1,11 +1,11 @@
 package core.database
 
 import config
+import core.database.collections.Settings
 import core.database.data.MongoItemParameter
 import core.database.data.MongoListParameter
 import core.database.data.mongoItem
 import core.database.data.mongoMutableListOf
-import core.database.collections.Settings
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 

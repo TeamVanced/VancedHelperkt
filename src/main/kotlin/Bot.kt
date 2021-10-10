@@ -1,7 +1,7 @@
 import core.command.CommandManager
+import core.database.settings
 import core.listener.MessageListener
 import core.listener.ReactionListener
-import core.database.settings
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.entity.ReactionEmoji

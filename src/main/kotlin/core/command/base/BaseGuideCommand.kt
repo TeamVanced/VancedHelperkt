@@ -1,13 +1,13 @@
 package core.command.base
 
 import core.command.CommandContext
+import core.ext.takeMax
 import core.util.randomColor
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.embed
 import domain.model.guide.GuideSingleJsonModel
-import core.ext.takeMax
 import org.koin.core.component.inject
 import repository.guide.GuideRepository
 

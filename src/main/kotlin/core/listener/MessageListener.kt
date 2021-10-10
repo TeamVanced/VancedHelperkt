@@ -1,14 +1,14 @@
 package core.listener
 
 import core.command.CommandManager
-import core.util.emoteRegex
 import core.database.warnUser
-import dev.kord.core.Kord
-import dev.kord.core.entity.Message
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.isDev
 import core.ext.isMod
 import core.ext.isWhitelistedSpamChannel
+import core.util.emoteRegex
+import dev.kord.core.Kord
+import dev.kord.core.entity.Message
 import org.slf4j.Logger
 
 class MessageListener {
