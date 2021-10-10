@@ -18,7 +18,7 @@ import dev.kord.rest.builder.interaction.subCommand
 class Settings : BaseCommand(
     commandName = "settings",
     commandDescription = "Configure settings",
-    requiresPermissions = true
+    defaultPermissions = false
 ) {
 
     override suspend fun execute(
@@ -216,7 +216,7 @@ class Settings : BaseCommand(
             }
         )
 
-    override suspend fun commandPermissions() =
+    override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
             permissions = {
                 for (owner in botOwners) {

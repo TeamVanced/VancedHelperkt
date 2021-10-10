@@ -21,7 +21,7 @@ import dev.kord.rest.builder.interaction.user
 class Warns : BaseCommand(
     commandName = "warn",
     commandDescription = "Warn actions",
-    requiresPermissions = true
+    defaultPermissions = false
 ) {
 
     override suspend fun execute(
@@ -94,7 +94,7 @@ class Warns : BaseCommand(
         }
     )
 
-    override suspend fun commandPermissions() =
+    override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
             permissions = {
                 for (moderatorRoleId in moderatorRoleIds) {

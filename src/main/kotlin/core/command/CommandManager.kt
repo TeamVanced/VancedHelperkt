@@ -4,6 +4,7 @@ import config
 import core.command.base.BaseCommand
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.entity.application.GuildApplicationCommand
 import dev.kord.core.entity.interaction.*
 import kotlinx.coroutines.flow.collect
 import org.reflections.Reflections
@@ -48,7 +49,7 @@ class CommandManager {
                     name = commandName,
                     description = commandDescription,
                     builder = {
-                        defaultPermission = !requiresPermissions
+                        defaultPermission = defaultPermissions
                         commandOptions().arguments(this)
                     }
                 )
@@ -70,12 +71,16 @@ class CommandManager {
         logger: Logger,
     ) {
         logger.info("Configuring command permissions...")
+
+        //second method
+        val commands = mutableListOf<GuildApplicationCommand>()
+        kord.getGuildApplicationCommands(config.guildSnowflake).collect { commands.add(it) }
         kord.bulkEditApplicationCommandPermissions(config.guildSnowflake) {
-            for (command in commands.filter { it.requiresPermissions }) {
-                command.commandId?.let { commandId ->
-                    command(commandId) {
-                        command.commandPermissions().permissions(this)
-                    }
+            for (command in commands) {
+                command(command.id) {
+                    val botCommand = getCommand(command.name)
+
+                    botCommand?.commandPermissions()?.permissions?.invoke(this)
                 }
             }
         }

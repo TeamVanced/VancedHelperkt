@@ -6,6 +6,7 @@ import core.database.warnUser
 import dev.kord.core.Kord
 import dev.kord.core.entity.Message
 import core.ext.checkWarnForTooManyInfractions
+import core.ext.isDev
 import core.ext.isMod
 import core.ext.isWhitelistedSpamChannel
 import org.slf4j.Logger
@@ -79,6 +80,8 @@ class MessageListener {
         kord: Kord,
         logger: Logger,
     ) {
+        if (message.getAuthorAsMember()?.isDev != true) return
+
         val commandPrefix = "vh!"
 
         val messageContent = message.content
@@ -87,15 +90,17 @@ class MessageListener {
         if (!messageContent.startsWith(commandPrefix)) return
 
         when (messageContent.substringAfter(commandPrefix)) {
-            "registercommands" -> {
+            "rgcmd" -> {
                 messageChannel.createMessage("Registering all slash commands...")
                 commandManager.registerCommands(kord, logger)
                 messageChannel.createMessage("Done! Registered slash commands.")
+            }
+            "cfgcmdprm" -> {
                 messageChannel.createMessage("Configuring command permissions...")
                 commandManager.configureCommandPermissions(kord, logger)
                 messageChannel.createMessage("Done! Configured command permissions.")
             }
-            "unregistercommands" -> {
+            "urgcmd" -> {
                 messageChannel.createMessage("Unregistering all slash commands...")
                 commandManager.unregisterCommands(kord, logger)
                 messageChannel.createMessage("Done! Unregistered slash commands.")

@@ -11,7 +11,7 @@ import org.koin.core.component.KoinComponent
 abstract class BaseCommand(
     val commandName: String,
     val commandDescription: String,
-    val requiresPermissions: Boolean = false
+    val defaultPermissions: Boolean = true
 ) : KoinComponent {
 
     var commandId: Snowflake? = null
@@ -37,7 +37,7 @@ abstract class BaseCommand(
     open suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder()
 
-    open suspend fun commandPermissions() =
+    open fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder()
 
 }

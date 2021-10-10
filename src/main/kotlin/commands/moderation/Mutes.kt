@@ -16,7 +16,7 @@ import dev.kord.rest.builder.interaction.user
 class Mutes : BaseCommand(
     commandName = "mute",
     commandDescription = "Mute actions",
-    requiresPermissions = true
+    defaultPermissions = false
 ) {
 
     override suspend fun execute(
@@ -62,7 +62,7 @@ class Mutes : BaseCommand(
             }
         )
 
-    override suspend fun commandPermissions() =
+    override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
             permissions = {
                 for (moderatorRoleId in moderatorRoleIds) {

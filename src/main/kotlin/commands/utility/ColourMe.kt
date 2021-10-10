@@ -15,7 +15,7 @@ import dev.kord.rest.builder.interaction.string
 class ColourMe : BaseCommand(
     commandName = "colourme",
     commandDescription = "Create a custom role for yourself.",
-    requiresPermissions = true
+    defaultPermissions = false
 ) {
 
     override suspend fun execute(
@@ -61,7 +61,7 @@ class ColourMe : BaseCommand(
             }
         )
 
-    override suspend fun commandPermissions() =
+    override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
             permissions = {
                 role(
