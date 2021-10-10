@@ -2,7 +2,7 @@ package commands.utility
 
 import core.command.CommandContext
 import core.command.base.BaseCommand
-import core.database.boosterRoleId
+import core.database.allowedColourMeRoleIds
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.Color
@@ -29,17 +29,24 @@ class ColourMe : BaseCommand(
         val kordColor = Color(java.awt.Color.decode(roleColor).rgb)
 
         val existingRole = author.roleBehaviors.find { it.asRole().name.contains("-CC") }
+
+        val newRoleName = "$roleName-CC"
+
         if (existingRole != null) {
             existingRole.edit {
-                name = "$roleName-CC"
+                name = newRoleName
                 color = kordColor
             }
         } else {
             val newRole = author.guild.createRole {
-                name = "$roleName-CC"
+                name = newRoleName
                 color = kordColor
             }
             author.addRole(newRole.id, "colourme")
+        }
+
+        ctx.respondEphemeral {
+            content = "Successfully assigned the $newRoleName role"
         }
     }
 
@@ -64,10 +71,12 @@ class ColourMe : BaseCommand(
     override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
             permissions = {
-                role(
-                    id = Snowflake(boosterRoleId),
-                    allow = true
-                )
+                for (allowedColourMeRoleId in allowedColourMeRoleIds) {
+                    role(
+                        id = Snowflake(allowedColourMeRoleId),
+                        allow = true
+                    )
+                }
             }
         )
 
