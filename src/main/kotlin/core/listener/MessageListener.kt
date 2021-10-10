@@ -90,17 +90,17 @@ class MessageListener {
         if (!messageContent.startsWith(commandPrefix)) return
 
         when (messageContent.substringAfter(commandPrefix)) {
-            "rgcmd" -> {
+            "regcmd" -> {
                 messageChannel.createMessage("Registering all slash commands...")
                 commandManager.registerCommands(kord, logger)
                 messageChannel.createMessage("Done! Registered slash commands.")
             }
-            "cfgcmdprm" -> {
+            "cfgcmdperm" -> {
                 messageChannel.createMessage("Configuring command permissions...")
                 commandManager.configureCommandPermissions(kord, logger)
                 messageChannel.createMessage("Done! Configured command permissions.")
             }
-            "urgcmd" -> {
+            "unregcmd" -> {
                 messageChannel.createMessage("Unregistering all slash commands...")
                 commandManager.unregisterCommands(kord, logger)
                 messageChannel.createMessage("Done! Unregistered slash commands.")
