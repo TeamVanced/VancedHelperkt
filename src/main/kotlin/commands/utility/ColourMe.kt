@@ -11,6 +11,7 @@ import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
+import kotlinx.coroutines.flow.toList
 
 class ColourMe : BaseCommand(
     commandName = "colourme",
@@ -42,6 +43,8 @@ class ColourMe : BaseCommand(
                 name = newRoleName
                 color = kordColor
             }
+            val newPosition = author.roles.toList().sortedByDescending { it.rawPosition }.map { it.rawPosition }[0] + 1
+            newRole.changePosition(newPosition)
             author.addRole(newRole.id, "colourme")
         }
 
