@@ -2,13 +2,16 @@ import core.command.CommandManager
 import core.database.settings
 import core.listener.MessageListener
 import core.listener.ReactionListener
+import core.listener.UserListener
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.any
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
+import dev.kord.core.event.guild.MemberUpdateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.event.message.ReactionAddEvent
@@ -23,6 +26,7 @@ class Bot : KoinComponent {
     private val commandManager: CommandManager by inject()
     private val messageListener: MessageListener by inject()
     private val reactionListener: ReactionListener by inject()
+    private val userListener: UserListener by inject()
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
@@ -67,6 +71,21 @@ class Bot : KoinComponent {
                     emoji = emoji as ReactionEmoji.Custom,
                     message = getMessage()
                 )
+            }
+        }
+
+        kord.on<MemberUpdateEvent> {
+            val oldWasBooster = old?.roles?.any { it.id == Snowflake(settings.boosterRoleId) }
+                ?: return@on
+            val newIsBooster = member.roles.any { it.id == Snowflake(settings.boosterRoleId) }
+
+            when {
+                !oldWasBooster && newIsBooster -> {
+                    userListener.onMemberBoostGuild(member)
+                }
+                oldWasBooster && !newIsBooster -> {
+                    userListener.onMemberUnboostGuild(member)
+                }
             }
         }
 
