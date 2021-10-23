@@ -11,6 +11,7 @@ import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 
 class ColourMe : BaseCommand(
@@ -29,7 +30,7 @@ class ColourMe : BaseCommand(
 
         val kordColor = Color(java.awt.Color.decode(roleColor).rgb)
 
-        val existingRole = author.roleBehaviors.find { it.asRole().name.contains("-CC") }
+        val existingRole = author.roles.firstOrNull { it.name.contains("-CC") }
 
         val newRoleName = "$roleName-CC"
 
