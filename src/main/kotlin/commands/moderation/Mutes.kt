@@ -81,7 +81,7 @@ class Mutes : BaseCommand(
 
         user.asMember(config.guildSnowflake).edit {
             if (roles == null) {
-                ctx.respondPublic {
+                ctx.respondEphemeral {
                     content = "Failed to retrieve roles for $userMention"
                 }
                 return@edit
@@ -90,7 +90,7 @@ class Mutes : BaseCommand(
             val muteSnowflake = Snowflake(muteRoleId)
 
             if (roles!!.contains(muteSnowflake)) {
-                ctx.respondPublic {
+                ctx.respondEphemeral {
                     content = "$userMention is already muted"
                 }
                 return@edit
@@ -111,7 +111,7 @@ class Mutes : BaseCommand(
 
         user.asMember(config.guildSnowflake).edit {
             if (roles == null) {
-                ctx.respondPublic {
+                ctx.respondEphemeral {
                     content = "Failed to retrieve roles for $userMention"
                 }
                 return@edit
@@ -120,7 +120,7 @@ class Mutes : BaseCommand(
             val muteSnowflake = Snowflake(muteRoleId)
 
             if (!roles!!.contains(muteSnowflake)) {
-                ctx.respondPublic {
+                ctx.respondEphemeral {
                     content = "$userMention is not muted"
                 }
                 return@edit

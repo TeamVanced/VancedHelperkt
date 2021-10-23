@@ -131,7 +131,7 @@ class Warns : BaseCommand(
         if (warnId != null) {
             val warns = getUserWarns(userId)
             if (warnId == 0 || (warns != null && warnId > warns.reasons.size)) {
-                ctx.respondPublic {
+                ctx.respondEphemeral {
                     content = "$warnId is an incorrect warn ID"
                 }
                 return
@@ -154,7 +154,7 @@ class Warns : BaseCommand(
         val warns = getUserWarns(user.id.asString)
 
         if (warns == null || warns.reasons.isEmpty()) {
-            ctx.respondPublic {
+            ctx.respondEphemeral {
                 content = "${user.mention} has no warns"
             }
             return
