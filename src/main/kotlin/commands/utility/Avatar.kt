@@ -22,7 +22,7 @@ class Avatar : BaseCommand(
                     ?: "https://cdn.discordapp.com/embed/avatars/${user.discriminator.toInt() % 5}.png"
 
                 title = "${user.username}'s avatar"
-                description = "[Avatar URL]($avatarUrl)"
+                description = "[Avatar URL](${avatarUrl}?size=512)"
                 image = "${avatarUrl}?size=256"
             }
         }
