@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
+    implementation(kotlin("stdlib-jdk8", version = "1.5.31"))
+    implementation(kotlin("reflect", version = "1.5.31"))
 
-    implementation("dev.kord:kord-core:type-fixes-SNAPSHOT")
+    implementation("dev.kord:kord-core:0.8.0-M7")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
@@ -31,7 +31,7 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.1.2")
 
-    implementation("org.reflections:reflections:0.10")
+    implementation("org.reflections:reflections:0.10.1")
 }
 
 tasks.withType<KotlinCompile> {
