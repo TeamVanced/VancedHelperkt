@@ -18,9 +18,12 @@ class Avatar : BaseCommand(
 
         ctx.respondPublic {
             embed {
+                val avatarUrl = user.avatar?.url
+                    ?: "https://cdn.discordapp.com/embed/avatars/${user.discriminator.toInt() % 5}.png"
+
                 title = "${user.username}'s avatar"
-                description = "[Avatar URL](${user.avatar!!.url})"
-                image = "${user.avatar!!.url}?size=256"
+                description = "[Avatar URL]($avatarUrl)"
+                image = "${avatarUrl}?size=256"
             }
         }
     }
