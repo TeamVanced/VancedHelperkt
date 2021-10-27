@@ -3,7 +3,6 @@ import core.database.settings
 import core.listener.MessageListener
 import core.listener.ReactionListener
 import core.listener.UserListener
-import core.util.cleanupCcRoles
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.any
@@ -12,6 +11,7 @@ import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
+import dev.kord.core.event.guild.MemberLeaveEvent
 import dev.kord.core.event.guild.MemberUpdateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -89,6 +89,10 @@ class Bot : KoinComponent {
             }
         }
 
+        kord.on<MemberLeaveEvent> {
+            userListener.onMemberLeaveGuild(getGuild(), logger)
+        }
+
         kord.login {
             if (settings.logChannelId == 0L) {
                 return@login
@@ -98,11 +102,6 @@ class Bot : KoinComponent {
             val messageChannel = channel as? MessageChannel ?: return
 
             messageChannel.createMessage("I just started!")
-        }
-
-        val guild = kord.getGuild(config.guildSnowflake)
-        if (guild != null) {
-            cleanupCcRoles(guild, logger)
         }
     }
 

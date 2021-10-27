@@ -1,8 +1,14 @@
 package core.listener
 
 import core.ext.isMod
+import dev.kord.core.any
+import dev.kord.core.entity.Guild
 import dev.kord.core.entity.Member
 import dev.kord.core.firstOrNull
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.filter
+import org.slf4j.Logger
 
 class UserListener {
 
@@ -23,11 +29,18 @@ class UserListener {
     }
 
     suspend fun onMemberLeaveGuild(
-        member: Member
+        guild: Guild,
+        logger: Logger,
     ) {
-        member.roles.firstOrNull {
-            it.name.endsWith("-CC")
-        }?.delete("Role owner left the guild")
+        guild.roles.filter { it.name.endsWith("-CC") }.collect { role ->
+            val members = guild.members.filter { member ->
+                member.roles.any { it == role }
+            }
+            if (members.count() == 0) {
+                logger.info("CC Role cleanup: Deleting ${role.name}")
+                role.delete("CC Role cleanup")
+            }
+        }
     }
 
 }
