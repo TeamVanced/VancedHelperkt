@@ -5,6 +5,8 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.database.moderatorRoleIds
 import core.database.muteRoleId
+import core.util.Infraction
+import core.util.sendInfractionToModLogChannel
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
@@ -101,6 +103,9 @@ class Mutes : BaseCommand(
             ctx.respondPublic {
                 content = "Successfully muted $userMention"
             }
+            sendInfractionToModLogChannel(
+                Infraction.Mute(user, ctx.author, reason)
+            )
         }
     }
 
@@ -131,6 +136,9 @@ class Mutes : BaseCommand(
             ctx.respondPublic {
                 content = "Successfully unmuted $userMention"
             }
+            sendInfractionToModLogChannel(
+                Infraction.Unmute(user, ctx.author)
+            )
         }
     }
 

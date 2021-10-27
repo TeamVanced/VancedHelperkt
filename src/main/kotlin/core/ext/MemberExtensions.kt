@@ -4,6 +4,8 @@ import core.database.allowedQuoteRoleIds
 import core.database.deleteUserWarns
 import core.database.getUserWarns
 import core.database.moderatorRoleIds
+import core.util.Infraction
+import core.util.sendInfractionToModLogChannel
 import dev.kord.core.entity.Member
 
 suspend fun Member.checkWarnForTooManyInfractions() {
@@ -11,7 +13,11 @@ suspend fun Member.checkWarnForTooManyInfractions() {
     val warns = getUserWarns(userId)
 
     if (warns != null && warns.reasons.size >= 3) {
-        kick("Too many infractions")
+        val reason = "Too many infractions"
+        kick(reason)
+        sendInfractionToModLogChannel(
+            Infraction.Kick(this, kord.getSelf(), reason)
+        )
         deleteUserWarns(userId)
     }
 }

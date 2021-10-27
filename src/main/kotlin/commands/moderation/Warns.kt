@@ -7,6 +7,8 @@ import core.database.getUserWarns
 import core.database.moderatorRoleIds
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.takeMax
+import core.util.Infraction
+import core.util.sendInfractionToModLogChannel
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
@@ -119,6 +121,9 @@ class Warns : BaseCommand(
         ctx.respondPublic {
             content = "Successfully warned ${user.mention} for $reason"
         }
+        sendInfractionToModLogChannel(
+            Infraction.Warn(user, ctx.author, reason)
+        )
         user.asMember(config.guildSnowflake).checkWarnForTooManyInfractions()
     }
 
@@ -142,7 +147,9 @@ class Warns : BaseCommand(
             userId = userId,
             warnId = warnId
         )
-
+        sendInfractionToModLogChannel(
+            Infraction.Unwarn(user, ctx.author)
+        )
         ctx.respondPublic {
             content = "Successfully unwarned ${user.mention}"
         }

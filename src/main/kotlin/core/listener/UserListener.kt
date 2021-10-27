@@ -1,9 +1,12 @@
 package core.listener
 
 import core.ext.isMod
+import core.util.Infraction
+import core.util.sendInfractionToModLogChannel
 import dev.kord.core.any
 import dev.kord.core.entity.Guild
 import dev.kord.core.entity.Member
+import dev.kord.core.entity.User
 import dev.kord.core.firstOrNull
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.count
@@ -11,12 +14,6 @@ import kotlinx.coroutines.flow.filter
 import org.slf4j.Logger
 
 class UserListener {
-
-    suspend fun onMemberBoostGuild(
-        member: Member
-    ) {
-
-    }
 
     suspend fun onMemberUnboostGuild(
         member: Member
@@ -41,6 +38,24 @@ class UserListener {
                 role.delete("CC Role cleanup")
             }
         }
+    }
+
+    suspend fun onMemberBan(
+        user: User,
+        moderator: User,
+        reason: String?
+    ) {
+        sendInfractionToModLogChannel(
+            Infraction.Ban(user, moderator, reason)
+        )
+    }
+
+    suspend fun onMemberUnban(
+        user: User,
+    ) {
+        sendInfractionToModLogChannel(
+            Infraction.Unban(user)
+        )
     }
 
 }
