@@ -27,7 +27,7 @@ class RoleInfo : BaseCommand(
                     Hello! This Channel is for info on roles available such as: 
                     - The Nitro Booster role
                     - Weeber role (grants you access to <#644156533046771722> and weeb emojis) 
-                    - MCGamer role (grants you access to our minecraft server (play.vancedapp.com) chat in true-gamer-chat ) 
+                    - MCGamer role (grants you access to our minecraft server (play.vancedapp.com) chat in <#666690829376553001> ) 
                     - Cursed role (grants you access to horrific chat, viewer discretion advised)
                     Also select for which kinds of devices you wish to receive pings for and access channels for, using the buttons below.
                 """.trimIndent()
