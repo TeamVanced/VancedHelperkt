@@ -98,6 +98,8 @@ class CommandManager {
                 args = command.options,
                 author = interaction.user.asMember(Snowflake(config.guildId)),
                 channel = interaction.getChannel(),
+                guild = interaction.getGuild(),
+                kord = interaction.kord,
                 subCommand = command as? SubCommand,
                 subCommandGroup = command as? GroupCommand,
                 commandInteraction = interaction,

@@ -2,8 +2,10 @@ package core.command
 
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.entity.ButtonStyle
+import dev.kord.core.Kord
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.interaction.respondPublic
+import dev.kord.core.entity.Guild
 import dev.kord.core.entity.Member
 import dev.kord.core.entity.channel.Channel
 import dev.kord.core.entity.interaction.GroupCommand
@@ -19,6 +21,8 @@ data class CommandContext(
     val args: Map<String, OptionValue<*>>,
     val subCommand: SubCommand?,
     val subCommandGroup: GroupCommand?,
+    val guild: Guild,
+    val kord: Kord,
     private val commandInteraction: GuildChatInputCommandInteraction,
     private val commandName: String,
 ) {
