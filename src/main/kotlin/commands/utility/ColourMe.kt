@@ -5,8 +5,8 @@ import core.command.base.BaseCommand
 import core.database.allowedColourMeRoleIds
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
-import dev.kord.common.Color
 import dev.kord.common.entity.Snowflake
+import dev.kord.common.kColor
 import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.string
@@ -16,6 +16,7 @@ import io.ktor.client.*
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import org.koin.core.component.inject
+import java.awt.Color
 
 class ColourMe : BaseCommand(
     commandName = "colourme",
@@ -34,7 +35,7 @@ class ColourMe : BaseCommand(
 
         val author = ctx.author
 
-        val kordColor = Color(java.awt.Color.decode(roleColor).rgb)
+        val kordColor = Color.decode(roleColor).kColor
 
         val existingRole = author.roles.firstOrNull { it.name.contains("-CC") }
 
