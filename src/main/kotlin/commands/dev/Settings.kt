@@ -63,158 +63,145 @@ class Settings : BaseCommand(
     }
 
     override suspend fun commandOptions() =
-        CustomApplicationCommandCreateBuilder(
-            arguments = {
-                subCommand(
-                    name = "muterole",
-                    description = "Set the mute role",
+        CustomApplicationCommandCreateBuilder {
+            subCommand(
+                name = "muterole",
+                description = "Set the mute role"
+            ) {
+                role(
+                    name = "role",
+                    description = "Role to assign",
                     builder = {
-                        role(
-                            name = "role",
-                            description = "Role to assign",
-                            builder = {
-                                required = true
-                            }
-                        )
-                    }
-                )
-                subCommand(
-                    name = "logchannel",
-                    description = "Set the log channel",
-                    builder = {
-                        channel(
-                            name = "channel",
-                            description = "Channel to use as the log channel",
-                            builder = {
-                                required = true
-                            }
-                        )
-                    }
-                )
-                subCommand(
-                    name = "modlogchannel",
-                    description = "Set the moderator action log channel",
-                    builder = {
-                        channel(
-                            name = "channel",
-                            description = "Channel to use as the moderator action log channel",
-                            builder = {
-                                required = true
-                            }
-                        )
-                    }
-                )
-                subCommand(
-                    name = "errorchannel",
-                    description = "Set the error log channel",
-                    builder = {
-                        channel(
-                            name = "channel",
-                            description = "Channel to use as the error log channel",
-                            builder = {
-                                required = true
-                            }
-                        )
-                    }
-                )
-                group(
-                    name = "moderators",
-                    description = "Edit moderators",
-                    builder = {
-                        subCommand(
-                            name = "add",
-                            description = "Add a moderator",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to add to moderators",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
-                        subCommand(
-                            name = "remove",
-                            description = "Remove a moderator",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to remove from moderators",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
-                    }
-                )
-                group(
-                    name = "quoters",
-                    description = "Edit roles that can add quotes",
-                    builder = {
-                        subCommand(
-                            name = "add",
-                            description = "Add allowed quote role",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to add to allowed quote roles",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
-                        subCommand(
-                            name = "remove",
-                            description = "Removed allowed quote role",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to remove from allowed quote roles",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
-                    }
-                )
-                group(
-                    name = "colourmes",
-                    description = "Edit roles that can use colourme",
-                    builder = {
-                        subCommand(
-                            name = "add",
-                            description = "Add allowed colourme role",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to add to allowed colourme roles",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
-                        subCommand(
-                            name = "remove",
-                            description = "Removed allowed colourme role",
-                            builder = {
-                                role(
-                                    name = "role",
-                                    description = "Role to remove from allowed colourme roles",
-                                    builder = {
-                                        required = true
-                                    }
-                                )
-                            }
-                        )
+                        required = true
                     }
                 )
             }
-        )
+            subCommand(
+                name = "logchannel",
+                description = "Set the log channel"
+            ) {
+                channel(
+                    name = "channel",
+                    description = "Channel to use as the log channel",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
+            subCommand(
+                name = "modlogchannel",
+                description = "Set the moderator action log channel"
+            ) {
+                channel(
+                    name = "channel",
+                    description = "Channel to use as the moderator action log channel",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
+            subCommand(
+                name = "errorchannel",
+                description = "Set the error log channel"
+            ) {
+                channel(
+                    name = "channel",
+                    description = "Channel to use as the error log channel",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
+            group(
+                name = "moderators",
+                description = "Edit moderators"
+            ) {
+                subCommand(
+                    name = "add",
+                    description = "Add a moderator"
+                ) {
+                    role(
+                        name = "role",
+                        description = "Role to add to moderators",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+                subCommand(
+                    name = "remove",
+                    description = "Remove a moderator"
+                ) {
+                    role(
+                        name = "role",
+                        description = "Role to remove from moderators",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+            }
+            group(
+                name = "quoters",
+                description = "Edit roles that can add quotes"
+            ) {
+                subCommand(
+                    name = "add",
+                    description = "Add allowed quote role",
+                    builder = {
+                        role(
+                            name = "role",
+                            description = "Role to add to allowed quote roles",
+                            builder = {
+                                required = true
+                            }
+                        )
+                    }
+                )
+                subCommand(
+                    name = "remove",
+                    description = "Removed allowed quote role"
+                ) {
+                    role(
+                        name = "role",
+                        description = "Role to remove from allowed quote roles",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+            }
+            group(
+                name = "colourmes",
+                description = "Edit roles that can use colourme"
+            ) {
+                subCommand(
+                    name = "add",
+                    description = "Add allowed colourme role",
+                    builder = {
+                        role(
+                            name = "role",
+                            description = "Role to add to allowed colourme roles",
+                            builder = {
+                                required = true
+                            }
+                        )
+                    }
+                )
+                subCommand(
+                    name = "remove",
+                    description = "Removed allowed colourme role"
+                ) {
+                    role(
+                        name = "role",
+                        description = "Role to remove from allowed colourme roles",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+            }
+        }
 
     override fun commandPermissions() =
         CustomApplicationCommandPermissionBuilder(
@@ -232,7 +219,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         logChannelId = channel.id.value.toLong()
-        ctx.respondPublic {
+        ctx.respondEphemeral {
             content = "Successfully updated the log channel"
         }
     }
@@ -241,7 +228,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         modLogChannelId = channel.id.value.toLong()
-        ctx.respondPublic {
+        ctx.respondEphemeral {
             content = "Successfully updated the moderator action log channel"
         }
     }
@@ -250,7 +237,7 @@ class Settings : BaseCommand(
         val channel = ctx.args["channel"]!!.channel()
 
         errorChannelId = channel.id.value.toLong()
-        ctx.respondPublic {
+        ctx.respondEphemeral {
             content = "Successfully updated the error log channel"
         }
     }
@@ -259,7 +246,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         muteRoleId = role.id.value.toLong()
-        ctx.respondPublic {
+        ctx.respondEphemeral {
             content = "Successfully updated the mute role"
         }
     }
