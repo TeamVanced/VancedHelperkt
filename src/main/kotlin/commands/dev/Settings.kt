@@ -255,7 +255,7 @@ class Settings : BaseCommand(
         val role = ctx.args["role"]!!.role()
 
         boosterRoleId = role.id.value.toLong()
-        ctx.respondPublic {
+        ctx.respondEphemeral {
             content = "Successfully updated the booster role"
         }
     }
