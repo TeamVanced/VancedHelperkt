@@ -1,49 +1,53 @@
 package commands.`fun`
 
-import commandhandler.CommandContext
-import commands.base.BaseCommand
-import ext.optional
-import net.dv8tion.jda.api.entities.Message
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.user
 import org.apache.commons.math3.distribution.NormalDistribution
-import type.CommandType.Fun
 
 class IQ : BaseCommand(
     commandName = "iq",
-    commandDescription = "Calculate IQ level",
-    commandType = Fun,
-    commandArguments = mapOf("The thing".optional()),
-    commandAliases = listOf("howsmart")
+    commandDescription = "Calculate user's IQ"
 ) {
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        val args = ctx.args
-        if (args.isNotEmpty()) {
-            ctx.message.calculateIQ(args.joinToString(" "))
-        } else {
-            val user = ctx.author.asMention
-            ctx.message.calculateIQ(user)
+
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val user = ctx.args["user"]!!.user()
+
+        ctx.respondPublic {
+            embed {
+                title = "IQ Calculator"
+                description = "${user.mention} has an IQ of ${randomIQ()}"
+            }
         }
-
     }
 
-    private fun Message.calculateIQ(arg: String) {
-        replyMsg(
-            embedBuilder.apply {
-                setTitle("IQ Calculator")
-                setDescription("$arg has an iq of ${calcIQ()}")
-            }.build()
+    override suspend fun commandOptions() =
+        CustomApplicationCommandCreateBuilder(
+            arguments = {
+                user(
+                    name = "user",
+                    description = "Whose IQ to calculate",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
         )
-    }
 
-    private fun calcIQ(): Int {
+    private fun randomIQ(): Int {
         val iqDist = NormalDistribution(100.0, 15.0)
-        val randIQ = (50..150).random()
+        val randomIq = (50..150).random()
         val luck = Math.random()
-        val smallo = iqDist.cumulativeProbability(randIQ.toDouble()) < 0.5
-        return if (smallo && iqDist.cumulativeProbability(randIQ.toDouble()) > luck || !smallo && iqDist.cumulativeProbability(randIQ.toDouble()) < luck) {
-            randIQ
+        val cumulative = iqDist.cumulativeProbability(randomIq.toDouble())
+        val smallo = cumulative < 0.5
+        return if (smallo && cumulative > luck || !smallo && cumulative < luck) {
+            randomIq
         } else {
-            calcIQ()
+            randomIQ()
         }
     }
 

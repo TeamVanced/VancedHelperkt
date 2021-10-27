@@ -4,6 +4,9 @@ import domain.model.country.CountryOfOriginModel
 
 interface CountryRepository {
 
-    suspend fun get(token: String, name: String): CountryOfOriginModel
+    suspend fun get(
+        token: String,
+        name: String
+    ): CountryOfOriginModel
 
 }

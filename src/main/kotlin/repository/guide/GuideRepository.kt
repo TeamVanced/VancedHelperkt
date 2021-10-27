@@ -4,6 +4,9 @@ import domain.model.guide.GuideJsonModel
 
 interface GuideRepository {
 
-    suspend fun fetch(jsonName: String): GuideJsonModel
+    suspend fun fetch(
+        jsonName: String,
+        language: String
+    ): GuideJsonModel
 
 }

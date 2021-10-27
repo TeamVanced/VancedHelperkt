@@ -7,7 +7,7 @@ import domain.util.EntityMapper
 class CountryDtoMapper : EntityMapper<CountryOfOriginDto, CountryOfOriginModel> {
 
     override suspend fun mapToModel(entity: CountryOfOriginDto): CountryOfOriginModel {
-        return with (entity) {
+        return with(entity) {
             CountryOfOriginModel(
                 countries = countryOrigin.map {
                     CountryModel(
