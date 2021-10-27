@@ -83,7 +83,7 @@ class Mutes : BaseCommand(
 
     private suspend fun muteUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
-        val reason = ctx.args["reasion"]!!.string()
+        val reason = ctx.args["reason"]!!.string()
 
         val userMention = user.mention
 
