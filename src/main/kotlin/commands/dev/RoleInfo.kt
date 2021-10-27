@@ -26,7 +26,7 @@ class RoleInfo : BaseCommand(
                 description = """
                     Hello! This Channel is for info on roles available such as: 
                     - The Nitro Booster role
-                    - Weeber role (grants you access to weeb-sht  and weeb emojis) 
+                    - Weeber role (grants you access to <#644156533046771722> and weeb emojis) 
                     - MCGamer role (grants you access to our minecraft server (play.vancedapp.com) chat in true-gamer-chat ) 
                     - Cursed role (grants you access to horrific chat, viewer discretion advised)
                     Also select for which kinds of devices you wish to receive pings for and access channels for, using the buttons below.
@@ -38,7 +38,7 @@ class RoleInfo : BaseCommand(
                         customId = "$commandName-797141785880035358"
                     ) {
                         label = "Android"
-                        emoji = DiscordPartialEmoji(id = Snowflake(677222645292597266))
+                        emoji = DiscordPartialEmoji(id = Snowflake(797147539941359616))
                     }
                     interactionButton(
                         style = ButtonStyle.Primary,
