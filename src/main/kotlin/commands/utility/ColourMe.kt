@@ -10,9 +10,12 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.string
+import dev.kord.rest.Image
 import dev.kord.rest.builder.interaction.string
+import io.ktor.client.*
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
+import org.koin.core.component.inject
 
 class ColourMe : BaseCommand(
     commandName = "colourme",
@@ -20,11 +23,14 @@ class ColourMe : BaseCommand(
     defaultPermissions = false
 ) {
 
+    private val httpClient: HttpClient by inject()
+
     override suspend fun execute(
         ctx: CommandContext
     ) {
         val roleName = ctx.args["name"]!!.string()
         val roleColor = ctx.args["color"]!!.string()
+        val iconUrl = ctx.args["icon"]?.string()
 
         val author = ctx.author
 
@@ -36,11 +42,32 @@ class ColourMe : BaseCommand(
 
         if (existingRole != null) {
             existingRole.edit {
+                if (iconUrl != null) {
+                    try {
+                        icon = Image.fromUrl(httpClient, iconUrl)
+                    } catch (e: Exception) {
+                        ctx.respondEphemeral {
+                            content = "Failed to retrieve the icon from the provided URL"
+                        }
+                        return@edit
+                    }
+                }
+
                 name = newRoleName
                 color = kordColor
             }
         } else {
             val newRole = author.guild.createRole {
+                if (iconUrl != null) {
+                    try {
+                        icon = Image.fromUrl(httpClient, iconUrl)
+                    } catch (e: Exception) {
+                        ctx.respondEphemeral {
+                            content = "Failed to retrieve the icon from the provided URL"
+                        }
+                        return@createRole
+                    }
+                }
                 name = newRoleName
                 color = kordColor
             }
@@ -68,6 +95,12 @@ class ColourMe : BaseCommand(
                     description = "Hex color of the role"
                 ) {
                     required = true
+                }
+                string(
+                    name = "icon",
+                    description = "Icon URL for the role"
+                ) {
+                    required = false
                 }
             }
         )

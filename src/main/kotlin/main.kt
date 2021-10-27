@@ -5,8 +5,9 @@ suspend fun main() {
     startKoin {
         modules(
             commandManagerModule,
-            mapperModule,
             eventListenerModule,
+            ktorModule,
+            mapperModule,
             repositoryModule,
             serviceModule,
         )
