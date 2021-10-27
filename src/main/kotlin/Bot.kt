@@ -3,6 +3,7 @@ import core.database.settings
 import core.listener.MessageListener
 import core.listener.ReactionListener
 import core.listener.UserListener
+import core.util.cleanupCcRoles
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.any
@@ -17,6 +18,8 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.event.message.ReactionAddEvent
 import dev.kord.core.event.message.ReactionRemoveEvent
 import dev.kord.core.on
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
@@ -29,7 +32,6 @@ class Bot : KoinComponent {
     private val userListener: UserListener by inject()
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
-
 
     suspend fun start() {
         val kord = Kord(config.token)
@@ -98,6 +100,13 @@ class Bot : KoinComponent {
             val messageChannel = channel as? MessageChannel ?: return
 
             messageChannel.createMessage("I just started!")
+        }
+
+        withContext(Dispatchers.IO) {
+            val guild = kord.getGuild(config.guildSnowflake)
+            if (guild != null) {
+                cleanupCcRoles(guild, logger)
+            }
         }
     }
 
