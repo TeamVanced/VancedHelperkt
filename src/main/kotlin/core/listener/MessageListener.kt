@@ -80,7 +80,7 @@ class MessageListener {
         kord: Kord,
         logger: Logger,
     ) {
-        if (message.getAuthorAsMember()?.isDev != true) return
+        if (message.author?.isDev != true) return
 
         val commandPrefix = "vh!"
 

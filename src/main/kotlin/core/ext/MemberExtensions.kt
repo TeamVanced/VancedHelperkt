@@ -4,7 +4,6 @@ import core.database.allowedQuoteRoleIds
 import core.database.deleteUserWarns
 import core.database.getUserWarns
 import core.database.moderatorRoleIds
-import core.util.botOwners
 import dev.kord.core.entity.Member
 
 suspend fun Member.checkWarnForTooManyInfractions() {
@@ -30,6 +29,3 @@ val Member.isQuoter
             roleId.value.toLong()
         }.contains(modRoleId)
     }
-
-val Member.isDev
-    get() = botOwners.contains(id.value)
