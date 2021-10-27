@@ -1,2 +1,2 @@
 #!/bin/sh
-exec java -jar bot.jar
+exec java -jar /src/build/libs/bot.jar
