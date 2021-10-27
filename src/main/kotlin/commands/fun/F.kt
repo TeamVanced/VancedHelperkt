@@ -1,27 +1,41 @@
 package commands.`fun`
 
-import commandhandler.CommandContext
-import commands.base.BaseCommand
-import ext.optional
-import type.CommandType.Fun
-import utils.pressF
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.util.EMOTE_PRESS_F
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.string
 
 class F : BaseCommand(
     commandName = "f",
-    commandDescription = "F",
-    commandType = Fun,
-    commandArguments = mapOf("Thing to pay respect for".optional()),
-    commandAliases = listOf("pressf", "payrespects")
+    commandDescription = "Pay respects"
 ) {
 
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        val args = ctx.args
-        if (args.isNotEmpty()) {
-            ctx.message.replyMsg("$pressF ${ctx.author.name} pays respect for ${args.joinToString(" ")}")
-        } else {
-            ctx.message.replyMsg(pressF)
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val thing = ctx.args["thing"]?.string()
+
+        ctx.respondPublic {
+            content = if (thing != null) {
+                "$EMOTE_PRESS_F ${ctx.author.mention} pays respects for $thing"
+            } else {
+                EMOTE_PRESS_F
+            }
         }
     }
+
+    override suspend fun commandOptions() = CustomApplicationCommandCreateBuilder(
+        arguments = {
+            string(
+                name = "thing",
+                description = "The thing to pay respects for",
+                builder = {
+                    required = false
+                }
+            )
+        }
+    )
 
 }

@@ -1,17 +1,15 @@
 package commands.`fun`
 
-import commandhandler.CommandContext
-import commands.base.BaseCommand
-import ext.required
-import ext.useArguments
-import type.CommandType.Fun
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import dev.kord.core.entity.interaction.string
+import dev.kord.rest.builder.interaction.string
+import java.util.*
 
 class EightBall : BaseCommand(
     commandName = "8ball",
-    commandDescription = "Let the magic 8ball decide your fate",
-    commandType = Fun,
-    commandArguments = mapOf("Question".required()),
-    commandAliases = listOf("8b", "fortune")
+    commandDescription = "Let a magical 8ball decide your fate"
 ) {
 
     private val responses = arrayOf(
@@ -37,14 +35,40 @@ class EightBall : BaseCommand(
         "Very doubtful"
     )
 
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        if (ctx.args.isNotEmpty()) {
-            ctx.message.replyMsg(responses.random())
-        } else {
-            ctx.message.useArguments(1)
-        }
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val question = ctx.args["question"]!!
+            .string()
+            .replace("(?i)are you(?-i)".toRegex(), "am I")
+            .replace("(?i)will you(?-i)".toRegex(), "will I")
+            .replaceFirstChar { it.titlecase(Locale.getDefault()) }
+            .let {
+                if (!it.endsWith("?")) {
+                    return@let "$it?"
+                }
+                return@let it
+            }
 
+        ctx.respondPublic {
+            embed {
+                title = question
+                description = responses.random()
+            }
+        }
     }
+
+    override suspend fun commandOptions() =
+        CustomApplicationCommandCreateBuilder(
+            arguments = {
+                string(
+                    name = "question",
+                    description = "A question for the magical ball",
+                    builder = {
+                        required = true
+                    }
+                )
+            }
+        )
 
 }

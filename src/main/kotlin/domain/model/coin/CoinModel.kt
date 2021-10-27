@@ -1,6 +1,6 @@
 package domain.model.coin
 
-data class CoinModel (
+data class CoinModel(
     val symbol: String,
     val name: String,
     val price: Double,

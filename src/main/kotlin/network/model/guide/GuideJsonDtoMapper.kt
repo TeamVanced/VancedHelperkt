@@ -8,7 +8,7 @@ import domain.util.EntityMapper
 class GuideJsonDtoMapper : EntityMapper<GuideJsonDto, GuideJsonModel> {
 
     override suspend fun mapToModel(entity: GuideJsonDto): GuideJsonModel {
-        return with (entity) {
+        return with(entity) {
             GuideJsonModel(
                 data = data.map { jsonDto ->
                     GuideSingleJsonModel(

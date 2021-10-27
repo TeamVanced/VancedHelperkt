@@ -9,7 +9,10 @@ class CountryRepositoryImpl(
     private val mapper: CountryDtoMapper
 ) : CountryRepository {
 
-    override suspend fun get(token: String, name: String): CountryOfOriginModel {
+    override suspend fun get(
+        token: String,
+        name: String
+    ): CountryOfOriginModel {
         return mapper.mapToModel(
             service.get(
                 token = token,

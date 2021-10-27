@@ -9,7 +9,11 @@ class CoinRepositoryImpl(
     private val mapper: CoinDtoMapper
 ) : CoinRepository {
 
-    override suspend fun get(token: String, pref: String, symbol: String): CoinModel {
+    override suspend fun get(
+        token: String,
+        pref: String,
+        symbol: String
+    ): CoinModel {
         return mapper.mapToModel(
             service.get(
                 token = token,

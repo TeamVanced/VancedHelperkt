@@ -9,9 +9,13 @@ import network.service.CountryService
 import network.service.GenderService
 import network.service.GuideService
 import org.koin.dsl.module
+import repository.coin.CoinRepository
 import repository.coin.CoinRepositoryImpl
+import repository.country.CountryRepository
 import repository.country.CountryRepositoryImpl
+import repository.gender.GenderRepository
 import repository.gender.GenderRepositoryImpl
+import repository.guide.GuideRepository
 import repository.guide.GuideRepositoryImpl
 
 val repositoryModule = module {
@@ -19,42 +23,34 @@ val repositoryModule = module {
     fun provideGuideRepository(
         service: GuideService,
         mapper: GuideJsonDtoMapper
-    ): GuideRepositoryImpl {
-        return GuideRepositoryImpl(
-            service = service,
-            mapper = mapper
-        )
-    }
+    ): GuideRepository = GuideRepositoryImpl(
+        service = service,
+        mapper = mapper
+    )
 
     fun provideGenderRepository(
         service: GenderService,
         mapper: GenderDtoMapper
-    ): GenderRepositoryImpl {
-        return GenderRepositoryImpl(
-            service = service,
-            mapper = mapper
-        )
-    }
+    ): GenderRepository = GenderRepositoryImpl(
+        service = service,
+        mapper = mapper
+    )
 
     fun provideCountryRepository(
         service: CountryService,
         mapper: CountryDtoMapper
-    ): CountryRepositoryImpl {
-        return CountryRepositoryImpl(
-            service = service,
-            mapper = mapper
-        )
-    }
+    ): CountryRepository = CountryRepositoryImpl(
+        service = service,
+        mapper = mapper
+    )
 
     fun provideCoinRepository(
         service: CoinService,
         mapper: CoinDtoMapper
-    ): CoinRepositoryImpl {
-        return CoinRepositoryImpl(
-            service = service,
-            mapper = mapper
-        )
-    }
+    ): CoinRepository = CoinRepositoryImpl(
+        service = service,
+        mapper = mapper
+    )
 
     single { provideGuideRepository(get(), get()) }
     single { provideGenderRepository(get(), get()) }

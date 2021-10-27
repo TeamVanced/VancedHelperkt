@@ -1,58 +1,182 @@
 package commands.moderation
 
-import com.mongodb.BasicDBObject
-import commandhandler.CommandContext
-import commands.base.BaseCommand
-import database.warnsCollection
-import ext.required
-import ext.takeMax
-import ext.useArguments
-import ext.useCommandProperly
-import org.litote.kmongo.findOne
-import type.CommandType.Moderation
+import config
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.database.getUserWarns
+import core.database.moderatorRoleIds
+import core.ext.checkWarnForTooManyInfractions
+import core.ext.takeMax
+import core.util.Infraction
+import core.util.sendInfractionToModLogChannel
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
+import dev.kord.common.entity.Snowflake
+import dev.kord.core.entity.interaction.int
+import dev.kord.core.entity.interaction.string
+import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.string
+import dev.kord.rest.builder.interaction.subCommand
+import dev.kord.rest.builder.interaction.user
 
 class Warns : BaseCommand(
-    commandName = "warns",
-    commandDescription = "Get warns for specified user",
-    commandType = Moderation,
-    commandArguments = mapOf("User ID | User Mention".required())
+    commandName = "warn",
+    commandDescription = "Warn actions",
+    defaultPermissions = false
 ) {
 
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        val args = ctx.args
-        if (args.isNotEmpty()) {
-            val user = args[0]
-            val id = user.filter { it.isDigit() }
-            if (id.isEmpty()) {
-                ctx.message.useCommandProperly()
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val subCommand = ctx.subCommand ?: return
+
+        when (subCommand.name) {
+            "add" -> warnUser(ctx)
+            "remove" -> unwarnUser(ctx)
+            "list" -> listWarns(ctx)
+        }
+    }
+
+    override suspend fun commandOptions() = CustomApplicationCommandCreateBuilder(
+        arguments = {
+            subCommand(
+                name = "add",
+                description = "Warn a user",
+                builder = {
+                    user(
+                        name = "user",
+                        description = "Who to warn",
+                        builder = {
+                            required = true
+                        }
+                    )
+                    string(
+                        name = "reason",
+                        description = "Reason of warn",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+            )
+            subCommand(
+                name = "remove",
+                description = "Unwarn a user",
+                builder = {
+                    user(
+                        name = "user",
+                        description = "Who to unwarn",
+                        builder = {
+                            required = true
+                        }
+                    )
+                    int(
+                        name = "warnid",
+                        description = "Number of the warn",
+                        builder = {
+                            required = false
+                        }
+                    )
+                }
+            )
+            subCommand(
+                name = "list",
+                description = "List user's warnings",
+                builder = {
+                    user(
+                        name = "user",
+                        description = "Whose warnings to get",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
+            )
+        }
+    )
+
+    override fun commandPermissions() =
+        CustomApplicationCommandPermissionBuilder(
+            permissions = {
+                for (moderatorRoleId in moderatorRoleIds) {
+                    role(
+                        id = Snowflake(moderatorRoleId),
+                        allow = true
+                    )
+                }
+            }
+        )
+
+    private suspend fun warnUser(ctx: CommandContext) {
+        val user = ctx.args["user"]!!.user()
+        val reason = ctx.args["reason"]!!.string()
+
+        core.database.warnUser(
+            userId = user.id.asString,
+            userTag = user.tag,
+            reason = reason
+        )
+
+        ctx.respondPublic {
+            content = "Successfully warned ${user.mention} for $reason"
+        }
+        sendInfractionToModLogChannel(
+            Infraction.Warn(user, ctx.author, reason)
+        )
+        user.asMember(config.guildSnowflake).checkWarnForTooManyInfractions()
+    }
+
+    private suspend fun unwarnUser(ctx: CommandContext) {
+        val user = ctx.args["user"]!!.user()
+        val warnId = ctx.args["warnid"]?.int()?.toInt()
+
+        val userId = user.id.asString
+
+        if (warnId != null) {
+            val warns = getUserWarns(userId)
+            if (warnId == 0 || (warns != null && warnId > warns.reasons.size)) {
+                ctx.respondEphemeral {
+                    content = "$warnId is an incorrect warn ID"
+                }
                 return
             }
-            val filter = BasicDBObject("userId", id).append("guildId", guildId)
-            val warn = warnsCollection.findOne(filter)
-            if (warn != null) {
-                val reasons = warn.reasons
-                if (reasons.isNotEmpty()) {
-                    ctx.message.replyMsg(
-                        embedBuilder.apply {
-                            setTitle("Warns for ${warn.userName}")
-                            for (i in reasons.indices) {
-                                addField(
-                                    "Warn ${i + 1}",
-                                    reasons[i].takeMax(1024),
-                                    false
-                                )
-                            }
-                        }.build()
-                    )
-                } else {
-                    ctx.message.replyMsg("User $user has no warns")
-                }
-            } else {
-                ctx.message.replyMsg("User $user has no warns")
+        }
+
+        core.database.unwarnUser(
+            userId = userId,
+            warnId = warnId
+        )
+        sendInfractionToModLogChannel(
+            Infraction.Unwarn(user, ctx.author)
+        )
+        ctx.respondPublic {
+            content = "Successfully unwarned ${user.mention}"
+        }
+    }
+
+    private suspend fun listWarns(ctx: CommandContext) {
+        val user = ctx.args["user"]!!.user()
+
+        val warns = getUserWarns(user.id.asString)
+
+        if (warns == null || warns.reasons.isEmpty()) {
+            ctx.respondEphemeral {
+                content = "${user.mention} has no warns"
             }
-        } else {
-            ctx.message.useArguments(1)
+            return
+        }
+
+        ctx.respondPublic {
+            embed {
+                title = "Warns for ${user.mention}"
+                warns.reasons.forEachIndexed { index, reason ->
+                    field {
+                        name = "Warn ${index + 1}"
+                        value = reason.takeMax(1024)
+                    }
+                }
+            }
         }
     }
 

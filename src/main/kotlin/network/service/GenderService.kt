@@ -9,7 +9,7 @@ interface GenderService {
     @GET("get")
     suspend fun get(
         @Query("key") token: String,
-        @Query("email") email: String
+        @Query("name") name: String
     ): GenderDto
 
 }

@@ -9,8 +9,11 @@ class GuideRepositoryImpl(
     private val mapper: GuideJsonDtoMapper
 ) : GuideRepository {
 
-    override suspend fun fetch(jsonName: String): GuideJsonModel {
-        return mapper.mapToModel(service.get(jsonName))
+    override suspend fun fetch(
+        jsonName: String,
+        language: String,
+    ): GuideJsonModel {
+        return mapper.mapToModel(service.get(jsonName, language))
     }
 
 }

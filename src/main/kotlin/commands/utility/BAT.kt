@@ -1,84 +1,85 @@
 package commands.utility
 
-import commandhandler.CommandContext
-import commands.base.BaseCommand
 import config
-import ext.optional
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import core.command.CommandContext
+import core.command.base.BaseCommand
+import core.util.*
+import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
+import dev.kord.core.entity.interaction.int
+import dev.kord.rest.builder.interaction.int
 import org.koin.core.component.inject
 import repository.coin.CoinRepositoryImpl
-import type.CommandType.Utility
-import utils.*
 
 class BAT : BaseCommand(
     commandName = "bat",
-    commandDescription = "Check how many stonks we made today",
-    commandArguments = mapOf("amount".optional()),
-    commandType = Utility
+    commandDescription = "Check how many stonks we made today"
 ) {
 
     private val repository by inject<CoinRepositoryImpl>()
 
-    override fun execute(ctx: CommandContext) {
-        super.execute(ctx)
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = repository.get(
-                    token = config.coinlibToken,
-                    pref = "EUR",
-                    symbol = "BAT"
-                )
+    override suspend fun execute(
+        ctx: CommandContext
+    ) {
+        val amount = ctx.args["amount"]?.int()
 
-                val args = ctx.args
-                val message = ctx.message
+        val response = repository.get(
+            token = config.coinlibToken,
+            pref = "EUR",
+            symbol = "BAT"
+        )
 
-                val price = response.price
-                if (args.isNotEmpty()) {
-                    val amount = args[0].toIntOrNull()
-                    if (amount != null) {
-                        message.replyMsg(
-                            "${amount * price} EUR"
-                        )
-                    } else {
-                        message.replyMsg("Provided argument is not a number!")
-                    }
-                } else {
-                    message.replyMsg(
-                        embedBuilder.apply {
-                            setTitle("${response.name} (${response.symbol})")
-                            addField(
-                                "EUR",
-                                price.toString(),
-                                false
-                            )
-                            addField(
-                                "Price Change",
-                                "`1h` - ${response.delta1H.stonkify()}\n" +
-                                        "`24h` - ${response.delta24H.stonkify()}\n" +
-                                        "`7d` - ${response.delta7D.stonkify()}\n" +
-                                        "`30d` - ${response.delta30D.stonkify()}",
-                                false
-                            )
-                            setFooter("Powered by coinlib.io")
-                        }.build()
-                    )
+        val price = response.price
+
+        if (amount != null) {
+            ctx.respondPublic {
+                content = "${amount * price} EUR"
+            }
+            return
+        }
+
+        ctx.respondPublic {
+            embed {
+                title = "${response.name} (${response.symbol})"
+                field {
+                    name = "EUR"
+                    value = price.toString()
                 }
-            } catch (e: Exception) {
-                ctx.message.replyMsg("An error occurred while trying to fetch data")
+                field("Price Change") {
+                    """
+                        `1h`  - ${response.delta1H.stonkify()}
+                        `24h` - ${response.delta24H.stonkify()}
+                        `7d`  - ${response.delta7D.stonkify()}
+                        `30d` - ${response.delta30D.stonkify()}
+                    """.trimIndent()
+                }
+                footer {
+                    text = "Powered by coinlib.io"
+                }
             }
         }
     }
 
+    override suspend fun commandOptions() =
+        CustomApplicationCommandCreateBuilder(
+            arguments = {
+                int(
+                    name = "amount",
+                    description = "Amount of BATs to convert to EUR",
+                    builder = {
+                        required = false
+                    }
+                )
+            }
+        )
+
     private fun Double.stonkify(): String =
         when {
-            this >= 25 -> "$relax $this%"
-            this >= 5 -> "$vmerchant $this%"
-            this >= 0 -> "$stonks $this%"
-            this <= -5 -> "$feels $this%"
-            this <= -25 -> "$sadness $this%"
-            else -> "$stinks $this%"
+            this >= 25 -> "$EMOTE_RELAX $this%"
+            this >= 5 -> "$EMOTE_V_MERCHANT $this%"
+            this >= 0 -> "$EMOTE_STONKS $this%"
+            this <= -5 -> "$EMOTE_FEELS $this%"
+            this <= -25 -> "$EMOTE_SADNESS $this%"
+            else -> "$EMOTE_STINKS $this%"
         }
 
 }

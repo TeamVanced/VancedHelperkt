@@ -7,7 +7,7 @@ import java.text.DecimalFormat
 class CoinDtoMapper : EntityMapper<CoinDto, CoinModel> {
 
     override suspend fun mapToModel(entity: CoinDto): CoinModel {
-        return with (entity) {
+        return with(entity) {
             CoinModel(
                 symbol = symbol,
                 name = name,

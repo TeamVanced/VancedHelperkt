@@ -2,11 +2,14 @@ package network.service
 
 import network.model.guide.GuideJsonDto
 import retrofit2.http.GET
-import retrofit2.http.Url
+import retrofit2.http.Path
 
 interface GuideService {
 
-    @GET
-    suspend fun get(@Url jsonName: String): GuideJsonDto
+    @GET("{language}/{jsonName}.json")
+    suspend fun get(
+        @Path("jsonName") jsonName: String,
+        @Path("language") language: String,
+    ): GuideJsonDto
 
 }
