@@ -10,8 +10,10 @@ import core.util.sendInfractionToModLogChannel
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.behavior.edit
+import dev.kord.core.any
+import dev.kord.core.entity.interaction.string
 import dev.kord.core.entity.interaction.user
+import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
 import dev.kord.rest.builder.interaction.user
 
@@ -38,29 +40,32 @@ class Mutes : BaseCommand(
                 subCommand(
                     name = "add",
                     description = "Mute a member",
-                    builder = {
-                        user(
-                            name = "user",
-                            description = "Who to mute",
-                            builder = {
-                                required = true
-                            }
-                        )
+                ) {
+                    user(
+                        name = "user",
+                        description = "Who to mute"
+                    ) {
+                        required = true
                     }
-                )
+                    string(
+                        name = "reason",
+                        description = "Reason for the mute"
+                    ) {
+                        required = true
+                    }
+                }
                 subCommand(
                     name = "remove",
                     description = "Unmute a member",
-                    builder = {
-                        user(
-                            name = "user",
-                            description = "User to unmute",
-                            builder = {
-                                required = true
-                            }
-                        )
-                    }
-                )
+                ) {
+                    user(
+                        name = "user",
+                        description = "User to unmute",
+                        builder = {
+                            required = true
+                        }
+                    )
+                }
             }
         )
 
@@ -78,35 +83,28 @@ class Mutes : BaseCommand(
 
     private suspend fun muteUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
+        val reason = ctx.args["reason"]!!.string()
 
         val userMention = user.mention
 
-        user.asMember(config.guildSnowflake).edit {
-            if (roles == null) {
-                ctx.respondEphemeral {
-                    content = "Failed to retrieve roles for $userMention"
-                }
-                return@edit
-            }
+        val member = user.asMember(config.guildSnowflake)
 
-            val muteSnowflake = Snowflake(muteRoleId)
+        val muteId = Snowflake(muteRoleId)
 
-            if (roles!!.contains(muteSnowflake)) {
-                ctx.respondEphemeral {
-                    content = "$userMention is already muted"
-                }
-                return@edit
+        if (member.roles.any { it.id == muteId }) {
+            ctx.respondEphemeral {
+                content = "$userMention is already muted"
             }
-
-            reason = "Muted"
-            roles!!.add(muteSnowflake)
-            ctx.respondPublic {
-                content = "Successfully muted $userMention"
-            }
-            sendInfractionToModLogChannel(
-                Infraction.Mute(user, ctx.author, reason)
-            )
+            return
         }
+
+        member.addRole(muteId, "Muted")
+        ctx.respondPublic {
+            content = "Successfully muted $userMention"
+        }
+        sendInfractionToModLogChannel(
+            Infraction.Mute(user, ctx.author, reason)
+        )
     }
 
     private suspend fun unmuteUser(ctx: CommandContext) {
@@ -114,32 +112,24 @@ class Mutes : BaseCommand(
 
         val userMention = user.mention
 
-        user.asMember(config.guildSnowflake).edit {
-            if (roles == null) {
-                ctx.respondEphemeral {
-                    content = "Failed to retrieve roles for $userMention"
-                }
-                return@edit
-            }
+        val member = user.asMember(config.guildSnowflake)
 
-            val muteSnowflake = Snowflake(muteRoleId)
+        val muteId = Snowflake(muteRoleId)
 
-            if (!roles!!.contains(muteSnowflake)) {
-                ctx.respondEphemeral {
-                    content = "$userMention is not muted"
-                }
-                return@edit
+        if (!member.roles.any { it.id == muteId }) {
+            ctx.respondEphemeral {
+                content = "$userMention is not muted"
             }
-
-            reason = "Unmuted"
-            roles!!.remove(muteSnowflake)
-            ctx.respondPublic {
-                content = "Successfully unmuted $userMention"
-            }
-            sendInfractionToModLogChannel(
-                Infraction.Unmute(user, ctx.author)
-            )
+            return
         }
+
+        member.removeRole(muteId, "Unmuted")
+        ctx.respondPublic {
+            content = "Successfully unmuted $userMention"
+        }
+        sendInfractionToModLogChannel(
+            Infraction.Unmute(user, ctx.author)
+        )
     }
 
 }

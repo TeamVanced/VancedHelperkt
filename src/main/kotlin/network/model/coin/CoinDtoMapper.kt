@@ -11,7 +11,7 @@ class CoinDtoMapper : EntityMapper<CoinDto, CoinModel> {
             CoinModel(
                 symbol = symbol,
                 name = name,
-                price = DecimalFormat("#.#####").format(price.toDouble()).toDouble(),
+                price = DecimalFormat("#,#####").format(price.toDouble()).toDouble(),
                 delta1H = delta1H.toDouble(),
                 delta24H = delta24H.toDouble(),
                 delta7D = delta7D.toDouble(),
