@@ -18,8 +18,6 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.event.message.ReactionAddEvent
 import dev.kord.core.event.message.ReactionRemoveEvent
 import dev.kord.core.on
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
@@ -102,11 +100,9 @@ class Bot : KoinComponent {
             messageChannel.createMessage("I just started!")
         }
 
-        withContext(Dispatchers.IO) {
-            val guild = kord.getGuild(config.guildSnowflake)
-            if (guild != null) {
-                cleanupCcRoles(guild, logger)
-            }
+        val guild = kord.getGuild(config.guildSnowflake)
+        if (guild != null) {
+            cleanupCcRoles(guild, logger)
         }
     }
 
