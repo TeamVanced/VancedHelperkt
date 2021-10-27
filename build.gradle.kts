@@ -8,7 +8,6 @@ plugins {
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 dependencies {
@@ -49,16 +48,18 @@ java {
 tasks.withType<Jar> {
     archiveFileName.set("bot.jar")
 
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
     }
 
     configurations["runtimeClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
-    }
-
-    manifest {
-        attributes["Main-Class"] = "MainKt"
     }
 }
 
