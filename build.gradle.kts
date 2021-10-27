@@ -48,11 +48,13 @@ java {
 tasks.withType<Jar> {
     archiveFileName.set("bot.jar")
 
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-
     manifest {
         attributes["Main-Class"] = "MainKt"
     }
+
+    exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
