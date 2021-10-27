@@ -6,7 +6,7 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 
 class Source : BaseCommand(
     commandName = "source",
-    commandDescription = "Get a link to my github source"
+    commandDescription = "Get a link to my GitHub source"
 ) {
 
     override suspend fun execute(
