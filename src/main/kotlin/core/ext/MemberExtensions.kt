@@ -30,9 +30,12 @@ suspend fun Member.canInteractWith(target: Member): Boolean {
         val issuerHighestModeratorRolePosition = issuer.roles.first {
             moderatorRoleIds.contains(it.id.value.toLong())
         }.getPosition()
+
         val targetHighestModeratorRolePosition = target.roles.first {
             moderatorRoleIds.contains(it.id.value.toLong())
         }.getPosition()
+
+
         return issuerHighestModeratorRolePosition > targetHighestModeratorRolePosition
     }
 
