@@ -5,6 +5,7 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.database.moderatorRoleIds
 import core.database.muteRoleId
+import core.ext.canInteractWith
 import core.util.Infraction
 import core.util.sendInfractionToModLogChannel
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
@@ -85,22 +86,28 @@ class Mutes : BaseCommand(
         val user = ctx.args["user"]!!.user()
         val reason = ctx.args["reason"]!!.string()
 
-        val userMention = user.mention
-
         val member = user.asMember(config.guildSnowflake)
+        val memberMention = member.mention
+
+        if (!ctx.author.canInteractWith(member)) {
+            ctx.respondEphemeral {
+                content = "You don't have enough permissions to interact with $memberMention."
+            }
+            return
+        }
 
         val muteId = Snowflake(muteRoleId)
 
         if (member.roles.any { it.id == muteId }) {
             ctx.respondEphemeral {
-                content = "$userMention is already muted"
+                content = "$memberMention is already muted"
             }
             return
         }
 
         member.addRole(muteId, "Muted")
         ctx.respondPublic {
-            content = "Successfully muted $userMention"
+            content = "Successfully muted $memberMention"
         }
         sendInfractionToModLogChannel(
             Infraction.Mute(user, ctx.author, reason)
@@ -110,22 +117,28 @@ class Mutes : BaseCommand(
     private suspend fun unmuteUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
 
-        val userMention = user.mention
-
         val member = user.asMember(config.guildSnowflake)
+        val memberMention = user.mention
+
+        if (!ctx.author.canInteractWith(member)) {
+            ctx.respondEphemeral {
+                content = "You don't have enough permissions to interact with $memberMention."
+            }
+            return
+        }
 
         val muteId = Snowflake(muteRoleId)
 
         if (!member.roles.any { it.id == muteId }) {
             ctx.respondEphemeral {
-                content = "$userMention is not muted"
+                content = "$memberMention is not muted"
             }
             return
         }
 
         member.removeRole(muteId, "Unmuted")
         ctx.respondPublic {
-            content = "Successfully unmuted $userMention"
+            content = "Successfully unmuted $memberMention"
         }
         sendInfractionToModLogChannel(
             Infraction.Unmute(user, ctx.author)
