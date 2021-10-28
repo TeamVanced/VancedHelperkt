@@ -3,8 +3,10 @@ package commands.moderation
 import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
+import core.database.addUserWarn
 import core.database.getUserWarns
 import core.database.moderatorRoleIds
+import core.database.removeUserWarn
 import core.ext.canInteractWith
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.takeMax
@@ -123,7 +125,7 @@ class Warns : BaseCommand(
             return
         }
 
-        core.database.warnUser(
+        addUserWarn(
             userId = user.id.asString,
             userTag = user.tag,
             reason = reason
@@ -164,7 +166,7 @@ class Warns : BaseCommand(
             }
         }
 
-        core.database.unwarnUser(
+        removeUserWarn(
             userId = userId,
             warnId = warnId
         )
