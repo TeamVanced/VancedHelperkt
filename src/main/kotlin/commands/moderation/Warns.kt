@@ -3,8 +3,11 @@ package commands.moderation
 import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
+import core.database.addUserWarn
 import core.database.getUserWarns
 import core.database.moderatorRoleIds
+import core.database.removeUserWarn
+import core.ext.canInteractWith
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.takeMax
 import core.util.Infraction
@@ -112,14 +115,24 @@ class Warns : BaseCommand(
         val user = ctx.args["user"]!!.user()
         val reason = ctx.args["reason"]!!.string()
 
-        core.database.warnUser(
+        val member = user.asMember(config.guildSnowflake)
+        val memberMention = member.mention
+
+        if (!ctx.author.canInteractWith(member)) {
+            ctx.respondEphemeral {
+                content = "You don't have enough permissions to interact with $memberMention."
+            }
+            return
+        }
+
+        addUserWarn(
             userId = user.id.asString,
             userTag = user.tag,
             reason = reason
         )
 
         ctx.respondPublic {
-            content = "Successfully warned ${user.mention} for $reason"
+            content = "Successfully warned $memberMention for $reason"
         }
         sendInfractionToModLogChannel(
             Infraction.Warn(user, ctx.author, reason)
@@ -130,6 +143,16 @@ class Warns : BaseCommand(
     private suspend fun unwarnUser(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
         val warnId = ctx.args["warnid"]?.int()?.toInt()
+
+        val member = user.asMember(config.guildSnowflake)
+        val memberMention = member.mention
+
+        if (!ctx.author.canInteractWith(member)) {
+            ctx.respondEphemeral {
+                content = "You don't have enough permissions to interact with $memberMention."
+            }
+            return
+        }
 
         val userId = user.id.asString
 
@@ -143,7 +166,7 @@ class Warns : BaseCommand(
             }
         }
 
-        core.database.unwarnUser(
+        removeUserWarn(
             userId = userId,
             warnId = warnId
         )
@@ -151,12 +174,22 @@ class Warns : BaseCommand(
             Infraction.Unwarn(user, ctx.author)
         )
         ctx.respondPublic {
-            content = "Successfully unwarned ${user.mention}"
+            content = "Successfully unwarned $memberMention"
         }
     }
 
     private suspend fun listWarns(ctx: CommandContext) {
         val user = ctx.args["user"]!!.user()
+
+        val member = user.asMember(config.guildSnowflake)
+        val memberMention = member.mention
+
+        if (!ctx.author.canInteractWith(member)) {
+            ctx.respondEphemeral {
+                content = "You don't have enough permissions to interact with $memberMention."
+            }
+            return
+        }
 
         val warns = getUserWarns(user.id.asString)
 

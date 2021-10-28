@@ -1,7 +1,7 @@
 package core.listener
 
 import core.command.CommandManager
-import core.database.warnUser
+import core.database.addUserWarn
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.isDev
 import core.ext.isMod
@@ -41,7 +41,7 @@ class MessageListener {
         if (duplicateCount < 6) return
 
         message.delete("Spam")
-        warnUser(
+        addUserWarn(
             userId = messageAuthor.id.asString,
             userTag = messageAuthor.tag,
             reason = "Spam"
@@ -65,7 +65,7 @@ class MessageListener {
         if (emotes.count() < 6) return
 
         message.delete("Spam")
-        warnUser(
+        addUserWarn(
             userId = messageAuthor.id.asString,
             userTag = messageAuthor.tag,
             reason = "Emote spam"

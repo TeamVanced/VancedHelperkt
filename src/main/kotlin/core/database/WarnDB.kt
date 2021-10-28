@@ -23,7 +23,7 @@ fun deleteUserWarns(
     )
 }
 
-fun warnUser(
+fun addUserWarn(
     userId: String,
     userTag: String,
     reason: String,
@@ -45,7 +45,7 @@ fun warnUser(
     }
 }
 
-fun unwarnUser(
+fun removeUserWarn(
     userId: String,
     warnId: Int?
 ) {
