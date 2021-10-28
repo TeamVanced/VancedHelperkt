@@ -23,9 +23,11 @@ suspend fun Member.checkWarnForTooManyInfractions() {
     }
 }
 
-suspend fun Member.canInteractWith(target: Member) : Boolean {
-    if (this.isMod && target.isMod) {
-        val issuerHighestModeratorRolePosition = this.roles.first {
+suspend fun Member.canInteractWith(target: Member): Boolean {
+    val issuer = this
+
+    if (issuer.isMod && target.isMod) {
+        val issuerHighestModeratorRolePosition = issuer.roles.first {
             moderatorRoleIds.contains(it.id.value.toLong())
         }.getPosition()
         val targetHighestModeratorRolePosition = target.roles.first {
@@ -34,7 +36,7 @@ suspend fun Member.canInteractWith(target: Member) : Boolean {
         return issuerHighestModeratorRolePosition > targetHighestModeratorRolePosition
     }
 
-    val issuerRolePosition = roles.first().getPosition()
+    val issuerRolePosition = issuer.roles.first().getPosition()
     val targetRolePosition = target.roles.first().getPosition()
 
     return issuerRolePosition > targetRolePosition
