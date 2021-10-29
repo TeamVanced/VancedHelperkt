@@ -14,7 +14,8 @@ import dev.kord.core.entity.interaction.ButtonInteraction
 
 class RoleInfo : BaseCommand(
     commandName = "roleinfo",
-    commandDescription = "Send the role info"
+    commandDescription = "Send the role info",
+    defaultPermissions = false
 ) {
 
     override suspend fun execute(
@@ -32,43 +33,6 @@ class RoleInfo : BaseCommand(
                     Also select for which kinds of devices you wish to receive pings for and access channels for, using the buttons below.
                 """.trimIndent()
                 color = Color(64, 78, 237)
-                actionRow {
-                    interactionButton(
-                        style = ButtonStyle.Primary,
-                        customId = "$commandName-797141785880035358"
-                    ) {
-                        label = "Android"
-                        emoji = DiscordPartialEmoji(id = Snowflake(797147539941359616))
-                    }
-                    interactionButton(
-                        style = ButtonStyle.Primary,
-                        customId = "$commandName-797141920118997053"
-                    ) {
-                        label = "iOS"
-                        emoji = DiscordPartialEmoji(id = Snowflake(797891150337933353))
-                    }
-                    interactionButton(
-                        style = ButtonStyle.Primary,
-                        customId = "$commandName-650741600846217217"
-                    ) {
-                        label = "Weeber"
-                        emoji = DiscordPartialEmoji(id = Snowflake(651054603793858561))
-                    }
-                    interactionButton(
-                        style = ButtonStyle.Primary,
-                        customId = "$commandName-682204644268703746"
-                    ) {
-                        label = "MCGamer"
-                        emoji = DiscordPartialEmoji(id = Snowflake(361948780926337036))
-                    }
-                    interactionButton(
-                        style = ButtonStyle.Primary,
-                        customId = "$commandName-798910044791767110"
-                    ) {
-                        label = "Cursed"
-                        emoji = DiscordPartialEmoji(id = Snowflake(788530533549211668))
-                    }
-                }
             }
             embed {
                 title = "Nitro Boosters"
@@ -86,6 +50,43 @@ class RoleInfo : BaseCommand(
                     Applications for certain roles such as tester, janitor and media team can be sent to <#837029449181429800> after reading the requirements carefully. 
                 """.trimIndent()
                 color = Color(88, 101, 242)
+            }
+            actionRow {
+                interactionButton(
+                    style = ButtonStyle.Primary,
+                    customId = "$commandName-797141785880035358"
+                ) {
+                    label = "Android"
+                    emoji = DiscordPartialEmoji(id = Snowflake(797147539941359616))
+                }
+                interactionButton(
+                    style = ButtonStyle.Primary,
+                    customId = "$commandName-797141920118997053"
+                ) {
+                    label = "iOS"
+                    emoji = DiscordPartialEmoji(id = Snowflake(797891150337933353))
+                }
+                interactionButton(
+                    style = ButtonStyle.Primary,
+                    customId = "$commandName-650741600846217217"
+                ) {
+                    label = "Weeber"
+                    emoji = DiscordPartialEmoji(id = Snowflake(903697212553453628))
+                }
+                interactionButton(
+                    style = ButtonStyle.Primary,
+                    customId = "$commandName-682204644268703746"
+                ) {
+                    label = "MCGamer"
+                    emoji = DiscordPartialEmoji(id = Snowflake(361948780926337036))
+                }
+                interactionButton(
+                    style = ButtonStyle.Primary,
+                    customId = "$commandName-798910044791767110"
+                ) {
+                    label = "Cursed"
+                    emoji = DiscordPartialEmoji(id = Snowflake(788530533549211668))
+                }
             }
         }
     }

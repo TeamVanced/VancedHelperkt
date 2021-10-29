@@ -30,7 +30,7 @@ dependencies {
 
     implementation("io.insert-koin:koin-core:3.1.2")
 
-    implementation("org.reflections:reflections:0.10.1")
+    implementation("org.reflections:reflections:0.10.2")
 }
 
 tasks.withType<KotlinCompile> {
