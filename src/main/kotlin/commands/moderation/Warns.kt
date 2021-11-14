@@ -202,7 +202,7 @@ class Warns : BaseCommand(
 
         ctx.respondPublic {
             embed {
-                title = "Warns for ${user.mention}"
+                title = "Warns for ${user.tag}"
                 warns.reasons.forEachIndexed { index, reason ->
                     field {
                         name = "Warn ${index + 1}"
