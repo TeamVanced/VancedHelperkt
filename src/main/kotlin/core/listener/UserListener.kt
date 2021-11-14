@@ -40,21 +40,31 @@ class UserListener {
         }
     }
 
-    suspend fun onMemberBan(
-        user: User,
+    suspend fun onMemberKick(
+        member: User,
         moderator: User,
         reason: String?
     ) {
         sendInfractionToModLogChannel(
-            Infraction.Ban(user, moderator, reason)
+            Infraction.Kick(member, moderator, reason)
+        )
+    }
+
+    suspend fun onMemberBan(
+        member: User,
+        moderator: User,
+        reason: String?
+    ) {
+        sendInfractionToModLogChannel(
+            Infraction.Ban(member, moderator, reason)
         )
     }
 
     suspend fun onMemberUnban(
-        user: User,
+        member: User,
     ) {
         sendInfractionToModLogChannel(
-            Infraction.Unban(user)
+            Infraction.Unban(member)
         )
     }
 

@@ -8,6 +8,7 @@ import core.util.Infraction
 import core.util.sendInfractionToModLogChannel
 import dev.kord.core.entity.Member
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 suspend fun Member.checkWarnForTooManyInfractions() {
     val userId = id.asString
@@ -26,12 +27,15 @@ suspend fun Member.checkWarnForTooManyInfractions() {
 suspend fun Member.canInteractWith(target: Member): Boolean {
     val issuer = this
 
+    val issuerRoles = issuer.roles.sortedByDescending { it.rawPosition }
+    val targetRoles = target.roles.sortedByDescending { it.rawPosition }
+
     if (issuer.isMod && target.isMod) {
-        val issuerHighestModeratorRolePosition = issuer.roles.first {
+        val issuerHighestModeratorRolePosition = issuerRoles.first {
             moderatorRoleIds.contains(it.id.value.toLong())
         }.getPosition()
 
-        val targetHighestModeratorRolePosition = target.roles.first {
+        val targetHighestModeratorRolePosition = targetRoles.first {
             moderatorRoleIds.contains(it.id.value.toLong())
         }.getPosition()
 
@@ -39,8 +43,8 @@ suspend fun Member.canInteractWith(target: Member): Boolean {
         return issuerHighestModeratorRolePosition > targetHighestModeratorRolePosition
     }
 
-    val issuerHighestRolePosition = issuer.roles.first().getPosition()
-    val targetHighestRolePosition = target.roles.first().getPosition()
+    val issuerHighestRolePosition = issuerRoles.firstOrNull()?.getPosition() ?: 0
+    val targetHighestRolePosition = targetRoles.firstOrNull()?.getPosition() ?: 0
 
     return issuerHighestRolePosition > targetHighestRolePosition
 }
