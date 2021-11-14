@@ -2,20 +2,23 @@ import core.command.CommandManager
 import core.database.settings
 import core.listener.MessageListener
 import core.listener.UserListener
+import dev.kord.common.entity.AuditLogEvent
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.any
+import dev.kord.core.behavior.getAuditLogEntries
 import dev.kord.core.entity.channel.MessageChannel
 import dev.kord.core.entity.interaction.ButtonInteraction
 import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
 import dev.kord.core.entity.interaction.SelectMenuInteraction
-import dev.kord.core.event.guild.BanAddEvent
 import dev.kord.core.event.guild.BanRemoveEvent
 import dev.kord.core.event.guild.MemberLeaveEvent
 import dev.kord.core.event.guild.MemberUpdateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.firstOrNull
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
@@ -70,9 +73,34 @@ class Bot : KoinComponent {
             userListener.onMemberLeaveGuild(getGuild(), logger)
         }
 
-        kord.on<BanAddEvent> {
-            val ban = getBan()
-            userListener.onMemberBan(ban.getUser(), user, ban.reason)
+        // Ban event
+        kord.on<MemberLeaveEvent> {
+            delay(5000L)
+
+            val ban = guild.getAuditLogEntries {
+                userId = user.id
+                action = AuditLogEvent.MemberBanAdd
+            }.firstOrNull() ?: return@on
+
+            val mod = guild.getMember(ban.userId)
+            val bannedUser = guild.getMember(ban.targetId!!)
+
+            userListener.onMemberBan(mod, bannedUser, ban.reason)
+        }
+
+        // Kick event
+        kord.on<MemberLeaveEvent> {
+            delay(5000L)
+
+            val kick = guild.getAuditLogEntries {
+                userId = user.id
+                action = AuditLogEvent.MemberKick
+            }.firstOrNull() ?: return@on
+
+            val mod = guild.getMember(kick.userId)
+            val kickedUser = guild.getMember(kick.targetId!!)
+
+            userListener.onMemberKick(mod, kickedUser, kick.reason)
         }
 
         kord.on<BanRemoveEvent> {
