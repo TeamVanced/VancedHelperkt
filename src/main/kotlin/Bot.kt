@@ -17,6 +17,9 @@ import dev.kord.core.event.guild.MemberUpdateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
+import dev.kord.gateway.Intent
+import dev.kord.gateway.Intents
+import dev.kord.gateway.PrivilegedIntent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.core.component.KoinComponent
@@ -31,6 +34,7 @@ class Bot : KoinComponent {
 
     private val logger = LoggerFactory.getLogger("Vanced Helper")
 
+    @OptIn(PrivilegedIntent::class)
     suspend fun start() {
         val kord = Kord(config.token)
 
@@ -108,14 +112,18 @@ class Bot : KoinComponent {
         }
 
         kord.login {
-            if (settings.logChannelId == 0L) {
-                return@login
+            intents = Intents(
+                Intent.GuildBans,
+                Intent.GuildMembers,
+                Intent.GuildMessages,
+            )
+
+            if (settings.logChannelId != 0L) {
+                val channel = kord.getGuild(config.guildSnowflake)?.getChannel(Snowflake(settings.logChannelId))
+                val messageChannel = channel as? MessageChannel ?: return
+
+                messageChannel.createMessage("I just started!")
             }
-
-            val channel = kord.getGuild(config.guildSnowflake)?.getChannel(Snowflake(settings.logChannelId))
-            val messageChannel = channel as? MessageChannel ?: return
-
-            messageChannel.createMessage("I just started!")
         }
     }
 
