@@ -19,9 +19,9 @@ dependencies {
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
-    implementation("org.litote.kmongo:kmongo:4.3.0")
+    implementation("org.litote.kmongo:kmongo:4.4.0")
 
-    val logbackVersion = "1.2.7"
+    val logbackVersion = "1.2.8"
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
 
@@ -29,7 +29,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
-    implementation("io.insert-koin:koin-core:3.1.3")
+    implementation("io.insert-koin:koin-core:3.1.4")
 
     implementation("org.reflections:reflections:0.10.2")
 }
