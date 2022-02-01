@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    val kotlinVersion = "1.6.0"
+    val kotlinVersion = "1.6.10"
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(kotlin("reflect", kotlinVersion))
 
@@ -21,7 +21,7 @@ dependencies {
 
     implementation("org.litote.kmongo:kmongo:4.4.0")
 
-    val logbackVersion = "1.2.8"
+    val logbackVersion = "1.2.10"
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
 
@@ -29,7 +29,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
-    implementation("io.insert-koin:koin-core:3.1.4")
+    implementation("io.insert-koin:koin-core:3.1.5")
 
     implementation("org.reflections:reflections:0.10.2")
 }
