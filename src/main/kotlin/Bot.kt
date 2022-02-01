@@ -61,9 +61,10 @@ class Bot : KoinComponent {
         }
 
         kord.on<MemberUpdateEvent> {
-            val oldWasBooster = old?.roles?.any { it.id == Snowflake(settings.boosterRoleId) }
+            val boosterRoleSnowflake = Snowflake(settings.boosterRoleId)
+            val oldWasBooster = old?.roles?.any { it.id == boosterRoleSnowflake }
                 ?: return@on
-            val newIsBooster = member.roles.any { it.id == Snowflake(settings.boosterRoleId) }
+            val newIsBooster = member.roles.any { it.id == boosterRoleSnowflake }
 
             when {
                 !oldWasBooster && newIsBooster -> {}
