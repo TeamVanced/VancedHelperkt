@@ -168,18 +168,12 @@ class Quotes : BaseCommand(
             return
         }
 
-        if (message.author?.isBot == true) {
-            ctx.respondEphemeral {
+        if (message.author?.isBot != false) {
+            return ctx.respondEphemeral {
                 content = "Beep Boop. Do not bully robots"
-            }
-            return
-        }
 
-        if (message.author == null) {
-            ctx.respondEphemeral {
-                content = "That's not a message from a guild member!"
+                addFile("GLaDOS.mp3", javaClass.getResourceAsStream("/robots.mp3")!!)
             }
-            return
         }
 
         val quoteId = (lastQuote?.quoteId ?: 0) + 1
