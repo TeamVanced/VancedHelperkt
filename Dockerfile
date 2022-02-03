@@ -1,4 +1,4 @@
-FROM gradle:jdk16
+FROM gradle:jdk17
 LABEL maintainer="xfileFIN"
 WORKDIR /src
 COPY . /src
