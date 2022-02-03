@@ -7,14 +7,14 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
-import repository.country.CountryRepositoryImpl
+import repository.country.CountryRepository
 
 class Country : BaseCommand(
     commandName = "country",
     commandDescription = "Get the country of a user"
 ) {
 
-    private val repository by inject<CountryRepositoryImpl>()
+    private val repository by inject<CountryRepository>()
 
     override suspend fun execute(
         ctx: CommandContext
