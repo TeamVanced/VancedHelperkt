@@ -192,7 +192,7 @@ class Quotes : BaseCommand(
                 messageUrl = link.replace("""(?:\w+.)?discord(?:app)?.com""".toRegex(), "discord.com"),
                 messageContent = message.content,
                 messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.epochSeconds)),
-                authorId = message.author!!.id.asString,
+                authorId = message.author!!.id.toString(),
                 authorAvatar = message.author!!.avatar!!.url,
                 authorName = message.author!!.tag,
                 attachment = message.attachments.firstOrNull()?.url,
@@ -264,7 +264,7 @@ class Quotes : BaseCommand(
 
     private suspend fun starQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int().toInt()
-        val authorId = ctx.author.id.asString
+        val authorId = ctx.author.id.toString()
 
         val quote = getQuote(quoteId)
 
@@ -294,7 +294,7 @@ class Quotes : BaseCommand(
 
     private suspend fun unstarQuote(ctx: CommandContext) {
         val quoteId = ctx.args["quoteid"]!!.int().toInt()
-        val authorId = ctx.author.id.asString
+        val authorId = ctx.author.id.toString()
 
         val quote = getQuote(quoteId)
 
