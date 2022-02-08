@@ -15,7 +15,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(kotlin("reflect", kotlinVersion))
 
-    implementation("dev.kord:kord-core:0.8.0-M8")
+    implementation("dev.kord:kord-core:0.8.0-M9")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
