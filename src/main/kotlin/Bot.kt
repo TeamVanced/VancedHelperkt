@@ -69,13 +69,13 @@ class Bot : KoinComponent {
             when {
                 !oldWasBooster && newIsBooster -> {}
                 oldWasBooster && !newIsBooster -> {
-                    userListener.onMemberUnboostGuild(member)
+                    userListener.onMemberUnboostGuild(member, logger)
                 }
             }
         }
 
         kord.on<MemberLeaveEvent> {
-            userListener.onMemberLeaveGuild(getGuild(), logger)
+            userListener.onMemberLeaveGuild(old ?: return@on, logger)
         }
 
         // Ban event

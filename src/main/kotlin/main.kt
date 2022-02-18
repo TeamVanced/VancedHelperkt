@@ -7,7 +7,6 @@ suspend fun main() {
             commandManagerModule,
             eventListenerModule,
             ktorModule,
-            mapperModule,
             repositoryModule,
             serviceModule,
         )

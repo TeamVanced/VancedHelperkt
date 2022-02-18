@@ -1,9 +1,8 @@
 package di
 
 import com.google.gson.GsonBuilder
-import network.service.CoinService
-import network.service.CountryService
-import network.service.GenderService
+import network.service.CoinlibService
+import network.service.GenderapiService
 import network.service.GuideService
 import network.util.baseGuideUrl
 import network.util.coinlibApiUrl
@@ -13,7 +12,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val serviceModule = module {
-
     fun provideGuideService(): GuideService {
         return Retrofit.Builder()
             .baseUrl(baseGuideUrl)
@@ -22,33 +20,23 @@ val serviceModule = module {
             .create(GuideService::class.java)
     }
 
-    fun provideGenderService(): GenderService {
+    fun provideGenderService(): GenderapiService {
         return Retrofit.Builder()
             .baseUrl(genderApiUrl)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create(GenderService::class.java)
+            .create(GenderapiService::class.java)
     }
 
-    fun provideCountryService(): CountryService {
-        return Retrofit.Builder()
-            .baseUrl(genderApiUrl)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .build()
-            .create(CountryService::class.java)
-    }
-
-    fun provideCoinService(): CoinService {
+    fun provideCoinService(): CoinlibService {
         return Retrofit.Builder()
             .baseUrl(coinlibApiUrl)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create(CoinService::class.java)
+            .create(CoinlibService::class.java)
     }
 
     single { provideGuideService() }
     single { provideGenderService() }
-    single { provideCountryService() }
     single { provideCoinService() }
-
 }
