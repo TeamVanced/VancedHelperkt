@@ -21,7 +21,6 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.Intents
 import dev.kord.gateway.PrivilegedIntent
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -70,7 +69,7 @@ class Bot : KoinComponent {
             when {
                 !oldWasBooster && newIsBooster -> {}
                 oldWasBooster && !newIsBooster -> {
-                    userListener.onMemberUnboostGuild(member)
+                    userListener.onMemberUnboostGuild(member, logger)
                 }
             }
         }

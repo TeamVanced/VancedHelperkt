@@ -7,14 +7,14 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
-import repository.country.CountryRepository
+import repository.genderapi.GenderapiRepository
 
 class Country : BaseCommand(
     commandName = "country",
     commandDescription = "Get the country of a user"
 ) {
 
-    private val repository by inject<CountryRepository>()
+    private val repository by inject<GenderapiRepository>()
 
     override suspend fun execute(
         ctx: CommandContext
@@ -22,7 +22,7 @@ class Country : BaseCommand(
         val user = ctx.args["user"]!!.user()
         val userName = user.username.filter { it.isLetter() }
 
-        val response = repository.get(
+        val response = repository.getCountryOfOrigin(
             token = config.genderToken,
             name = userName
         )

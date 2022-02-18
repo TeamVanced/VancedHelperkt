@@ -8,14 +8,14 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.int
 import dev.kord.rest.builder.interaction.int
 import org.koin.core.component.inject
-import repository.coin.CoinRepository
+import repository.coin.CoinlibRepository
 
 class BAT : BaseCommand(
     commandName = "bat",
     commandDescription = "Check how many stonks we made today"
 ) {
 
-    private val repository by inject<CoinRepository>()
+    private val repository by inject<CoinlibRepository>()
 
     override suspend fun execute(
         ctx: CommandContext
