@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
@@ -11,16 +11,17 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8", version = "1.5.31"))
-    implementation(kotlin("reflect", version = "1.5.31"))
+    val kotlinVersion = "1.6.10"
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
+    implementation(kotlin("reflect", kotlinVersion))
 
-    implementation("dev.kord:kord-core:0.8.0-M7")
+    implementation("dev.kord:kord-core:0.8.0-M9")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
-    implementation("org.litote.kmongo:kmongo:4.3.0")
+    implementation("org.litote.kmongo:kmongo:4.4.0")
 
-    val logbackVersion = "1.2.6"
+    val logbackVersion = "1.2.10"
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
 
@@ -28,21 +29,21 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
-    implementation("io.insert-koin:koin-core:3.1.2")
+    implementation("io.insert-koin:koin-core:3.1.5")
 
     implementation("org.reflections:reflections:0.10.2")
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "16"
+        jvmTarget = "17"
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<Jar> {

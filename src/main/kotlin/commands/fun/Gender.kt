@@ -7,14 +7,14 @@ import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
-import repository.gender.GenderRepositoryImpl
+import repository.gender.GenderRepository
 
 class Gender : BaseCommand(
     commandName = "gender",
     commandDescription = "Get the gender of a user"
 ) {
 
-    private val repository by inject<GenderRepositoryImpl>()
+    private val repository by inject<GenderRepository>()
 
     override suspend fun execute(
         ctx: CommandContext

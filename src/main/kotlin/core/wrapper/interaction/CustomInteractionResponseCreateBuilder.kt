@@ -6,6 +6,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
+import java.io.InputStream
 
 data class CustomInteractionResponseCreateBuilder(
     val persistentMessageCreateBuilder: MessageCreateBuilder
@@ -23,6 +24,10 @@ data class CustomInteractionResponseCreateBuilder(
         block: ActionRowBuilder.() -> Unit
     ) {
         persistentMessageCreateBuilder.actionRow(block)
+    }
+
+    fun addFile(name: String, inputStream: InputStream) {
+        persistentMessageCreateBuilder.addFile(name, inputStream)
     }
 
     var content

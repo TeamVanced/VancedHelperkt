@@ -17,6 +17,50 @@ class RoleInfo : BaseCommand(
     commandDescription = "Send the role info",
     defaultPermissions = false
 ) {
+    
+    private data class EmojiButton(
+        val label: String,
+        val roleId: Long,
+        val emojiId: Snowflake? = null,
+        val emojiName: String? = null,
+    )
+
+    private val emojiRows = listOf(
+        listOf(
+            EmojiButton(
+                label = "Android",
+                roleId = 797141785880035358,
+                emojiId = Snowflake(797147539941359616)
+            ),
+            EmojiButton(
+                label = "iOS",
+                roleId = 797141920118997053,
+                emojiId = Snowflake(797891150337933353)
+            ),
+        ),
+        listOf(
+            EmojiButton(
+                label = "Weeber",
+                roleId = 650741600846217217,
+                emojiId = Snowflake(903697212553453628)
+            ),
+            EmojiButton(
+                label = "MCGamer",
+                roleId = 682204644268703746,
+                emojiId = Snowflake(361948780926337036)
+            ),
+            EmojiButton(
+                label = "Cursed",
+                roleId = 798910044791767110,
+                emojiId = Snowflake(788530533549211668)
+            ),
+            EmojiButton(
+                label = "Monkey",
+                emojiName = "\uD83D\uDC12",
+                roleId = 836255710362730578
+            ),
+        )
+    )
 
     override suspend fun execute(
         ctx: CommandContext
@@ -30,6 +74,8 @@ class RoleInfo : BaseCommand(
                     - Weeber role (grants you access to <#644156533046771722> and weeb emojis) 
                     - MCGamer role (grants you access to our minecraft server (play.vancedapp.com) chat in <#666690829376553001> ) 
                     - Cursed role (grants you access to horrific chat, viewer discretion advised)
+                    - Monkey role (grants you access to the Vanced Public Beta Testing channel)
+                    
                     Also select for which kinds of devices you wish to receive pings for and access channels for, using the buttons below.
                 """.trimIndent()
                 color = Color(64, 78, 237)
@@ -51,41 +97,20 @@ class RoleInfo : BaseCommand(
                 """.trimIndent()
                 color = Color(88, 101, 242)
             }
-            actionRow {
-                interactionButton(
-                    style = ButtonStyle.Primary,
-                    customId = "$commandName-797141785880035358"
-                ) {
-                    label = "Android"
-                    emoji = DiscordPartialEmoji(id = Snowflake(797147539941359616))
-                }
-                interactionButton(
-                    style = ButtonStyle.Primary,
-                    customId = "$commandName-797141920118997053"
-                ) {
-                    label = "iOS"
-                    emoji = DiscordPartialEmoji(id = Snowflake(797891150337933353))
-                }
-                interactionButton(
-                    style = ButtonStyle.Primary,
-                    customId = "$commandName-650741600846217217"
-                ) {
-                    label = "Weeber"
-                    emoji = DiscordPartialEmoji(id = Snowflake(903697212553453628))
-                }
-                interactionButton(
-                    style = ButtonStyle.Primary,
-                    customId = "$commandName-682204644268703746"
-                ) {
-                    label = "MCGamer"
-                    emoji = DiscordPartialEmoji(id = Snowflake(361948780926337036))
-                }
-                interactionButton(
-                    style = ButtonStyle.Primary,
-                    customId = "$commandName-798910044791767110"
-                ) {
-                    label = "Cursed"
-                    emoji = DiscordPartialEmoji(id = Snowflake(788530533549211668))
+            emojiRows.forEach { row ->
+                actionRow {
+                    row.forEach { emojiButton ->
+                        interactionButton(
+                            style = ButtonStyle.Primary,
+                            customId = "$commandName-${emojiButton.emojiId}"
+                        ) {
+                            label = emojiButton.label
+                            emoji = DiscordPartialEmoji(
+                                id = emojiButton.emojiId,
+                                name = emojiButton.emojiName
+                            )
+                        }
+                    }
                 }
             }
         }
