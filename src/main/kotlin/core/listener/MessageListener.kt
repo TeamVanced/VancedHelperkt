@@ -42,7 +42,7 @@ class MessageListener {
 
         message.delete("Spam")
         addUserWarn(
-            userId = messageAuthor.id.asString,
+            userId = messageAuthor.id.toString(),
             userTag = messageAuthor.tag,
             reason = "Spam"
         )
@@ -66,7 +66,7 @@ class MessageListener {
 
         message.delete("Spam")
         addUserWarn(
-            userId = messageAuthor.id.asString,
+            userId = messageAuthor.id.toString(),
             userTag = messageAuthor.tag,
             reason = "Emote spam"
         )

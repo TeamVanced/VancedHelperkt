@@ -126,7 +126,7 @@ class Warns : BaseCommand(
         }
 
         addUserWarn(
-            userId = user.id.asString,
+            userId = user.id.toString(),
             userTag = user.tag,
             reason = reason
         )
@@ -154,7 +154,7 @@ class Warns : BaseCommand(
             return
         }
 
-        val userId = user.id.asString
+        val userId = user.id.toString()
 
         if (warnId != null) {
             val warns = getUserWarns(userId)
@@ -191,7 +191,7 @@ class Warns : BaseCommand(
             return
         }
 
-        val warns = getUserWarns(user.id.asString)
+        val warns = getUserWarns(user.id.toString())
 
         if (warns == null || warns.reasons.isEmpty()) {
             ctx.respondEphemeral {

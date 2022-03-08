@@ -74,7 +74,7 @@ class UserListener {
         )
     }
 
-    suspend fun onMemberUnban(member: User, ) {
+    suspend fun onMemberUnban(member: User) {
         sendInfractionToModLogChannel(
             Infraction.Unban(member)
         )
