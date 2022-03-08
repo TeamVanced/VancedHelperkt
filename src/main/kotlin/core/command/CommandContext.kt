@@ -15,7 +15,7 @@ import dev.kord.core.entity.interaction.SubCommand
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 
-data class CommandContext(
+class CommandContext(
     val author: Member,
     val channel: Channel,
     val args: Map<String, OptionValue<*>>,
