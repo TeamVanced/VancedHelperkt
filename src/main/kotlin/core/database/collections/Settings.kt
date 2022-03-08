@@ -9,6 +9,7 @@ data class Settings(
     val boosterRoleId: Long = 0L,
     val modRoleIds: List<Long> = emptyList(),
     val whitelistedSpamChannelIds: List<Long> = emptyList(),
+    val whitelistedAutoresponseChannelIds: List<Long> = emptyList(),
     val allowedQuoteRoleIds: List<Long> = emptyList(),
     val allowedColourMeRoleIds: List<Long> = emptyList(),
 )

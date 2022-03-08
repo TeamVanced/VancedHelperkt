@@ -57,6 +57,18 @@ class Settings : BaseCommand(
                             "remove" -> removeColourMeRole(ctx)
                         }
                     }
+                    "whitelisted_spam_channels" -> {
+                        when (subCommandGroup.name) {
+                            "add" -> addWhitelistedSpamChannel(ctx)
+                            "remove" -> removeWhitelistedSpamChannel(ctx)
+                        }
+                    }
+                    "whitelisted_autoresp_channels" -> {
+                        when (subCommandGroup.name) {
+                            "add" -> addWhitelistedAutoresponsesChannel(ctx)
+                            "remove" -> removeWhitelistedAutoresponsesChannel(ctx)
+                        }
+                    }
                 }
             }
         }
@@ -201,6 +213,62 @@ class Settings : BaseCommand(
                     )
                 }
             }
+            group(
+                name = "whitelisted_spam_channels",
+                description = "Edit channels where spam is allowed"
+            ) {
+                subCommand(
+                    name = "add",
+                    description = "Add a channel",
+                    builder = {
+                        channel(
+                            name = "channel",
+                            description = "Channel where spam should be allowed"
+                        ) {
+                            required = true
+                        }
+                    }
+                )
+                subCommand(
+                    name = "remove",
+                    description = "Removed a channel"
+                ) {
+                    channel(
+                        name = "channel",
+                        description = "Channel where spam is allowed"
+                    ) {
+                        required = true
+                    }
+                }
+            }
+            group(
+                name = "whitelisted_autoresp_channels",
+                description = "Edit channels where bot enforces autoresponses"
+            ) {
+                subCommand(
+                    name = "add",
+                    description = "Add a channel",
+                    builder = {
+                        channel(
+                            name = "channel",
+                            description = "Channel where autoresponses should be enforced"
+                        ) {
+                            required = true
+                        }
+                    }
+                )
+                subCommand(
+                    name = "remove",
+                    description = "Removed a channel"
+                ) {
+                    channel(
+                        name = "channel",
+                        description = "Channel where autoresponses are enforced"
+                    ) {
+                        required = true
+                    }
+                }
+            }
         }
 
     override fun commandPermissions() =
@@ -323,6 +391,50 @@ class Settings : BaseCommand(
             element = role.id.value.toLong(),
             itemName = "fruities",
             mention = role.mention
+        )
+    }
+
+    private suspend fun addWhitelistedSpamChannel(ctx: CommandContext) {
+        val channel = ctx.args["channel"]!!.channel()
+
+        whitelistedSpamChannelIds.addWithChecks(
+            ctx = ctx,
+            element = channel.id.value.toLong(),
+            itemName = "whitelisted spam channels",
+            mention = channel.mention
+        )
+    }
+    
+    private suspend fun removeWhitelistedSpamChannel(ctx: CommandContext) {
+        val channel = ctx.args["channel"]!!.channel()
+
+        whitelistedSpamChannelIds.removeWithChecks(
+            ctx = ctx,
+            element = channel.id.value.toLong(),
+            itemName = "whitelisted spam channels",
+            mention = channel.mention
+        )
+    }
+
+    private suspend fun addWhitelistedAutoresponsesChannel(ctx: CommandContext) {
+        val channel = ctx.args["channel"]!!.channel()
+
+        whitelistedAutoresponsesChannelIds.addWithChecks(
+            ctx = ctx,
+            element = channel.id.value.toLong(),
+            itemName = "whitelisted Autoresponses channels",
+            mention = channel.mention
+        )
+    }
+    
+    private suspend fun removeWhitelistedAutoresponsesChannel(ctx: CommandContext) {
+        val channel = ctx.args["channel"]!!.channel()
+
+        whitelistedAutoresponsesChannelIds.removeWithChecks(
+            ctx = ctx,
+            element = channel.id.value.toLong(),
+            itemName = "whitelisted Autoresponses channels",
+            mention = channel.mention
         )
     }
 

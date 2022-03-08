@@ -4,10 +4,7 @@ import core.command.CommandManager
 import core.database.addUserWarn
 import core.database.getKeywords
 import core.database.getResponseForKeyword
-import core.ext.checkWarnForTooManyInfractions
-import core.ext.isDev
-import core.ext.isMod
-import core.ext.isWhitelistedSpamChannel
+import core.ext.*
 import core.util.emoteRegex
 import dev.kord.core.Kord
 import dev.kord.core.behavior.reply
@@ -78,6 +75,8 @@ class MessageListener {
     }
 
     suspend fun autoRespond(message: Message) {
+        if (!message.getChannel().isWhitelistedAutoresponseChannel) return
+
         val messageAuthor = message.getAuthorAsMember() ?: return
 
         if (messageAuthor.isBot) return
