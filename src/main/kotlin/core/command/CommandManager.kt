@@ -6,7 +6,6 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.entity.application.GuildApplicationCommand
 import dev.kord.core.entity.interaction.*
-import kotlinx.coroutines.flow.collect
 import org.reflections.Reflections
 import org.slf4j.Logger
 import java.lang.reflect.Modifier

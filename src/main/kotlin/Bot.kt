@@ -56,6 +56,7 @@ class Bot : KoinComponent {
             with(messageListener) {
                 filterMessageSpam(message)
                 filterSingleMessageEmoteSpam(message)
+                autoRespond(message)
                 runDevCommands(message, commandManager, kord, logger)
             }
         }

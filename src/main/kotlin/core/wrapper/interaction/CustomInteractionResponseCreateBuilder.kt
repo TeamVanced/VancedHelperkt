@@ -8,8 +8,8 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import java.io.InputStream
 
-data class CustomInteractionResponseCreateBuilder(
-    val persistentMessageCreateBuilder: MessageCreateBuilder
+class CustomInteractionResponseCreateBuilder(
+    private val persistentMessageCreateBuilder: MessageCreateBuilder
 ) {
     fun embed(
         block: EmbedBuilder.() -> Unit

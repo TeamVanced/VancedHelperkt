@@ -30,6 +30,14 @@ val whitelistedSpamChannelIds = mongoMutableListOf(
     )
 )
 
+val whitelistedAutoresponsesChannelIds = mongoMutableListOf(
+    MongoListParameter(
+        name = "whitelistedAutoresponsesChannelIds",
+        list = settings.whitelistedAutoresponsesChannelIds,
+        collection = settingsCollection,
+    )
+)
+
 val moderatorRoleIds = mongoMutableListOf(
     MongoListParameter(
         name = "modRoleIds",

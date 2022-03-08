@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 suspend fun Member.checkWarnForTooManyInfractions() {
-    val userId = id.asString
+    val userId = id.toString()
     val warns = getUserWarns(userId)
 
     if (warns != null && warns.reasons.size >= 3) {

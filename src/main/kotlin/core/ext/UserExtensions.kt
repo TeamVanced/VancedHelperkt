@@ -10,5 +10,5 @@ val User.userInfo
     get() = """
         Mention: $mention
         Tag: $tag
-        ID: ${id.asString}
+        ID: $id
     """.trimIndent()
