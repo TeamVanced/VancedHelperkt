@@ -2,12 +2,15 @@ package core.listener
 
 import core.command.CommandManager
 import core.database.addUserWarn
+import core.database.getKeywords
+import core.database.getResponseForKeyword
 import core.ext.checkWarnForTooManyInfractions
 import core.ext.isDev
 import core.ext.isMod
 import core.ext.isWhitelistedSpamChannel
 import core.util.emoteRegex
 import dev.kord.core.Kord
+import dev.kord.core.behavior.reply
 import dev.kord.core.entity.Message
 import org.slf4j.Logger
 
@@ -72,6 +75,23 @@ class MessageListener {
         )
         channel.createMessage("${messageAuthor.mention} has been warned for spamming")
         messageAuthor.checkWarnForTooManyInfractions()
+    }
+
+    suspend fun autoRespond(message: Message) {
+        val messageAuthor = message.getAuthorAsMember() ?: return
+
+        if (messageAuthor.isBot) return
+
+        val keywords = getKeywords()
+        val match = keywords.find { message.content.contains(it.keyword) }
+        if (match != null) {
+            val response = getResponseForKeyword(match.keyword)
+            if (response != null) {
+                message.reply {
+                    content = response.message
+                }
+            }
+        }
     }
 
     suspend fun runDevCommands(
