@@ -23,9 +23,9 @@ class AutoResponses : BaseCommand(
         val subCommandGroup = ctx.subCommandGroup ?: return
 
         when (subCommandGroup.groupName) {
-            "add" -> {
+            "keywords" -> {
                 when (subCommandGroup.name) {
-                    "keyword" -> {
+                    "add" -> {
                         val keyword = ctx.args["keyword"]!!.string()
                         val indexOfResponse = ctx.args["index"]!!.int().toInt()
                         addKeyword(keyword, indexOfResponse)
@@ -33,18 +33,7 @@ class AutoResponses : BaseCommand(
                             content = "Successfully added `$keyword` keyword  to automatic responses."
                         }
                     }
-                    "response" -> {
-                        val message = ctx.args["message"]!!.string()
-                        val index = addResponse(message)
-                        ctx.respondEphemeral {
-                            content = "Successfully added a response to automatic responses at index `$index`."
-                        }
-                    }
-                }
-            }
-            "list" -> {
-                when (subCommandGroup.name) {
-                    "keywords" -> {
+                    "list" -> {
                         val groupedKeywords = getKeywords().sortedBy {
                             it.indexOfResponse
                         }.groupBy(
@@ -59,14 +48,32 @@ class AutoResponses : BaseCommand(
                             embed {
                                 title = "Keywords"
                                 for ((indexOfResponse, keywords) in groupedKeywords) {
-                                    field("Respond index $indexOfResponse") {
+                                    field("Response index $indexOfResponse") {
                                         keywords.joinToString(", ")
                                     }
                                 }
                             }
                         }
                     }
-                    "responses" -> {
+                    "remove" -> {
+                        val keyword = ctx.args["keyword"]!!.string()
+                        removeKeyword(keyword)
+                        ctx.respondEphemeral {
+                            content = "Successfully removed `$keyword` keyword from automatic responses."
+                        }
+                    }
+                }
+            }
+            "responses" -> {
+                when (subCommandGroup.name) {
+                    "add" -> {
+                        val message = ctx.args["message"]!!.string()
+                        val index = addResponse(message)
+                        ctx.respondEphemeral {
+                            content = "Successfully added a response to automatic responses at index `$index`."
+                        }
+                    }
+                    "list" -> {
                         val responses = getResponses().sortedBy { it.index }
                         ctx.respondEphemeral {
                             embed {
@@ -80,18 +87,7 @@ class AutoResponses : BaseCommand(
                             }
                         }
                     }
-                }
-            }
-            "remove" -> {
-                when (subCommandGroup.name) {
-                    "keyword" -> {
-                        val keyword = ctx.args["keyword"]!!.string()
-                        removeKeyword(keyword)
-                        ctx.respondEphemeral {
-                            content = "Successfully removed `$keyword` keyword from automatic responses."
-                        }
-                    }
-                    "response" -> {
+                    "remove" -> {
                         val index = ctx.args["index"]!!.int().toInt()
                         removeResponse(index)
                         ctx.respondEphemeral {
@@ -106,11 +102,11 @@ class AutoResponses : BaseCommand(
     override suspend fun commandOptions() =
         CustomApplicationCommandCreateBuilder {
             group(
-                name = "add",
-                description = "Add items to automatic responses"
+                name = "keywords",
+                description = "Edit the autoresponses keywords"
             ) {
                 subCommand(
-                    name = "keyword",
+                    name = "add",
                     description = "Add a keyword to automatic responses"
                 ) {
                     required = true
@@ -128,41 +124,13 @@ class AutoResponses : BaseCommand(
                     }
                 }
                 subCommand(
-                    name = "response",
-                    description = "Add a response to automatic responses"
-                ) {
-                    required = true
-                    string(
-                        name = "message",
-                        description = "Message to add to the response list"
-                    ) {
-                        required = true
-                    }
-                }
-            }
-            group(
-                name = "list",
-                description = "List automatic response items"
-            ) {
-                subCommand(
-                    name = "keywords",
-                    description = "List of keywords that activate a response"
+                    name = "list",
+                    description = "List the keywords that activate a response"
                 ) {
                     required = true
                 }
                 subCommand(
-                    name = "responses",
-                    description = "List of responses"
-                ) {
-                    required = true
-                }
-            }
-            group(
-                name = "remove",
-                description = "Remove items from the automatic responses"
-            ) {
-                subCommand(
-                    name = "keyword",
+                    name = "remove",
                     description = "Remove a keyword from automatic responses"
                 ) {
                     required = true
@@ -173,8 +141,31 @@ class AutoResponses : BaseCommand(
                         required = true
                     }
                 }
+            }
+            group(
+                name = "responses",
+                description = "Edit the autoresponses responses"
+            ) {
                 subCommand(
-                    name = "response",
+                    name = "add",
+                    description = "Add a response to automatic responses"
+                ) {
+                    required = true
+                    string(
+                        name = "message",
+                        description = "Message to add to the response list"
+                    ) {
+                        required = true
+                    }
+                }
+                subCommand(
+                    name = "list",
+                    description = "List the responses with their indexes"
+                ) {
+                    required = true
+                }
+                subCommand(
+                    name = "remove",
                     description = "Remove a response from automatic responses"
                 ) {
                     required = true
