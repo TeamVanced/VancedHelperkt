@@ -183,13 +183,13 @@ class Quotes : BaseCommand(
                 channelId = channelId,
                 messageUrl = link.replace("""(?:\w+.)?discord(?:app)?.com""".toRegex(), "discord.com"),
                 messageContent = message.content,
-                messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.epochSeconds)),
+                messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.toEpochMilliseconds())),
                 authorId = message.author!!.id.toString(),
                 authorAvatar = message.author!!.avatar!!.url,
                 authorName = message.author!!.tag,
                 attachment = message.attachments.firstOrNull()?.url,
                 quoteId = quoteId,
-                stars = mutableListOf()
+                stars = listOf()
             )
         )
 

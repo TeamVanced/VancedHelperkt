@@ -12,5 +12,5 @@ data class Quote(
     val authorName: String,
     val attachment: String?,
     val quoteId: Long,
-    val stars: MutableList<String>
+    val stars: List<String>
 )
