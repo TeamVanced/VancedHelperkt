@@ -119,6 +119,7 @@ class Bot : KoinComponent {
                 Intent.GuildMembers,
                 Intent.GuildMessages,
                 Intent.Guilds,
+                Intent.MessageContent
             )
 
             if (settings.logChannelId != 0L) {
