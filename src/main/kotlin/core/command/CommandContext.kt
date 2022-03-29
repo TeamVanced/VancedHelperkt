@@ -18,7 +18,7 @@ import dev.kord.rest.builder.message.create.actionRow
 class CommandContext(
     val author: Member,
     val channel: Channel,
-    val args: Map<String, OptionValue<*>>,
+    val args: CommandArguments,
     val subCommand: SubCommand?,
     val subCommandGroup: GroupCommand?,
     val guild: Guild,

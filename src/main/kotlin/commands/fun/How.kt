@@ -3,7 +3,6 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
 
 class How : BaseCommand(
@@ -14,8 +13,8 @@ class How : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val predicate = ctx.args["predicate"]!!.string()
-        val thing = ctx.args["thing"]!!.string()
+        val predicate = ctx.args.strings["predicate"]!!
+        val thing = ctx.args.strings["thing"]!!
             .replace("(?i)you(?-i)".toRegex(), "I")
             .replace("(?i)me(?-i)".toRegex(), "You")
 

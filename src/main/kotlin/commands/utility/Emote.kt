@@ -3,7 +3,6 @@ package commands.utility
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
 
 class Emote : BaseCommand(
@@ -21,7 +20,7 @@ class Emote : BaseCommand(
     ) {
         val emoteRegex = """<?(a)?:?(\w{2,32}):(\d{17,19})>?""".toRegex()
 
-        val emotes = ctx.args["emotes"]!!.string()
+        val emotes = ctx.args.strings["emotes"]!!
 
         val parsedEmotes = emoteRegex.findAll(emotes).map {
             ParsedEmote(

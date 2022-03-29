@@ -15,9 +15,6 @@ import core.util.sendInfractionToModLogChannel
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.entity.interaction.int
-import dev.kord.core.entity.interaction.string
-import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
@@ -112,8 +109,8 @@ class Warns : BaseCommand(
         )
 
     private suspend fun warnUser(ctx: CommandContext) {
-        val user = ctx.args["user"]!!.user()
-        val reason = ctx.args["reason"]!!.string()
+        val user = ctx.args.users["user"]!!
+        val reason = ctx.args.strings["reason"]!!
 
         val member = user.asMember(config.guildSnowflake)
         val memberMention = member.mention
@@ -141,8 +138,8 @@ class Warns : BaseCommand(
     }
 
     private suspend fun unwarnUser(ctx: CommandContext) {
-        val user = ctx.args["user"]!!.user()
-        val warnId = ctx.args["warnid"]?.int()?.toInt()
+        val user = ctx.args.users["user"]!!
+        val warnId = ctx.args.integers["warnid"]?.toInt()
 
         val member = user.asMember(config.guildSnowflake)
         val memberMention = member.mention
@@ -179,7 +176,7 @@ class Warns : BaseCommand(
     }
 
     private suspend fun listWarns(ctx: CommandContext) {
-        val user = ctx.args["user"]!!.user()
+        val user = ctx.args.users["user"]!!
 
         val member = user.asMember(config.guildSnowflake)
         val memberMention = member.mention

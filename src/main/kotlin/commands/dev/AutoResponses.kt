@@ -7,8 +7,6 @@ import core.util.botOwners
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.entity.interaction.int
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.group
 import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
@@ -26,8 +24,8 @@ class AutoResponses : BaseCommand(
             "keywords" -> {
                 when (subCommandGroup.name) {
                     "add" -> {
-                        val keyword = ctx.args["keyword"]!!.string()
-                        val indexOfResponse = ctx.args["index"]!!.int().toInt()
+                        val keyword = ctx.args.strings["keyword"]!!
+                        val indexOfResponse = ctx.args.integers["index"]!!.toInt()
                         addKeyword(keyword, indexOfResponse)
                         ctx.respondEphemeral {
                             content = "Successfully added `$keyword` keyword  to automatic responses."
@@ -56,7 +54,7 @@ class AutoResponses : BaseCommand(
                         }
                     }
                     "remove" -> {
-                        val keyword = ctx.args["keyword"]!!.string()
+                        val keyword = ctx.args.strings["keyword"]!!
                         removeKeyword(keyword)
                         ctx.respondEphemeral {
                             content = "Successfully removed `$keyword` keyword from automatic responses."
@@ -67,7 +65,7 @@ class AutoResponses : BaseCommand(
             "responses" -> {
                 when (subCommandGroup.name) {
                     "add" -> {
-                        val message = ctx.args["message"]!!.string()
+                        val message = ctx.args.strings["message"]!!
                         val index = addResponse(message)
                         ctx.respondEphemeral {
                             content = "Successfully added a response to automatic responses at index `$index`."
@@ -88,7 +86,7 @@ class AutoResponses : BaseCommand(
                         }
                     }
                     "remove" -> {
-                        val index = ctx.args["index"]!!.int().toInt()
+                        val index = ctx.args.integers["index"]!!.toInt()
                         removeResponse(index)
                         ctx.respondEphemeral {
                             content = "Successfully removed a response at index `$index` from automatic responses."

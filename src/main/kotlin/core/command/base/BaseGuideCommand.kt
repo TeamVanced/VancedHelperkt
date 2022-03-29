@@ -3,7 +3,7 @@ package core.command.base
 import core.command.CommandContext
 import core.ext.takeMax
 import core.util.randomColor
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.response.edit
 import dev.kord.core.entity.interaction.SelectMenuInteraction
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.embed
@@ -60,7 +60,7 @@ abstract class BaseGuideCommand(
         interaction: SelectMenuInteraction
     ) {
         val index = interaction.values.first().toInt()
-        interaction.acknowledgePublicDeferredMessageUpdate().edit {
+        interaction.deferPublicMessageUpdate().edit {
             embed {
                 buildGuideEmbed(index)
                 color = randomColor

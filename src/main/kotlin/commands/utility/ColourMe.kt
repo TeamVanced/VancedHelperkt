@@ -9,7 +9,6 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.common.kColor
 import dev.kord.core.behavior.createRole
 import dev.kord.core.behavior.edit
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.Image
 import dev.kord.rest.builder.interaction.string
 import io.ktor.client.*
@@ -29,9 +28,9 @@ class ColourMe : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val roleName = ctx.args["name"]!!.string()
-        val roleColor = ctx.args["color"]!!.string()
-        val iconUrl = ctx.args["icon"]?.string()
+        val roleName = ctx.args.strings["name"]!!
+        val roleColor = ctx.args.strings["color"]!!
+        val iconUrl = ctx.args.strings["icon"]
 
         val author = ctx.author
 

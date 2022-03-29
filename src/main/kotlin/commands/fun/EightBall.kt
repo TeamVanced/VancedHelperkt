@@ -3,7 +3,6 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
 import java.util.*
 
@@ -38,8 +37,7 @@ class EightBall : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val question = ctx.args["question"]!!
-            .string()
+        val question = ctx.args.strings["question"]!!
             .replace("(?i)are you(?-i)".toRegex(), "am I")
             .replace("(?i)will you(?-i)".toRegex(), "will I")
             .replaceFirstChar { it.titlecase(Locale.getDefault()) }

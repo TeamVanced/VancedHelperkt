@@ -5,7 +5,6 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.util.*
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.int
 import dev.kord.rest.builder.interaction.int
 import org.koin.core.component.inject
 import repository.coin.CoinlibRepository
@@ -20,7 +19,7 @@ class BAT : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val amount = ctx.args["amount"]?.int()
+        val amount = ctx.args.integers["amount"]?.toInt()
 
         val response = repository.get(
             token = config.coinlibToken,

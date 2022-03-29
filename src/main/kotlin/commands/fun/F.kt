@@ -4,7 +4,6 @@ import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.util.EMOTE_PRESS_F
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.string
 
 class F : BaseCommand(
@@ -15,7 +14,7 @@ class F : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val thing = ctx.args["thing"]?.string()
+        val thing = ctx.args.strings["thing"]
 
         ctx.respondPublic {
             content = if (thing != null) {
