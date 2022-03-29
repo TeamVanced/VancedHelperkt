@@ -15,13 +15,13 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(kotlin("reflect", kotlinVersion))
 
-    implementation("dev.kord:kord-core:0.8.0-M9")
+    implementation("dev.kord:kord-core:0.8.0-M12")
 
     implementation("org.apache.commons:commons-math3:3.6.1")
 
-    implementation("org.litote.kmongo:kmongo:4.4.0")
+    implementation("org.litote.kmongo:kmongo:4.5.0")
 
-    val logbackVersion = "1.2.10"
+    val logbackVersion = "1.2.11"
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
 

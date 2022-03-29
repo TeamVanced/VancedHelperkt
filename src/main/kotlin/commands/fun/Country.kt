@@ -4,7 +4,6 @@ import config
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 import org.koin.core.component.inject
 import repository.genderapi.GenderapiRepository
@@ -19,7 +18,7 @@ class Country : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val user = ctx.args["user"]!!.user()
+        val user = ctx.args.users["user"]!!
         val userName = user.username.filter { it.isLetter() }
 
         val response = repository.getCountryOfOrigin(

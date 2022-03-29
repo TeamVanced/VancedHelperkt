@@ -11,8 +11,6 @@ import core.util.EMOTE_STONKS
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.interaction.CustomInteractionResponseCreateBuilder
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.entity.interaction.int
-import dev.kord.core.entity.interaction.string
 import dev.kord.rest.builder.interaction.int
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.interaction.subCommand
@@ -138,7 +136,7 @@ class Quotes : BaseCommand(
         val linkRegex =
             """https://(?:\w+.)?discord(?:app)?.com/channels/\d+/(?<channelId>\d+)/(?<messageId>\d+)""".toRegex()
 
-        val link = ctx.args["link"]!!.string()
+        val link = ctx.args.strings["link"]!!
 
         if (!linkRegex.matches(link)) {
             ctx.respondPublic {
@@ -185,13 +183,13 @@ class Quotes : BaseCommand(
                 channelId = channelId,
                 messageUrl = link.replace("""(?:\w+.)?discord(?:app)?.com""".toRegex(), "discord.com"),
                 messageContent = message.content,
-                messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.epochSeconds)),
+                messageTimestamp = SimpleDateFormat("dd/MM/yyyy").format(Date(message.timestamp.toEpochMilliseconds())),
                 authorId = message.author!!.id.toString(),
                 authorAvatar = message.author!!.avatar!!.url,
                 authorName = message.author!!.tag,
                 attachment = message.attachments.firstOrNull()?.url,
                 quoteId = quoteId,
-                stars = mutableListOf()
+                stars = listOf()
             )
         )
 
@@ -201,7 +199,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun getQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int().toInt()
+        val quoteId = ctx.args.integers["quoteid"]!!.toInt()
 
         val quote = getQuote(quoteId)
             ?: return ctx.respondEphemeral {
@@ -214,7 +212,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun searchQuote(ctx: CommandContext) {
-        val keyword = ctx.args["keyword"]!!.string()
+        val keyword = ctx.args.strings["keyword"]!!
 
         val quotes = searchQuotes(keyword)
 
@@ -247,7 +245,7 @@ class Quotes : BaseCommand(
             }
         }
 
-        val quoteId = ctx.args["quoteid"]!!.int().toInt()
+        val quoteId = ctx.args.integers["quoteid"]!!.toInt()
 
         deleteQuote(quoteId)
 
@@ -257,7 +255,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun starQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int().toInt()
+        val quoteId = ctx.args.integers["quoteid"]!!.toInt()
         val authorId = ctx.author.id.toString()
 
         val quote = getQuote(quoteId)
@@ -287,7 +285,7 @@ class Quotes : BaseCommand(
     }
 
     private suspend fun unstarQuote(ctx: CommandContext) {
-        val quoteId = ctx.args["quoteid"]!!.int().toInt()
+        val quoteId = ctx.args.integers["quoteid"]!!.toInt()
         val authorId = ctx.author.id.toString()
 
         val quote = getQuote(quoteId)

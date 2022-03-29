@@ -8,8 +8,6 @@ import core.util.botOwners
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
 import core.wrapper.applicationcommand.CustomApplicationCommandPermissionBuilder
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.entity.interaction.channel
-import dev.kord.core.entity.interaction.role
 import dev.kord.rest.builder.interaction.channel
 import dev.kord.rest.builder.interaction.group
 import dev.kord.rest.builder.interaction.role
@@ -284,7 +282,7 @@ class Settings : BaseCommand(
         )
 
     private suspend fun configureLogChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         logChannelId = channel.id.value.toLong()
         ctx.respondEphemeral {
@@ -293,7 +291,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun configureModLogChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         modLogChannelId = channel.id.value.toLong()
         ctx.respondEphemeral {
@@ -302,7 +300,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun configureErrorChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         errorChannelId = channel.id.value.toLong()
         ctx.respondEphemeral {
@@ -311,7 +309,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun configureMuteRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         muteRoleId = role.id.value.toLong()
         ctx.respondEphemeral {
@@ -320,7 +318,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun configureBoosterRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         boosterRoleId = role.id.value.toLong()
         ctx.respondEphemeral {
@@ -329,7 +327,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun addModerator(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         moderatorRoleIds.addWithChecks(
             ctx = ctx,
@@ -340,7 +338,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun removeModerator(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         moderatorRoleIds.removeWithChecks(
             ctx = ctx,
@@ -351,7 +349,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun addQuoteRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         allowedQuoteRoleIds.addWithChecks(
             ctx = ctx,
@@ -362,7 +360,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun removeQuoteRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         allowedQuoteRoleIds.removeWithChecks(
             ctx = ctx,
@@ -373,7 +371,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun addColourMeRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         allowedColourMeRoleIds.addWithChecks(
             ctx = ctx,
@@ -384,7 +382,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun removeColourMeRole(ctx: CommandContext) {
-        val role = ctx.args["role"]!!.role()
+        val role = ctx.args.roles["role"]!!
 
         allowedColourMeRoleIds.removeWithChecks(
             ctx = ctx,
@@ -395,7 +393,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun addWhitelistedSpamChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         whitelistedSpamChannelIds.addWithChecks(
             ctx = ctx,
@@ -406,7 +404,7 @@ class Settings : BaseCommand(
     }
     
     private suspend fun removeWhitelistedSpamChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         whitelistedSpamChannelIds.removeWithChecks(
             ctx = ctx,
@@ -417,7 +415,7 @@ class Settings : BaseCommand(
     }
 
     private suspend fun addWhitelistedAutoresponsesChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         whitelistedAutoresponsesChannelIds.addWithChecks(
             ctx = ctx,
@@ -428,7 +426,7 @@ class Settings : BaseCommand(
     }
     
     private suspend fun removeWhitelistedAutoresponsesChannel(ctx: CommandContext) {
-        val channel = ctx.args["channel"]!!.channel()
+        val channel = ctx.args.channels["channel"]!!
 
         whitelistedAutoresponsesChannelIds.removeWithChecks(
             ctx = ctx,

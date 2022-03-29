@@ -30,7 +30,7 @@ abstract class BaseCommand(
         interaction: ButtonInteraction
     ) {
         if (interaction.componentId == "${commandName}-delete") {
-            interaction.acknowledgePublicDeferredMessageUpdate().delete()
+            interaction.deferPublicMessageUpdate().delete()
         }
     }
 

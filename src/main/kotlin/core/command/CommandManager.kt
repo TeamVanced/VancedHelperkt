@@ -94,7 +94,18 @@ class CommandManager {
 
         commandObject.execute(
             ctx = CommandContext(
-                args = command.options,
+                args = CommandArguments(
+                    strings = command.strings,
+                    integers = command.integers,
+                    numbers = command.numbers,
+                    booleans = command.booleans,
+                    users = command.users,
+                    members = command.members,
+                    channels = command.channels,
+                    roles = command.roles,
+                    mentionables = command.mentionables,
+                    attachments = command.attachments
+                ),
                 author = interaction.user.asMember(Snowflake(config.guildId)),
                 channel = interaction.getChannel(),
                 guild = interaction.getGuild(),

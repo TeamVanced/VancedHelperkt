@@ -3,7 +3,6 @@ package commands.utility
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 
 class Avatar : BaseCommand(
@@ -14,7 +13,7 @@ class Avatar : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val user = ctx.args["user"]!!.user()
+        val user = ctx.args.users["user"]!!
 
         ctx.respondPublic {
             embed {

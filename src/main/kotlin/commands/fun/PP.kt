@@ -3,7 +3,6 @@ package commands.`fun`
 import core.command.CommandContext
 import core.command.base.BaseCommand
 import core.wrapper.applicationcommand.CustomApplicationCommandCreateBuilder
-import dev.kord.core.entity.interaction.user
 import dev.kord.rest.builder.interaction.user
 import org.apache.commons.math3.distribution.NormalDistribution
 
@@ -15,7 +14,7 @@ class PP : BaseCommand(
     override suspend fun execute(
         ctx: CommandContext
     ) {
-        val user = ctx.args["user"]!!.user()
+        val user = ctx.args.users["user"]!!
 
         val ppSize = randomPP()
         val bar = "8" + "=".repeat(ppSize) + "D"
