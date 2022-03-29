@@ -76,8 +76,8 @@ class BAT : BaseCommand(
             this >= 25 -> "$EMOTE_RELAX $this%"
             this >= 5 -> "$EMOTE_V_MERCHANT $this%"
             this >= 0 -> "$EMOTE_STONKS $this%"
-            this <= -5 -> "$EMOTE_FEELS $this%"
             this <= -25 -> "$EMOTE_SADNESS $this%"
+            this <= -5 -> "$EMOTE_FEELS $this%"
             else -> "$EMOTE_STINKS $this%"
         }
 
